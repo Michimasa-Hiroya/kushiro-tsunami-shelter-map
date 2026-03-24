@@ -1,0 +1,9 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'>
+  <rect width='192' height='192' rx='42.24' fill='#080d1a'/>
+  <rect width='192' height='192' rx='42.24' fill='none' stroke='rgba(56,189,248,0.4)' stroke-width='5.184'/>
+  <path d='M17.28 130.56 Q48 99.84 78.72 130.56 Q109.44 161.28 140.16 130.56 Q157.44 113.28 178.56 122.88' stroke='#38bdf8' stroke-width='10.944' fill='none' stroke-linecap='round'/>
+  <path d='M17.28 153.60000000000002 Q48 122.88 78.72 153.60000000000002 Q109.44 182.39999999999998 140.16 153.60000000000002 Q157.44 136.32 178.56 144' stroke='rgba(56,189,248,0.4)' stroke-width='7.872' fill='none' stroke-linecap='round'/>
+  <polygon points='96,30.72 57.599999999999994,69.12 134.39999999999998,69.12' fill='#f59e0b'/>
+  <rect x='65.28' y='69.12' width='61.44' height='48' rx='3.84' fill='#f59e0b'/>
+  <rect x='84.48' y='86.4' width='23.04' height='30.72' rx='1.92' fill='#080d1a'/>
+</svg>
