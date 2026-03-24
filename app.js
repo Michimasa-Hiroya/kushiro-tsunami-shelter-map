@@ -480,7 +480,8 @@ async function findShelters(lat, lng) {
   const candidates = [...shelters];
   if (typeof EXTRA_SHELTERS !== 'undefined') {
     for (const s of EXTRA_SHELTERS) {
-      candidates.push({ ...s, elevation_m: null, distance_from_sea_m: null });
+      // elevation_m がデータに含まれていればそれを優先、なければ null
+      candidates.push({ elevation_m: null, distance_from_sea_m: null, ...s });
     }
   }
   // 距離順にソートして近い順に最大3件取得
