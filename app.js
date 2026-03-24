@@ -117,19 +117,24 @@ function riverBoost(lat, lng) {
   return 0;
 }
 
-// ===== 建物密集地区補正（津波-2m）=====
-// 中部南地区（釧路駅ライン〜柳町公園ライン）・中部北地区・愛国地区・美原・芦野地区
+// ===== 建物密集地区補正 =====
+// -2m: 中部南・中部北・愛国地区・美原・芦野地区
 const URBAN_DENSE = [
   { latMin: 42.974, latMax: 42.993, lngMin: 144.360, lngMax: 144.415 }, // 中部南
   { latMin: 42.993, latMax: 43.013, lngMin: 144.358, lngMax: 144.418 }, // 中部北
   { latMin: 43.000, latMax: 43.022, lngMin: 144.375, lngMax: 144.415 }, // 愛国西・愛国東地区
   { latMin: 43.012, latMax: 43.036, lngMin: 144.400, lngMax: 144.455 }, // 美原・芦野地区
 ];
+// -1m: 柳町公園〜釧路駅の線路沿い地区（堀川町・双葉町・松浦町・新釧路町・中島町・若松町）
+const URBAN_LIGHT = [
+  { latMin: 42.974, latMax: 42.994, lngMin: 144.320, lngMax: 144.378 },
+];
 
-function inUrbanDense(lat, lng) {
-  return URBAN_DENSE.some(a =>
-    lat >= a.latMin && lat <= a.latMax && lng >= a.lngMin && lng <= a.lngMax
-  );
+// 市街地補正量を返す（-2m地区: 2, -1m地区: 1, それ以外: 0）
+function urbanReduce(lat, lng) {
+  if (URBAN_DENSE.some(a => lat >= a.latMin && lat <= a.latMax && lng >= a.lngMin && lng <= a.lngMax)) return 2;
+  if (URBAN_LIGHT.some(a => lat >= a.latMin && lat <= a.latMax && lng >= a.lngMin && lng <= a.lngMax)) return 1;
+  return 0;
 }
 
 // 国土地理院 DEM PNG タイルから標高を復元（単位: m）
