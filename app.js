@@ -558,7 +558,7 @@ function renderResults(results, userLat, userLng) {
       </div>
       <div class="info-row">
         ${elevBadge(s.elevation_m)}
-        <span class="badge">🌊 海岸から ${(s.distance_from_sea_m / 1000).toFixed(1)}km</span>
+        ${s.distance_from_sea_m !== null ? `<span class="badge">🌊 海岸から ${(s.distance_from_sea_m / 1000).toFixed(1)}km</span>` : ''}
         ${s.capacity > 0 ? `<span class="badge">👥 ${s.capacity}人</span>` : ''}
       </div>
       <div class="shelter-addr">${s.address}</div>
