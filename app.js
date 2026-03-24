@@ -81,15 +81,17 @@ function decodeDEMElev(r, g, b) {
 }
 
 // 浸水深に応じたRGBA色（ハザードマップ準拠グラデーション）
+// effectiveH = maxH - 1m（建物等による減衰を考慮）
 function getFloodRGBA(elev, maxH) {
-  if (elev === null || elev < 0 || elev >= maxH) return null;
-  const d = maxH - elev; // 浸水深（m）
-  if (d < 0.5)  return [255, 250, 160, 100]; // 薄黄（膝下程度）
-  if (d < 3)    return [255, 190, 140, 130]; // 薄橙（1階浸水）
-  if (d < 5)    return [255, 140, 110, 148]; // サーモン（2階床上）
-  if (d < 10)   return [255,  80,  80, 158]; // ピンク（2階天井）
-  if (d < 20)   return [220,  30, 100, 168]; // 濃ピンク（10〜20m）
-  return               [190,  20, 170, 178]; // マゼンタ（20m超）
+  const effectiveH = maxH - 1; // 実際の浸水深は津波高さより約1m浅い
+  if (elev === null || elev < 0 || elev >= effectiveH) return null;
+  const d = effectiveH - elev; // 浸水深（m）
+  if (d < 0.5)  return [255, 255, 200,  50]; // 極薄黄（膝下程度）
+  if (d < 3)    return [255, 200, 100, 120]; // 薄橙（1階浸水）
+  if (d < 5)    return [255, 120,  70, 148]; // サーモン（2階床上）
+  if (d < 10)   return [240,  40,  60, 165]; // 赤（2階天井）
+  if (d < 20)   return [180,   0,  80, 180]; // 深紅（10〜20m）
+  return               [ 90,   0, 200, 210]; // 深紫（20m超）
 }
 
 // Leaflet GridLayer を拡張して DEM タイルを処理するカスタムレイヤー
