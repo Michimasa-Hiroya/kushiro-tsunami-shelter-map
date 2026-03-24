@@ -221,9 +221,10 @@ const FloodLayer = L.GridLayer.extend({
         const bufLat = 200 / RLAT, bufLng = 200 / RLNG;
         const tLatMin = lats[lats.length-1], tLatMax = lats[0];
         const tLngMin = lngs[0],             tLngMax = lngs[lngs.length-1];
+        const buf500Lat = 500 / RLAT, buf500Lng = 500 / RLNG;
         const tileHasRiver  = RIVERS.some(r => r.some(([rl,rg]) =>
-          rl >= tLatMin-bufLat && rl <= tLatMax+bufLat &&
-          rg >= tLngMin-bufLng && rg <= tLngMax+bufLng));
+          rl >= tLatMin-buf500Lat && rl <= tLatMax+buf500Lat &&
+          rg >= tLngMin-buf500Lng && rg <= tLngMax+buf500Lng));
         const tileHasUrban  = URBAN_DENSE.some(a =>
           tLatMax >= a.latMin && tLatMin <= a.latMax &&
           tLngMax >= a.lngMin && tLngMin <= a.lngMax);
