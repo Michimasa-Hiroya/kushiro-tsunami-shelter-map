@@ -314,8 +314,22 @@ function normalizeAddress(input) {
   return s.replace(/\s+/g, ' ').trim();
 }
 
+// ===== 市町村ごとの検索設定 =====
+const TOWN_PREFIXES = {
+  '釧路市': '北海道釧路市',
+  '釧路町': '北海道釧路郡釧路町',
+  '白糠町': '北海道白糠郡白糠町',
+  '音別町': '北海道釧路市音別町',
+};
+const TOWN_BOUNDS = {
+  '釧路市': { latMin: 42.78, latMax: 43.15, lngMin: 143.90, lngMax: 144.55 },
+  '釧路町': { latMin: 42.88, latMax: 43.20, lngMin: 144.38, lngMax: 144.75 },
+  '白糠町': { latMin: 42.55, latMax: 43.10, lngMin: 143.78, lngMax: 144.30 },
+  '音別町': { latMin: 42.85, latMax: 43.08, lngMin: 143.82, lngMax: 144.18 },
+};
+
 // ===== 国土地理院 住所検索API（番地・号レベルまで対応）=====
-async function tryGSI(query) {
+async function tryGSI(query, bounds) {
   try {
     const url = `https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(query)}`;
     const ctrl = new AbortController();
@@ -323,57 +337,59 @@ async function tryGSI(query) {
     const data = await fetch(url, { signal: ctrl.signal }).then(r => r.json());
     clearTimeout(timer);
     if (!Array.isArray(data) || !data.length) return null;
-    // 市区町村レベル（タイトルが「北海道釧路市」のみ）の結果を除外
-    const hit = data.find(d =>
-      d.properties?.title && d.properties.title !== '北海道釧路市'
-    );
+    const hit = data.find(d => {
+      if (!d.properties?.title) return false;
+      const [lng, lat] = d.geometry.coordinates;
+      return lat >= bounds.latMin && lat <= bounds.latMax &&
+             lng >= bounds.lngMin && lng <= bounds.lngMax;
+    });
     if (!hit) return null;
     const [lng, lat] = hit.geometry.coordinates;
-    // 釧路市広域チェック
-    if (lat < 42.8 || lat > 43.5 || lng < 143.8 || lng > 144.6) return null;
     return { lat, lon: lng };
   } catch { return null; }
 }
 
 // ===== Nominatim 検索（フォールバック用）=====
-async function tryNominatim(query) {
+async function tryNominatim(query, bounds) {
   try {
     const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=jp`;
     const data = await fetch(url, { headers: { 'Accept-Language': 'ja' } }).then(r => r.json());
     if (!data.length) return null;
-    // 行政境界（市区町村代表点）は除外
     const candidates = data.filter(d => d.class !== 'boundary' && d.type !== 'administrative');
     return candidates.find(d => {
       const la = +d.lat, lo = +d.lon;
-      return la >= 42.92 && la <= 43.08 && lo >= 144.22 && lo <= 144.50;
-    }) || candidates.find(d => {
-      const la = +d.lat, lo = +d.lon;
-      return la >= 42.8 && la <= 43.2 && lo >= 143.8 && lo <= 144.5;
+      return la >= bounds.latMin && la <= bounds.latMax &&
+             lo >= bounds.lngMin && lo <= bounds.lngMax;
     }) || null;
   } catch { return null; }
 }
 
 // ===== 住所検索（GSI優先 → Nominatimフォールバック）=====
 async function searchAddress() {
+  const town = document.getElementById('town-select').value;
   const raw = document.getElementById('address-input').value.trim();
   if (!raw) return;
   showLoading(true);
 
   try {
-    // 入力に「釧路市」が含まれている場合の二重付与を防ぐ
-    const addr = normalizeAddress(raw).replace(/^(北海道)?釧路市/, '');
-    const gsiQuery = '北海道釧路市' + addr;
+    const prefix = TOWN_PREFIXES[town];
+    const bounds = TOWN_BOUNDS[town];
+    // 入力から選択済み市町村名を除去してから付与（二重付与防止）
+    const addr = normalizeAddress(raw)
+      .replace(new RegExp('^(北海道)?' + town.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), '')
+      .trim();
+    const q1 = prefix + addr;
+    const q2 = prefix + ' ' + addr;
 
-    // GSI（番地・号レベルまで正確）→ Nominatim フォールバック
     const hit =
-      await tryGSI(gsiQuery)                                                  ||
-      await tryGSI('北海道釧路市 ' + addr)                                   ||
-      await tryNominatim('北海道釧路市 ' + addr)                             ||
-      await tryNominatim('北海道釧路市 ' + addr.replace(/(\d+丁目).*$/, '$1'));
+      await tryGSI(q1, bounds)       ||
+      await tryGSI(q2, bounds)       ||
+      await tryNominatim(q1, bounds) ||
+      await tryNominatim(q2, bounds);
 
     if (!hit) {
       showLoading(false);
-      alert(`「${raw}」が見つかりませんでした。\n例: 大楽毛3丁目5番地2号 / 春採3丁目`);
+      alert(`「${raw}」が見つかりませんでした。\n例: 大楽毛3丁目5番地2号 / 釧路駅 / 遊学館`);
       return;
     }
 
