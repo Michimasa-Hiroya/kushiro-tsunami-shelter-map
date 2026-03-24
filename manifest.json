@@ -1,0 +1,24 @@
+{
+  "name": "釧路津波避難所マップ",
+  "short_name": "避難所マップ",
+  "description": "釧路市・釧路町・白糠町の津波避難所と浸水シミュレーションマップ",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#080d1a",
+  "theme_color": "#38bdf8",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
