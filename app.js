@@ -245,7 +245,7 @@ const FloodLayer = L.GridLayer.extend({
             }
             const i = (cy * sz.x + cx) * 4;
             const boost  = tileHasRiver ? riverBoost(lat, lng) : 0;
-            const reduce = (tileHasUrban && inUrbanDense(lat, lng)) ?  2 : 0;
+            const reduce = tileHasUrban ? urbanReduce(lat, lng) : 0;
             const col = getFloodRGBA(decodeDEMElev(px[i], px[i+1], px[i+2]), targetH + boost - reduce);
             if (col) { px[i]=col[0]; px[i+1]=col[1]; px[i+2]=col[2]; px[i+3]=col[3]; }
             else      { px[i+3] = 0; }
