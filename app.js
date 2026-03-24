@@ -474,8 +474,15 @@ async function getRoute(profile, fromLat, fromLng, toLat, toLng) {
 
 // ===== 避難場所検索 =====
 async function findShelters(lat, lng) {
+  // 釧路市 + 釧路町・白糠町の全避難所を候補に
+  const candidates = [...shelters];
+  if (typeof EXTRA_SHELTERS !== 'undefined') {
+    for (const s of EXTRA_SHELTERS) {
+      candidates.push({ ...s, elevation_m: null, distance_from_sea_m: null });
+    }
+  }
   // 距離順にソートして近い順に最大3件取得
-  const top3 = shelters
+  const top3 = candidates
     .map(s => ({ ...s, _d: distM(lat, lng, s.lat, s.lng) }))
     .sort((a, b) => a._d - b._d)
     .slice(0, 3);
