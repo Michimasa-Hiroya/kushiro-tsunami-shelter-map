@@ -646,7 +646,7 @@ function renderResults(results, userLat, userLng) {
       <div class="info-row">
         ${elevBadge(s.elevation_m)}
         ${s.distance_from_sea_m !== null ? `<span class="badge">🌊 海岸から ${(s.distance_from_sea_m / 1000).toFixed(1)}km</span>` : ''}
-        ${s.capacity > 0 ? `<span class="badge">👥 ${s.capacity}人</span>` : ''}
+        ${capacityBadge(s.capacity)}
       </div>
       <div class="shelter-addr">${s.address}</div>
       <button class="route-btn" onclick="showRoute('foot',${userLat},${userLng},${s.lat},${s.lng})">
