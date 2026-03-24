@@ -76,12 +76,18 @@
     </button>
     <div id="or-divider">または住所を入力</div>
     <div id="address-input-wrap">
+      <select id="town-select">
+        <option value="釧路市">釧路市</option>
+        <option value="釧路町">釧路町</option>
+        <option value="白糠町">白糠町</option>
+        <option value="音別町">音別町</option>
+      </select>
       <input type="text" id="address-input"
-             placeholder=""
+             placeholder="町名・番地またはキーワード"
              inputmode="text" autocomplete="off" />
       <button id="search-btn" onclick="searchAddress()">検索</button>
     </div>
-    <div id="addr-hint">例: 大楽毛〇丁目〇〇番〇〇号</div>
+    <div id="addr-hint">例: 大楽毛3丁目5番地2号 ／ 釧路駅 ／ 遊学館</div>
   </section>
 
   <!-- 地区別警告（ゾーンに入ったとき表示） -->
