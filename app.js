@@ -468,7 +468,7 @@ async function searchAddress() {
 
     if (!hit) {
       showLoading(false);
-      alert(`「${raw}」が見つかりませんでした。\n例: 大楽毛3丁目5番地2号`);
+      alert(`住所が見つかりませんでした。\n例: 大楽毛〇丁目〇番地〇号`);
       return;
     }
 
