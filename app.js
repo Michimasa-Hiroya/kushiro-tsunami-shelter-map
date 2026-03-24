@@ -140,22 +140,33 @@ const FloodLayer = L.GridLayer.extend({
         const px = id.data;
 
         // ピクセルごとの緯度・経度を事前計算（メルカトル投影）
+        // 定数を事前計算して内ループの演算コストを削減
         const nDem = Math.pow(2, demZ);
         const lngs = new Float32Array(sz.x);
         const lats = new Float32Array(sz.y);
+        const lngBase = (demX + srcX / sz.x) / nDem * 360 - 180;
+        const lngStep = (srcW / sz.x) / sz.x / nDem * 360;
         for (let cx = 0; cx < sz.x; cx++) {
-          lngs[cx] = (demX + (srcX + cx * srcW / sz.x) / sz.x) / nDem * 360 - 180;
+          lngs[cx] = lngBase + cx * lngStep;
         }
+        const mercYBase = (demY + srcY / sz.y) / nDem;
+        const mercYStep = (srcH / sz.y) / sz.y / nDem;
         for (let cy = 0; cy < sz.y; cy++) {
-          const mercY = (demY + (srcY + cy * srcH / sz.y) / sz.y) / nDem;
+          const mercY = mercYBase + cy * mercYStep;
           lats[cy] = Math.atan(Math.sinh(Math.PI * (1 - 2 * mercY))) * 180 / Math.PI;
         }
 
         for (let cy = 0; cy < sz.y; cy++) {
           const lat = lats[cy];
           for (let cx = 0; cx < sz.x; cx++) {
+            const lng = lngs[cx];
+            // latLngInFloodArea をインライン化（ピクセル単位呼び出しのオーバーヘッド削減）
+            if (!((lat>=42.78&&lat<=43.13&&lng>=144.08&&lng<=144.55)||
+                  (lat>=42.90&&lat<=43.17&&lng>=144.40&&lng<=144.68)||
+                  (lat>=42.60&&lat<=43.03&&lng>=143.85&&lng<=144.28))) {
+              px[(cy*sz.x+cx)*4+3] = 0; continue;
+            }
             const i = (cy * sz.x + cx) * 4;
-            if (!latLngInFloodArea(lat, lngs[cx])) { px[i+3] = 0; continue; }
             const col = getFloodRGBA(decodeDEMElev(px[i], px[i+1], px[i+2]), targetH);
             if (col) { px[i]=col[0]; px[i+1]=col[1]; px[i+2]=col[2]; px[i+3]=col[3]; }
             else      { px[i+3] = 0; }
