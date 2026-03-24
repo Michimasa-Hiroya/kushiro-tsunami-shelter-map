@@ -8,6 +8,7 @@ let radiusCircles = [];
 let tsunamiHeightM   = 0;  // シナリオ: 津波高さ（m）
 let tsunamiArrivalMin = 0; // シナリオ: 到達時間（分）
 let floodLayer = null;     // 浸水シミュレーションレイヤー
+let kinkyuuNames = new Set(); // 指定緊急避難場所の名前セット
 
 // 車圏内半径テーブル（分 → メートル）
 const CAR_RADIUS_M = { 0: 0, 10: 3500, 15: 4200, 20: 7000 };
