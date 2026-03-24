@@ -827,12 +827,12 @@ function addMapLegend() {
       '<br><span class="map-legend-dot" style="background:#34d399"></span>指定避難所',
       '<hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">',
       '<b style="font-size:10px">浸水深（想定）</b>',
-      '<br><span class="map-legend-dot" style="background:rgba(190,20,170,0.9)"></span>20m〜',
-      '<br><span class="map-legend-dot" style="background:rgba(220,30,100,0.9)"></span>10〜20m',
-      '<br><span class="map-legend-dot" style="background:rgba(255,80,80,0.9)"></span>5〜10m',
-      '<br><span class="map-legend-dot" style="background:rgba(255,140,110,0.9)"></span>3〜5m',
-      '<br><span class="map-legend-dot" style="background:rgba(255,190,140,0.9)"></span>0.5〜3m',
-      '<br><span class="map-legend-dot" style="background:rgba(255,250,160,0.9)"></span>〜0.5m',
+      '<br><span class="map-legend-dot" style="background:rgba(70,0,200,0.92)"></span>20m〜',
+      '<br><span class="map-legend-dot" style="background:rgba(140,0,70,0.88)"></span>10〜20m',
+      '<br><span class="map-legend-dot" style="background:rgba(220,0,0,0.85)"></span>5〜10m',
+      '<br><span class="map-legend-dot" style="background:rgba(255,90,0,0.82)"></span>3〜5m',
+      '<br><span class="map-legend-dot" style="background:rgba(255,200,0,0.78)"></span>0.5〜3m',
+      '<br><span class="map-legend-dot" style="background:rgba(255,255,120,0.65)"></span>〜0.5m',
     ].join('');
     return div;
   };
