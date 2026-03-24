@@ -167,6 +167,13 @@
 
 </div>
 
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js');
+  }
+  window.addEventListener('online',  () => document.getElementById('offline-banner').style.display = 'none');
+  window.addEventListener('offline', () => document.getElementById('offline-banner').style.display = 'block');
+</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="all-shelters-data.js"></script>
 <script src="shelters-data.js"></script>
