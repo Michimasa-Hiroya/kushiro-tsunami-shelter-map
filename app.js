@@ -208,6 +208,17 @@ const FloodLayer = L.GridLayer.extend({
           lats[cy] = Math.atan(Math.sinh(Math.PI * (1 - 2 * mercY))) * 180 / Math.PI;
         }
 
+        // タイルレベルで河川・市街地の有無を事前判定（ピクセルループの高速化）
+        const bufLat = 200 / RLAT, bufLng = 200 / RLNG;
+        const tLatMin = lats[lats.length-1], tLatMax = lats[0];
+        const tLngMin = lngs[0],             tLngMax = lngs[lngs.length-1];
+        const tileHasRiver  = RIVERS.some(r => r.some(([rl,rg]) =>
+          rl >= tLatMin-bufLat && rl <= tLatMax+bufLat &&
+          rg >= tLngMin-bufLng && rg <= tLngMax+bufLng));
+        const tileHasUrban  = URBAN_DENSE.some(a =>
+          tLatMax >= a.latMin && tLatMin <= a.latMax &&
+          tLngMax >= a.lngMin && tLngMin <= a.lngMax);
+
         for (let cy = 0; cy < sz.y; cy++) {
           const lat = lats[cy];
           for (let cx = 0; cx < sz.x; cx++) {
@@ -219,7 +230,9 @@ const FloodLayer = L.GridLayer.extend({
               px[(cy*sz.x+cx)*4+3] = 0; continue;
             }
             const i = (cy * sz.x + cx) * 4;
-            const col = getFloodRGBA(decodeDEMElev(px[i], px[i+1], px[i+2]), targetH);
+            const boost  = (tileHasRiver && nearRiver(lat, lng))    ?  1 : 0;
+            const reduce = (tileHasUrban && inUrbanDense(lat, lng)) ?  2 : 0;
+            const col = getFloodRGBA(decodeDEMElev(px[i], px[i+1], px[i+2]), targetH + boost - reduce);
             if (col) { px[i]=col[0]; px[i+1]=col[1]; px[i+2]=col[2]; px[i+3]=col[3]; }
             else      { px[i+3] = 0; }
           }
