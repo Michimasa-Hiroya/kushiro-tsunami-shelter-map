@@ -542,6 +542,11 @@ body {
 /* 概算バッジ */
 .badge.est-badge   { background: rgba(234,179,8,0.08); border-color: rgba(234,179,8,0.22); color: #fde047; font-size: 11px; }
 
+/* 収容人数バッジ */
+.badge.cap-lg { background: rgba(52,211,153,0.15); border-color: rgba(52,211,153,0.45); color: #6ee7b7; font-weight: 700; }
+.badge.cap-md { background: rgba(56,189,248,0.12); border-color: rgba(56,189,248,0.40); color: #7dd3fc; font-weight: 700; }
+.badge.cap-sm { background: rgba(148,163,184,0.10); border-color: rgba(148,163,184,0.25); color: #94a3b8; }
+
 /* 時間・距離の行 */
 .time-row {
   display: flex;
