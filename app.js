@@ -507,14 +507,18 @@ function updateMapMarkers(results) {
   window._shelterMarkers = results
     .filter((s, i, arr) => arr.findIndex(x => x.name === s.name) === i)
     .map(s => {
-      const color = s.elevation_m >= 10 ? '#00aa44' : '#cc7700';
+      const color = (s.elevation_m !== null && s.elevation_m >= 10) ? '#00aa44' : '#cc7700';
+      const elevLabel = s.elevation_m !== null ? `🔺${s.elevation_m}m` : '🔺標高不明';
+      const popupElev = s.elevation_m !== null
+        ? `標高: ${s.elevation_m}m<br>海岸から: ${(s.distance_from_sea_m/1000).toFixed(1)}km<br>`
+        : '';
       return L.marker([s.lat, s.lng], {
         icon: L.divIcon({
-          html: `<div style="background:${color};color:#fff;padding:3px 7px;border-radius:5px;font-size:13px;font-weight:bold;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.4)">🔺${s.elevation_m}m</div>`,
+          html: `<div style="background:${color};color:#fff;padding:3px 7px;border-radius:5px;font-size:13px;font-weight:bold;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.4)">${elevLabel}</div>`,
           iconSize: null, className: ''
         })
       }).addTo(map)
-        .bindPopup(`<b>${s.name}</b><br>標高: ${s.elevation_m}m<br>海岸から: ${(s.distance_from_sea_m/1000).toFixed(1)}km<br>${s.capacity > 0 ? `受け入れ人数: ${s.capacity}人<br>` : ''}${s.address}`);
+        .bindPopup(`<b>${s.name}</b><br>${popupElev}${s.capacity > 0 ? `受け入れ人数: ${s.capacity}人<br>` : ''}${s.address}`);
     });
 }
 
