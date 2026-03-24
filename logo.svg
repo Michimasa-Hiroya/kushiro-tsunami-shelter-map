@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 300">
+  <defs>
+    <clipPath id="shield-clip">
+      <path d="M140,272 Q40,224 40,158 L40,44 L240,44 L240,158 Q240,224 140,272Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- シールド外枠（濃いチャコール） -->
+  <path d="M140,282 Q30,230 30,158 L30,34 L250,34 L250,158 Q250,230 140,282Z" fill="#1e1e1e"/>
+
+  <!-- シールド内側（白） -->
+  <path d="M140,272 Q40,224 40,158 L40,44 L240,44 L240,158 Q240,224 140,272Z" fill="#ffffff"/>
+
+  <!-- クリップ内コンテンツ -->
+  <g clip-path="url(#shield-clip)">
+
+    <!-- 山（背景・左） -->
+    <polygon points="40,185 98,92 156,185" fill="#4a4a4a"/>
+    <!-- 山（背景・右） -->
+    <polygon points="124,185 182,88 240,185" fill="#525252"/>
+    <!-- 山（前景・中央・最大） -->
+    <polygon points="70,185 140,78 210,185" fill="#2e2e2e"/>
+
+    <!-- 雪 -->
+    <polygon points="140,78 126,102 154,102" fill="#f0f0f0"/>
+    <polygon points="98,92 86,112 110,112" fill="#e8e8e8"/>
+    <polygon points="182,88 170,108 194,108" fill="#e8e8e8"/>
+
+    <!-- 緑の地面 -->
+    <rect x="40" y="182" width="200" height="92" fill="#2a6b2a"/>
+    <ellipse cx="140" cy="182" rx="100" ry="12" fill="#358035"/>
+
+    <!-- 家（屋根） -->
+    <polygon points="140,130 96,162 184,162" fill="#ffffff"/>
+    <!-- 煙突 -->
+    <rect x="162" y="140" width="11" height="24" fill="#ffffff"/>
+    <!-- 家（壁） -->
+    <rect x="100" y="162" width="80" height="44" fill="#ffffff"/>
+    <!-- 窓（4分割） -->
+    <rect x="116" y="168" width="48" height="32" fill="#1e1e1e"/>
+    <line x1="140" y1="168" x2="140" y2="200" stroke="#ffffff" stroke-width="3"/>
+    <line x1="116" y1="184" x2="164" y2="184" stroke="#ffffff" stroke-width="3"/>
+
+  </g>
+
+  <!-- シールド枠の縁取り（内側に細く重ねて締める） -->
+  <path d="M140,272 Q40,224 40,158 L40,44 L240,44 L240,158 Q240,224 140,272Z"
+        fill="none" stroke="#1e1e1e" stroke-width="3"/>
+
+  <!-- テキスト -->
+  <text x="140" y="304" font-family="'Arial Black','Helvetica Neue',sans-serif"
+        font-size="26" font-weight="900" fill="#1e1e1e"
+        text-anchor="middle" letter-spacing="3">KUSHIRO SHELTER</text>
+</svg>
