@@ -598,7 +598,7 @@ function updateMapMarkers(results) {
       const color = (s.elevation_m !== null && s.elevation_m >= 10) ? '#00aa44' : '#cc7700';
       const elevLabel = s.elevation_m !== null ? `🔺${s.elevation_m}m` : '🔺標高不明';
       const popupElev = s.elevation_m !== null
-        ? `標高: ${s.elevation_m}m<br>海岸から: ${(s.distance_from_sea_m/1000).toFixed(1)}km<br>`
+        ? `標高: ${s.elevation_m}m${s.distance_from_sea_m !== null ? `　海岸から: ${(s.distance_from_sea_m/1000).toFixed(1)}km` : ''}<br>`
         : '';
       return L.marker([s.lat, s.lng], {
         icon: L.divIcon({
