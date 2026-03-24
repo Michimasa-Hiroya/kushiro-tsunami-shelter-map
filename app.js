@@ -524,6 +524,7 @@ function updateMapMarkers(results) {
 
 // ===== バッジ生成 =====
 function elevBadge(elev) {
+  if (elev === null) return `<span class="badge">標高 不明</span>`;
   if (tsunamiHeightM === 0) return `<span class="badge elev-safe">標高 ${elev}m</span>`;
   if (elev >= tsunamiHeightM + 5) return `<span class="badge elev-safe">標高 ${elev}m ✓ 安全</span>`;
   if (elev >= tsunamiHeightM)     return `<span class="badge elev-caution">標高 ${elev}m △ 要確認</span>`;
