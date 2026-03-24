@@ -1,0 +1,9 @@
+# ソースデータ（デプロイ不要）
+*.csv
+*.geojson
+避難場所/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
