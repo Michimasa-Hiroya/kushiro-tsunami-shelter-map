@@ -675,7 +675,7 @@ function showAllSheltersOnMap() {
     const capacityLine = s.capacity > 0 ? `受け入れ人数: ${s.capacity}人<br>` : '';
 
     L.circleMarker([s.lat, s.lng], {
-      radius: 6,
+      radius: 7,
       color: color,
       fillColor: color,
       fillOpacity: 0.75,
