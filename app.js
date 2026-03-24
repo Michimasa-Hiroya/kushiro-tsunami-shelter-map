@@ -315,6 +315,7 @@ function setTsunamiHeight(h) {
   });
   updateFloodLayer();
   showWarningMarkers();
+  showAllSheltersOnMap(); // 津波高さ変更時にマップ上の避難所表示も更新
   if (currentLat !== null) findShelters(currentLat, currentLng);
 }
 
