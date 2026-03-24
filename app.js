@@ -389,7 +389,7 @@ async function searchAddress() {
 
     if (!hit) {
       showLoading(false);
-      alert(`「${raw}」が見つかりませんでした。\n例: 大楽毛3丁目5番地2号 / 釧路駅 / 遊学館`);
+      alert(`「${raw}」が見つかりませんでした。\n例: 大楽毛3丁目5番地2号`);
       return;
     }
 
