@@ -73,10 +73,11 @@ function latLngInFloodArea(lat, lng) {
   );
 }
 
-// ===== 河川沿い補正（津波+1m）=====
+// ===== 河川沿い補正（250m以内:+2m、250〜500m:+1m）=====
 // 緯度1度≈111km、経度1度≈81.2km（@43°N）
 const RLAT = 111000, RLNG = 81200;
-const RIVER_BUF2 = 200 * 200; // 200m バッファ（距離²で比較）
+const RIVER_BUF_NEAR2 = 250 * 250; // 250m（距離²）
+const RIVER_BUF_FAR2  = 500 * 500; // 500m（距離²）
 
 // 釧路川・新釧路川・阿寒川の代表ポリライン（橋梁座標ベース）
 const RIVERS = [
