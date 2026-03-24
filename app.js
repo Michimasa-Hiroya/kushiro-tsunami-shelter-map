@@ -356,11 +356,17 @@ document.addEventListener('DOMContentLoaded', () => {
     capacity:            f.properties.capacity,
   }));
 
+  // 指定緊急避難場所の名前セットを構築
+  kinkyuuNames = new Set(
+    ALL_SHELTERS.filter(s => s.types.includes('kinkyuu')).map(s => s.name)
+  );
+
   document.getElementById('address-input')
     .addEventListener('keydown', e => { if (e.key === 'Enter') searchAddress(); });
 
   showAllSheltersOnMap();
   addMapLegend();
+  loadHospitals();
 });
 
 // ===== GPS 取得 =====
