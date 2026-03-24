@@ -288,7 +288,7 @@ function getGPSLocation() {
   );
 }
 
-// ===== 住所の JS 正規化（Gemini のフォールバック・補完用）=====
+// ===== 住所の JS 正規化（GSI/Nominatim 検索前の前処理）=====
 function normalizeAddress(input) {
   let s = input.trim();
   s = s.replace(/[０-９]/g,  c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
