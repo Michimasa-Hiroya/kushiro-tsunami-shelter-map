@@ -539,7 +539,7 @@ function timeBadge(min, profile) {
   return `<span class="${cls}">${label} 約${min}分${warn}</span>`;
 }
 
-const cardClass = elev => tsunamiHeightM === 0 ? '' :
+const cardClass = elev => (elev === null || tsunamiHeightM === 0) ? '' :
   elev >= tsunamiHeightM + 5 ? 'safe' : elev >= tsunamiHeightM ? 'caution' : '';
 
 // ===== 結果レンダリング =====
