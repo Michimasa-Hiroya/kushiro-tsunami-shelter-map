@@ -913,3 +913,40 @@ function toggleAllShelters() {
 // ===== ローディング =====
 const showLoading = show =>
   (document.getElementById('loading').style.display = show ? 'flex' : 'none');
+
+// ===== 病院マーカー（Overpass API）=====
+async function loadHospitals() {
+  try {
+    const query = `[out:json][timeout:15];(node["amenity"="hospital"](42.78,143.80,43.15,144.70);way["amenity"="hospital"](42.78,143.80,43.15,144.70););out center;`;
+    const ctrl  = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 15000);
+    const resp  = await fetch(
+      `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`,
+      { signal: ctrl.signal }
+    );
+    clearTimeout(timer);
+    const data = await resp.json();
+
+    const hospitalIcon = L.divIcon({
+      html: '<div style="font-size:20px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))">🏥</div>',
+      iconSize: [24, 24], iconAnchor: [12, 12], className: ''
+    });
+
+    for (const el of data.elements) {
+      const lat = el.lat ?? el.center?.lat;
+      const lng = el.lon ?? el.center?.lon;
+      if (!lat || !lng) continue;
+      const name = el.tags?.name || '病院';
+      // 診療所・クリニックが誤ってhospitalタグで登録されている場合を除外
+      if (/診療所|クリニック|clinic/i.test(name)) continue;
+      L.marker([lat, lng], { icon: hospitalIcon })
+        .bindPopup(
+          `<b>🏥 ${name}</b><br>` +
+          `<span style="color:#f87171;font-weight:600">医療機関（病院）</span>`
+        )
+        .addTo(map);
+    }
+  } catch {
+    // オフライン時は病院マーカーを表示しない（無視）
+  }
+}
