@@ -104,11 +104,17 @@ function distSeg2(lat, lng, la, loa, lb, lob) {
   return dx*dx + dy*dy;
 }
 
-function nearRiver(lat, lng) {
+// 河川からの距離に応じたブースト量を返す（0/1/2）
+function riverBoost(lat, lng) {
+  let minD2 = Infinity;
   for (const r of RIVERS)
-    for (let i = 0; i < r.length - 1; i++)
-      if (distSeg2(lat, lng, r[i][0], r[i][1], r[i+1][0], r[i+1][1]) <= RIVER_BUF2) return true;
-  return false;
+    for (let i = 0; i < r.length - 1; i++) {
+      const d2 = distSeg2(lat, lng, r[i][0], r[i][1], r[i+1][0], r[i+1][1]);
+      if (d2 < minD2) minD2 = d2;
+    }
+  if (minD2 <= RIVER_BUF_NEAR2) return 2; // 250m以内: +2m
+  if (minD2 <= RIVER_BUF_FAR2)  return 1; // 250〜500m: +1m
+  return 0;
 }
 
 // ===== 建物密集地区補正（津波-2m）=====
