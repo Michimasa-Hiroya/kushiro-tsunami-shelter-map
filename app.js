@@ -579,6 +579,13 @@ async function findShelters(lat, lng) {
 
   updateMapMarkers(results);
   renderResults(results, lat, lng);
+
+  // 第1候補のルートを自動表示（再フェッチなし）
+  if (routeLayer) { routeLayer.remove(); routeLayer = null; }
+  const first = results[0];
+  routeLayer = first.route.geometry
+    ? L.geoJSON(first.route.geometry, { style: { color: '#2277ff', weight: 5, opacity: 0.85 } }).addTo(map)
+    : L.polyline([[lat, lng], [first.lat, first.lng]], { color: '#2277ff', weight: 4, dashArray: '10,8', opacity: 0.8 }).addTo(map);
 }
 
 // ===== 地図マーカー更新 =====
