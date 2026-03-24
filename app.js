@@ -674,10 +674,11 @@ function renderResults(results, userLat, userLng) {
   const adviceHtml = `
     <div class="search-ai-box">
       <div class="search-ai-title">⚠️ 避難の際のご注意</div>
-      <div class="search-ai-line">🏃 最寄りの避難所へ迷わず速やかに移動してください。</div>
-      <div class="search-ai-line">🚗 車での避難は渋滞が発生しやすく、到達時間に大きなばらつきが生じる可能性があります。高台・内陸方向を目指してください。</div>
-      <div class="search-ai-line">🌉 大津波警報発令時は橋が封鎖される場合があります。橋を渡る経路を避難ルートとしている場合は、別ルートも事前に確認しておきましょう。</div>
+      <div class="search-ai-line">🏃 最寄りの避難所を3箇所出しています。どこに逃げれば良いか、自宅に留まるかはご自身で判断してください。</div>
       <div class="search-ai-line">📻 実際の避難行動は、行政・防災無線の指示に必ず従ってください。</div>
+      <div class="search-ai-line">🏠 指定避難所は参考程度に出しています。緊急の場合は、指定緊急避難場所に逃げてください。</div>
+      <div class="search-ai-line">🚗 車での避難は渋滞が発生しやすく、到達時間に大きなばらつきが生じる可能性があります。高台・内陸方向を目指してください。</div>
+      <div class="search-ai-line">🌉 大津波警報発令時は橋が封鎖される場合があります。橋を渡る経路を避難ルートとしている場合は、別ルートも事前に確認しておいてください。</div>
     </div>`;
 
   document.getElementById('results').style.display = 'block';
