@@ -73,6 +73,56 @@ function latLngInFloodArea(lat, lng) {
   );
 }
 
+// ===== 河川沿い補正（津波+1m）=====
+// 緯度1度≈111km、経度1度≈81.2km（@43°N）
+const RLAT = 111000, RLNG = 81200;
+const RIVER_BUF2 = 200 * 200; // 200m バッファ（距離²で比較）
+
+// 釧路川・新釧路川・阿寒川の代表ポリライン（橋梁座標ベース）
+const RIVERS = [
+  // 釧路川（海口〜上流）
+  [[42.974,144.383],[42.981,144.386],[42.983,144.391],
+   [42.987,144.396],[42.999,144.409],[43.004,144.418],
+   [43.015,144.432],[43.030,144.450]],
+  // 新釧路川（海口〜上流）
+  [[42.993,144.353],[42.998,144.358],[42.999,144.361],
+   [43.002,144.363],[43.008,144.366],[43.015,144.371],
+   [43.022,144.378]],
+  // 阿寒川（概略）
+  [[43.004,144.418],[43.012,144.423],[43.022,144.430],[43.040,144.440]],
+];
+
+// 点→線分の距離²（m²）
+function distSeg2(lat, lng, la, loa, lb, lob) {
+  const px = (lng - loa) * RLNG, py = (lat - la) * RLAT;
+  const bx = (lob - loa) * RLNG, by = (lb  - la) * RLAT;
+  const len2 = bx * bx + by * by;
+  if (len2 === 0) return px * px + py * py;
+  const t = Math.max(0, Math.min(1, (px*bx + py*by) / len2));
+  const dx = px - t*bx, dy = py - t*by;
+  return dx*dx + dy*dy;
+}
+
+function nearRiver(lat, lng) {
+  for (const r of RIVERS)
+    for (let i = 0; i < r.length - 1; i++)
+      if (distSeg2(lat, lng, r[i][0], r[i][1], r[i+1][0], r[i+1][1]) <= RIVER_BUF2) return true;
+  return false;
+}
+
+// ===== 建物密集地区補正（津波-2m）=====
+// 中部南地区（釧路駅ライン〜柳町公園ライン）・中部北地区
+const URBAN_DENSE = [
+  { latMin: 42.974, latMax: 42.993, lngMin: 144.360, lngMax: 144.415 }, // 中部南
+  { latMin: 42.993, latMax: 43.013, lngMin: 144.358, lngMax: 144.418 }, // 中部北
+];
+
+function inUrbanDense(lat, lng) {
+  return URBAN_DENSE.some(a =>
+    lat >= a.latMin && lat <= a.latMax && lng >= a.lngMin && lng <= a.lngMax
+  );
+}
+
 // 国土地理院 DEM PNG タイルから標高を復元（単位: m）
 function decodeDEMElev(r, g, b) {
   const v = r * 65536 + g * 256 + b;
