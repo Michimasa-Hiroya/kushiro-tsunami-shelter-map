@@ -713,8 +713,9 @@ function showAllSheltersOnMap() {
       const capacityLine = s.capacity > 0 ? `受け入れ人数: ${s.capacity}人<br>` : '';
       const townLabel = s.town ? `<span style="color:#aaa">${s.town}</span><br>` : '';
 
+      const elevLine = s.elevation_m != null ? `標高: ${s.elevation_m}m<br>` : '';
       L.circleMarker([s.lat, s.lng], {
-        radius: 6,
+        radius: 8,
         color: color,
         fillColor: color,
         fillOpacity: 0.75,
