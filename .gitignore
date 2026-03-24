@@ -3,6 +3,9 @@
 *.geojson
 避難場所/
 
+# Claude Code ローカル設定（個人設定のため除外）
+.claude/
+
 # OS
 .DS_Store
 Thumbs.db
