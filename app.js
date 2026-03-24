@@ -150,12 +150,12 @@ function getFloodRGBA(elev, maxH) {
   const effectiveH = maxH - 2; // 実際の浸水深は津波高さより約2m浅い
   if (elev === null || elev < 0 || elev >= effectiveH) return null;
   const d = effectiveH - elev; // 浸水深（m）
-  if (d < 0.5)  return [255, 250, 160, 100]; // 薄黄（膝下程度）
-  if (d < 3)    return [255, 190, 140, 130]; // 薄橙（1階浸水）
-  if (d < 5)    return [255, 140, 110, 148]; // サーモン（2階床上）
-  if (d < 10)   return [255,  80,  80, 158]; // ピンク（2階天井）
-  if (d < 20)   return [220,  30, 100, 168]; // 濃ピンク（10〜20m）
-  return               [190,  20, 170, 178]; // マゼンタ（20m超）
+  if (d < 0.5)  return [255, 255, 120,  70]; // 極薄黄（〜0.5m）
+  if (d < 3)    return [255, 200,   0, 155]; // 黄（0.5〜3m）
+  if (d < 5)    return [255,  90,   0, 175]; // 橙（3〜5m）
+  if (d < 10)   return [220,   0,   0, 192]; // 赤（5〜10m）
+  if (d < 20)   return [140,   0,  70, 208]; // 深紅（10〜20m）
+  return               [ 70,   0, 200, 222]; // 深紫（20m〜）
 }
 
 // Leaflet GridLayer を拡張して DEM タイルを処理するカスタムレイヤー
