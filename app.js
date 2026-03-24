@@ -229,7 +229,7 @@ const FloodLayer = L.GridLayer.extend({
         const tileHasRiver  = RIVERS.some(r => r.some(([rl,rg]) =>
           rl >= tLatMin-buf500Lat && rl <= tLatMax+buf500Lat &&
           rg >= tLngMin-buf500Lng && rg <= tLngMax+buf500Lng));
-        const tileHasUrban  = URBAN_DENSE.some(a =>
+        const tileHasUrban  = [...URBAN_DENSE, ...URBAN_LIGHT].some(a =>
           tLatMax >= a.latMin && tLatMin <= a.latMax &&
           tLngMax >= a.lngMin && tLngMin <= a.lngMax);
 
