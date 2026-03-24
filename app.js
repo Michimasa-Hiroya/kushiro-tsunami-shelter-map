@@ -564,12 +564,15 @@ async function getRoute(profile, fromLat, fromLng, toLat, toLng) {
 
 // ===== 避難場所検索 =====
 async function findShelters(lat, lng) {
-  // 釧路市 + 釧路町・白糠町の全避難所を候補に
+  // 指定緊急避難場所のみを候補に（指定避難所は除外）
   // 津波10m以上は危険な低標高避難所を除外
   const hide = tsunamiHeightM >= 10;
-  const candidates = [...shelters].filter(s => !hide || !TSUNAMI_HIDE_NAMES.has(s.name));
+  const candidates = [...shelters].filter(s =>
+    kinkyuuNames.has(s.name) && (!hide || !TSUNAMI_HIDE_NAMES.has(s.name))
+  );
   if (typeof EXTRA_SHELTERS !== 'undefined') {
     for (const s of EXTRA_SHELTERS) {
+      if (!s.types.includes('kinkyuu')) continue; // 指定緊急避難場所のみ
       if (hide && TSUNAMI_HIDE_NAMES.has(s.name)) continue;
       // elevation_m がデータに含まれていればそれを優先、なければ null
       candidates.push({ elevation_m: null, distance_from_sea_m: null, ...s });
