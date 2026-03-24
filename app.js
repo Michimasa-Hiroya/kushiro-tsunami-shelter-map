@@ -371,6 +371,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===== GPS 取得 =====
 function getGPSLocation() {
+  document.getElementById('consent-modal').style.display = 'flex';
+}
+
+function consentGPS(agreed) {
+  document.getElementById('consent-modal').style.display = 'none';
+  if (!agreed) return;
   if (!navigator.geolocation) {
     alert('このブラウザはGPSに対応していません。住所を入力してください。');
     return;
