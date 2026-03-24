@@ -136,6 +136,27 @@
     </div>
   </div>
 
+  <!-- 位置情報同意モーダル -->
+  <div id="consent-modal" style="display:none" onclick="consentGPS(false)">
+    <div id="consent-box" onclick="event.stopPropagation()">
+      <div class="consent-icon">📍</div>
+      <h3 class="consent-title">現在地を取得します</h3>
+      <div class="consent-body">
+        <p>GPS を使って現在地を取得し、最寄りの避難所を案内します。</p>
+        <ul>
+          <li>📵 取得した座標は<strong>端末内のみ</strong>で処理します。外部サーバーへの保存・送信は行いません</li>
+          <li>🗺 現在地の表示と避難所の距離計算にのみ使用します</li>
+          <li>🔒 アプリを閉じると位置情報は破棄されます</li>
+          <li>⚠️ ルート表示時のみ、出発地・目的地の座標を経路探索サービス（OSRM）へ送信します</li>
+        </ul>
+      </div>
+      <div class="consent-btns">
+        <button class="consent-btn-agree" onclick="consentGPS(true)">同意して現在地を取得</button>
+        <button class="consent-btn-cancel" onclick="consentGPS(false)">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
   <!-- フッター -->
   <footer id="app-footer">
     <div class="footer-section">
