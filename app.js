@@ -111,10 +111,12 @@ function nearRiver(lat, lng) {
 }
 
 // ===== 建物密集地区補正（津波-2m）=====
-// 中部南地区（釧路駅ライン〜柳町公園ライン）・中部北地区
+// 中部南地区（釧路駅ライン〜柳町公園ライン）・中部北地区・愛国地区・美原・芦野地区
 const URBAN_DENSE = [
   { latMin: 42.974, latMax: 42.993, lngMin: 144.360, lngMax: 144.415 }, // 中部南
   { latMin: 42.993, latMax: 43.013, lngMin: 144.358, lngMax: 144.418 }, // 中部北
+  { latMin: 43.000, latMax: 43.022, lngMin: 144.375, lngMax: 144.415 }, // 愛国西・愛国東地区
+  { latMin: 43.012, latMax: 43.036, lngMin: 144.400, lngMax: 144.455 }, // 美原・芦野地区
 ];
 
 function inUrbanDense(lat, lng) {
