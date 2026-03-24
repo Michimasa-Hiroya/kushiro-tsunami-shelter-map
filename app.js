@@ -218,7 +218,6 @@ const FloodLayer = L.GridLayer.extend({
         }
 
         // タイルレベルで河川・市街地の有無を事前判定（ピクセルループの高速化）
-        const bufLat = 200 / RLAT, bufLng = 200 / RLNG;
         const tLatMin = lats[lats.length-1], tLatMax = lats[0];
         const tLngMin = lngs[0],             tLngMax = lngs[lngs.length-1];
         const buf500Lat = 500 / RLAT, buf500Lng = 500 / RLNG;
