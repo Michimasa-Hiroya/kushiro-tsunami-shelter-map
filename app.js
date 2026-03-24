@@ -727,6 +727,7 @@ function showAllSheltersOnMap() {
           townLabel +
           `<span style="color:#888">${typeLabel}</span><br>` +
           `${s.address}<br>` +
+          elevLine +
           capacityLine +
           `対応災害: ${disasters}`
         )
