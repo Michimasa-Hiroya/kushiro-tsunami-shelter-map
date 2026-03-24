@@ -622,6 +622,13 @@ function timeBadge(min, profile) {
 const cardClass = elev => (elev === null || tsunamiHeightM === 0) ? '' :
   elev >= tsunamiHeightM + 5 ? 'safe' : elev >= tsunamiHeightM ? 'caution' : '';
 
+function capacityBadge(cap) {
+  if (!cap || cap <= 0) return '';
+  if (cap >= 500) return `<span class="badge cap-lg">👥 ${cap}人収容（大）</span>`;
+  if (cap >= 200) return `<span class="badge cap-md">👥 ${cap}人収容（中）</span>`;
+  return `<span class="badge cap-sm">👥 ${cap}人収容（小）</span>`;
+}
+
 // ===== 結果レンダリング =====
 function renderResults(results, userLat, userLng) {
   const cards = results.map((s, i) => {
