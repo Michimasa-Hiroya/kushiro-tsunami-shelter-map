@@ -715,7 +715,7 @@ function showRadiusCircles(lat, lng) {
 
   const carRadius     = CAR_RADIUS_M[tsunamiArrivalMin] ?? 0; // 10分=3.5km, 15分=4.2km, 20分=7km
   const walkRadius    = tsunamiArrivalMin * 80;              // ジョギング 80m/分（5km/h）
-  const walkSlowRadius = tsunamiArrivalMin * 33;             // 徒歩 33m/分（2km/h）
+  const walkSlowRadius = tsunamiArrivalMin * 50;             // 徒歩 50m/分（3km/h）
 
   if (carRadius > 0) {
     radiusCircles.push(L.circle([lat, lng], {
