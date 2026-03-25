@@ -938,8 +938,9 @@ async function loadHospitals() {
       const lng = el.lon ?? el.center?.lon;
       if (!lat || !lng) continue;
       const name = el.tags?.name || '病院';
-      // 診療所・クリニックが誤ってhospitalタグで登録されている場合を除外
+      // 診療所・クリニック、および個別除外施設をスキップ
       if (/診療所|クリニック|clinic/i.test(name)) continue;
+      if (name === 'うえはら耳鼻科') continue;
       L.marker([lat, lng], { icon: hospitalIcon })
         .bindPopup(
           `<b>🏥 ${name}</b><br>` +
