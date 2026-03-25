@@ -17,13 +17,11 @@
 <body>
 <div id="app">
 
-  <!-- ヘッダー -->
+  <!-- ヘッダー（コンパクト固定） -->
   <header id="header">
-
-    <!-- タイトル＋ロゴ -->
     <div id="header-main">
       <div class="header-logo">
-        <svg width="48" height="48" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+        <svg width="32" height="32" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
           <defs><clipPath id="hsc"><path d="M96,178 Q22,144 22,102 L22,28 L170,28 L170,102 Q170,144 96,178Z"/></clipPath></defs>
           <path d="M96,184 Q16,148 16,102 L16,22 L176,22 L176,102 Q176,148 96,184Z" fill="#1e1e1e"/>
           <path d="M96,178 Q22,144 22,102 L22,28 L170,28 L170,102 Q170,144 96,178Z" fill="#fff"/>
@@ -48,31 +46,9 @@
       <div class="header-text">
         <h1>釧路津波避難所マップ</h1>
       </div>
+      <div id="scenario-chip">🌊0m ⏱0分</div>
+      <button id="settings-btn" onclick="openSettings()" aria-label="設定を開く">⚙</button>
     </div>
-
-    <!-- シナリオ選択 -->
-    <div id="scenario-section">
-      <div class="scenario-row">
-        <span class="scenario-label">🌊 津波高さ</span>
-        <div class="scenario-btns" id="height-btns">
-          <button class="scenario-btn active" data-val="0"  onclick="setTsunamiHeight(0)">0m</button>
-          <button class="scenario-btn" data-val="5"  onclick="setTsunamiHeight(5)">5m</button>
-          <button class="scenario-btn" data-val="10" onclick="setTsunamiHeight(10)">10m</button>
-          <button class="scenario-btn" data-val="15" onclick="setTsunamiHeight(15)">15m</button>
-          <button class="scenario-btn" data-val="20" onclick="setTsunamiHeight(20)">20m</button>
-        </div>
-      </div>
-      <div class="scenario-row">
-        <span class="scenario-label">⏱ 到達時間</span>
-        <div class="scenario-btns" id="time-btns">
-          <button class="scenario-btn active" data-val="0"  onclick="setArrivalTime(0)">0分</button>
-          <button class="scenario-btn" data-val="10" onclick="setArrivalTime(10)">10分</button>
-          <button class="scenario-btn" data-val="15" onclick="setArrivalTime(15)">15分</button>
-          <button class="scenario-btn" data-val="20" onclick="setArrivalTime(20)">20分</button>
-        </div>
-      </div>
-    </div>
-
   </header>
 
   <!-- オフラインバナー -->
@@ -80,52 +56,95 @@
     📵 オフラインモード — 地図・避難所データはキャッシュから表示しています
   </div>
 
-  <!-- アプリ説明 -->
-  <div id="app-description">
-    <p>現在地またはご自宅の住所を入力すると、釧路管内の最寄り津波避難場所を距離順に案内します。</p>
-    <ol>
-      <li>上の「津波高さ」と「到達時間」でシナリオを選択</li>
-      <li>「現在地を取得（GPS）」またはご住所を入力して検索</li>
-      <li>地図に避難所と到達圏（青実線：ジョギング／緑実線：徒歩／点線：車）が表示されます</li>
-      <li>📵 一度オンラインで開くと、次回からオフライン（圏外・機内モード）でも地図・避難所データを確認できます</li>
-    </ol>
-  </div>
-
-  <!-- 現在地入力 -->
-  <section id="location-section">
-    <button id="gps-btn" onclick="getGPSLocation()">
-      📍 現在地を取得（GPS）
-    </button>
-    <div id="or-divider">または住所を入力</div>
-    <div id="address-input-wrap">
-      <select id="town-select">
-        <option value="釧路市">釧路市</option>
-        <option value="釧路町">釧路町</option>
-        <option value="白糠町">白糠町</option>
-        <option value="音別町">音別町</option>
-      </select>
-      <input type="text" id="address-input"
-             placeholder="町名・番地またはキーワード"
-             inputmode="text" autocomplete="off" />
-      <button id="search-btn" onclick="searchAddress()">検索</button>
-    </div>
-    <div id="addr-hint">例: 大楽毛〇丁目〇番 / 大楽毛〇-〇　※住所入力は番地までのデータです</div>
-  </section>
-
-  <!-- 地区別警告（ゾーンに入ったとき表示） -->
-  <div id="zone-warning"></div>
-
-  <!-- 地図 -->
+  <!-- 地図コントロール（地図上に重なるオーバーレイ） -->
   <div id="map-controls">
     <button id="toggle-all-btn" onclick="toggleAllShelters()">🗺 全避難所を表示中</button>
     <span id="shelter-count-label"></span>
   </div>
+
+  <!-- 地図 -->
   <div id="map"></div>
 
-  <!-- 検索結果 -->
-  <div id="results">
-    <h2>🏃 最も近い避難場所</h2>
-    <div id="walking-list"></div>
+  <!-- ボトムシート -->
+  <div id="bottom-sheet">
+    <div id="bs-handle"></div>
+    <div id="bs-content">
+
+      <!-- 地区別警告 -->
+      <div id="zone-warning"></div>
+
+      <!-- 現在地入力 -->
+      <section id="location-section">
+        <button id="gps-btn" onclick="getGPSLocation()">
+          📍 現在地を取得（GPS）
+        </button>
+        <div id="or-divider">または住所を入力</div>
+        <div id="address-input-wrap">
+          <select id="town-select">
+            <option value="釧路市">釧路市</option>
+            <option value="釧路町">釧路町</option>
+            <option value="白糠町">白糠町</option>
+            <option value="音別町">音別町</option>
+          </select>
+          <input type="text" id="address-input"
+                 placeholder="町名・番地またはキーワード"
+                 inputmode="text" autocomplete="off" />
+          <button id="search-btn" onclick="searchAddress()">検索</button>
+        </div>
+        <div id="addr-hint">例: 大楽毛〇丁目〇番 / 大楽毛〇-〇　※住所入力は番地までのデータです</div>
+      </section>
+
+      <!-- 検索結果 -->
+      <div id="results">
+        <h2>🏃 最も近い避難場所</h2>
+        <div id="walking-list"></div>
+      </div>
+
+      <!-- フッター -->
+      <footer id="app-footer">
+        <div class="footer-section">
+          <div class="footer-title">📋 更新履歴</div>
+          <ul class="footer-privacy">
+            <li><b>2026年3月26日</b>：地図ファースト＋ボトムシートUIに刷新。地図を全画面表示し、検索・結果パネルをスライド式に変更。設定モーダルにシナリオ選択と使い方を集約。</li>
+            <li><b>2026年3月25日</b>：病院・商業施設マーカーを追加（アイコン・標高表示付き）。収容人数バッジを色分け強調。第1候補ルートを自動表示。徒歩到達圏（時速3km）追加。津波10m以上で危険低標高施設を自動除外。各施設の名称・階数を整備。</li>
+            <li><b>2026年3月24日</b>：釧路町・白糠町の避難所データ追加（106件）。橋梁・渋滞予想マーカー追加。住所検索UI改善（市町村セレクタ）。オフライン対応（PWA）追加。浸水シミュレーション精度向上。</li>
+            <li><b>2026年3月22〜23日</b>：アプリ公開。釧路市の指定避難所・指定緊急避難場所データを収録。GPS・住所検索・避難圏表示・津波浸水シミュレーション機能を実装。</li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <div class="footer-title">📂 避難所データについて</div>
+          <ul class="footer-privacy">
+            <li>釧路市の避難所データは釧路市公開のオープンデータを使用。釧路町・白糠町のデータは北海道オープンデータポータルより取得（<a href="https://www.harp.lg.jp/opendata/dataset/1893.html" target="_blank" rel="noopener" class="footer-mail">CC BY</a>）。</li>
+            <li>浸水深表示は釧路沖地震（震度7想定）を前提とした<strong>予想</strong>です。国土地理院の標高データをもとにしたシミュレーションであり、実際の浸水範囲・深さとは異なります。</li>
+            <li>最新情報は各市町村公式サイトまたは釧路市役所（0154-23-5151）でご確認ください。</li>
+          </ul>
+          <div class="footer-creator" style="margin-top:8px">
+            <a href="https://www.city.kushiro.lg.jp/kurashi/bousai/1003680/1003686.html"
+               target="_blank" rel="noopener" class="footer-mail">
+              🔗 釧路市指定避難所・指定緊急避難場所一覧（公式）
+            </a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <div class="footer-title">🔒 プライバシーポリシー</div>
+          <ul class="footer-privacy">
+            <li>位置情報・住所は外部サーバーに保存しません。距離計算はすべて端末内で処理されます。</li>
+            <li>住所検索時は入力テキストを国土地理院・OpenStreetMapへ送信します（個人情報は含みません）。ルート表示時は出発地・目的地の座標をOSRMへ送信します。</li>
+            <li>本アプリはシミュレーションです。実際の避難行動は行政の指示に従ってください。</li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <div class="footer-title">👤 製作者情報</div>
+          <div class="footer-creator">
+            <div>釧路生成AIラボ</div>
+            <div>廣谷 迪正（ひろや みちまさ）</div>
+            <div>📧 <a href="mailto:kushiro.ai.lab@gmail.com" class="footer-mail">kushiro.ai.lab@gmail.com</a></div>
+          </div>
+        </div>
+        <div class="footer-copy">© 2025 釧路生成AIラボ</div>
+      </footer>
+
+    </div>
   </div>
 
   <!-- ローディング -->
@@ -133,6 +152,51 @@
     <div id="loading-inner">
       <div class="spinner"></div>
       <p>避難場所を検索中...</p>
+    </div>
+  </div>
+
+  <!-- 設定モーダル -->
+  <div id="settings-modal" onclick="closeSettings()">
+    <div id="settings-box" onclick="event.stopPropagation()">
+      <div id="settings-header">
+        <span id="settings-title">⚙ シナリオ設定</span>
+        <button id="settings-close" onclick="closeSettings()">×</button>
+      </div>
+
+      <!-- シナリオ選択 -->
+      <div id="scenario-section">
+        <div class="scenario-row">
+          <span class="scenario-label">🌊 津波高さ</span>
+          <div class="scenario-btns" id="height-btns">
+            <button class="scenario-btn active" data-val="0"  onclick="setTsunamiHeight(0)">0m</button>
+            <button class="scenario-btn" data-val="5"  onclick="setTsunamiHeight(5)">5m</button>
+            <button class="scenario-btn" data-val="10" onclick="setTsunamiHeight(10)">10m</button>
+            <button class="scenario-btn" data-val="15" onclick="setTsunamiHeight(15)">15m</button>
+            <button class="scenario-btn" data-val="20" onclick="setTsunamiHeight(20)">20m</button>
+          </div>
+        </div>
+        <div class="scenario-row">
+          <span class="scenario-label">⏱ 到達時間</span>
+          <div class="scenario-btns" id="time-btns">
+            <button class="scenario-btn active" data-val="0"  onclick="setArrivalTime(0)">0分</button>
+            <button class="scenario-btn" data-val="10" onclick="setArrivalTime(10)">10分</button>
+            <button class="scenario-btn" data-val="15" onclick="setArrivalTime(15)">15分</button>
+            <button class="scenario-btn" data-val="20" onclick="setArrivalTime(20)">20分</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 使い方（折りたたみ） -->
+      <details id="app-description">
+        <summary>📖 使い方</summary>
+        <p>現在地またはご自宅の住所を入力すると、釧路管内の最寄り津波避難場所を距離順に案内します。</p>
+        <ol>
+          <li>「津波高さ」と「到達時間」でシナリオを選択</li>
+          <li>「現在地を取得（GPS）」またはご住所を入力して検索</li>
+          <li>地図に避難所と到達圏（青実線：ジョギング／緑実線：徒歩／点線：車）が表示されます</li>
+          <li>📵 一度オンラインで開くと、次回からオフライン（圏外・機内モード）でも地図・避難所データを確認できます</li>
+        </ol>
+      </details>
     </div>
   </div>
 
@@ -156,50 +220,6 @@
       </div>
     </div>
   </div>
-
-  <!-- フッター -->
-  <footer id="app-footer">
-    <div class="footer-section">
-      <div class="footer-title">📋 更新履歴</div>
-      <ul class="footer-privacy">
-        <li><b>2026年3月25日</b>：病院・商業施設マーカーを追加（アイコン・標高表示付き）。収容人数バッジを色分け強調。第1候補ルートを自動表示。徒歩到達圏（時速3km）追加。津波10m以上で危険低標高施設を自動除外。各施設の名称・階数を整備。</li>
-        <li><b>2026年3月24日</b>：釧路町・白糠町の避難所データ追加（106件）。橋梁・渋滞予想マーカー追加。住所検索UI改善（市町村セレクタ）。オフライン対応（PWA）追加。浸水シミュレーション精度向上。タイトルを「釧路津波避難所マップ」に統一。</li>
-        <li><b>2026年3月23日</b>：津波浸水シミュレーション機能を追加。国土地理院の標高データをもとに浸水深を色分け表示。津波高さ・到達時間のシナリオ選択に対応。</li>
-        <li><b>2026年3月22日</b>：アプリ公開。釧路市の指定避難所・指定緊急避難場所データを収録。GPS・住所検索・避難圏表示（ジョギング/車）機能を実装。</li>
-      </ul>
-    </div>
-    <div class="footer-section">
-      <div class="footer-title">📂 避難所データについて</div>
-      <ul class="footer-privacy">
-        <li>釧路市の避難所データは釧路市公開のオープンデータを使用。釧路町・白糠町のデータは北海道オープンデータポータルより取得（<a href="https://www.harp.lg.jp/opendata/dataset/1893.html" target="_blank" rel="noopener" class="footer-mail">CC BY</a>）。</li>
-        <li>浸水深表示は釧路沖地震（震度7想定）を前提とした<strong>予想</strong>です。国土地理院の標高データをもとにしたシミュレーションであり、実際の浸水範囲・深さとは異なります。</li>
-        <li>最新情報は各市町村公式サイトまたは釧路市役所（0154-23-5151）でご確認ください。</li>
-      </ul>
-      <div class="footer-creator" style="margin-top:8px">
-        <a href="https://www.city.kushiro.lg.jp/kurashi/bousai/1003680/1003686.html"
-           target="_blank" rel="noopener" class="footer-mail">
-          🔗 釧路市指定避難所・指定緊急避難場所一覧（公式）
-        </a>
-      </div>
-    </div>
-    <div class="footer-section">
-      <div class="footer-title">🔒 プライバシーポリシー</div>
-      <ul class="footer-privacy">
-        <li>位置情報・住所は外部サーバーに保存しません。距離計算はすべて端末内で処理されます。</li>
-        <li>住所検索時は入力テキストを国土地理院・OpenStreetMapへ送信します（個人情報は含みません）。ルート表示時は出発地・目的地の座標をOSRMへ送信します。</li>
-        <li>本アプリはシミュレーションです。実際の避難行動は行政の指示に従ってください。</li>
-      </ul>
-    </div>
-    <div class="footer-section">
-      <div class="footer-title">👤 製作者情報</div>
-      <div class="footer-creator">
-        <div>釧路生成AIラボ</div>
-        <div>廣谷 迪正（ひろや みちまさ）</div>
-        <div>📧 <a href="mailto:kushiro.ai.lab@gmail.com" class="footer-mail">kushiro.ai.lab@gmail.com</a></div>
-      </div>
-    </div>
-    <div class="footer-copy">© 2025 釧路生成AIラボ</div>
-  </footer>
 
 </div>
 
