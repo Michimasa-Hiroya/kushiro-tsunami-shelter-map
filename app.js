@@ -1070,15 +1070,8 @@ function elevLine(groundElev, floors) {
 async function loadHospitals() {
   try {
     const bbox = '42.78,143.80,43.15,144.70';
-    const query = `[out:json][timeout:20];(node["amenity"="hospital"](${bbox});way["amenity"="hospital"](${bbox});node["amenity"~"clinic|doctors"]["name"~"病院"](${bbox});way["amenity"~"clinic|doctors"]["name"~"病院"](${bbox}););out center tags;`;
-    const ctrl  = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 20000);
-    const resp  = await fetch(
-      `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`,
-      { signal: ctrl.signal }
-    );
-    clearTimeout(timer);
-    const data = await resp.json();
+    const query = `[out:json][timeout:25];(node["amenity"="hospital"](${bbox});way["amenity"="hospital"](${bbox});node["amenity"~"clinic|doctors"]["name"~"病院"](${bbox});way["amenity"~"clinic|doctors"]["name"~"病院"](${bbox}););out center tags;`;
+    const data = await overpassFetch(query);
 
     // フィルタ・変換して候補リストを作成
     const items = [];
