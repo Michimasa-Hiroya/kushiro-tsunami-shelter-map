@@ -559,9 +559,6 @@ async function setUserLocation(lat, lng, label) {
   // ゾーンバナー非表示
   document.getElementById('zone-warning').style.display = 'none';
 
-  // まず地図にスクロール
-  document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
-
   showRadiusCircles(lat, lng);
 
   await findShelters(lat, lng);
