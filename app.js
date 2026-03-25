@@ -722,6 +722,7 @@ function renderResults(results, userLat, userLng) {
       <div class="shelter-rank">${rank}</div>
       <div class="shelter-name" data-name="${s.name}">${s.name}</div>
       <div class="time-row">
+        ${walkBadge(s.route.distance_m)}
         ${timeBadge(s.route.duration_min, 'foot')}
         <span class="badge dist-badge">📏 距離 ${s.route.distance_m}m</span>
         ${est}
