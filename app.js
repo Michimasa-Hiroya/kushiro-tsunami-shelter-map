@@ -1015,6 +1015,13 @@ const SHOP_EXCL_ZONES = [
   { latMin:42.994, latMax:43.006, lngMin:144.347, lngMax:144.374, except:['イオン'] }, // 昭和中央3丁目（イオンは残す）
 ];
 
+// テーブルを部分一致で引く（OSMの正式名に前後の文字が付いていても対応）
+function lookupPartial(table, name) {
+  if (name in table) return table[name];
+  const key = Object.keys(table).find(k => name.includes(k) || k.includes(name));
+  return key ? table[key] : undefined;
+}
+
 function shopShouldRemove(name, lat, lng) {
   if (SHOP_REMOVE_PATTERNS.some(p => name.includes(p))) return true;
   return SHOP_EXCL_ZONES.some(z =>
@@ -1025,6 +1032,11 @@ function shopShouldRemove(name, lat, lng) {
 function shopFloors(name, osmLevels) {
   if (SHOP_1F_PATTERNS.some(p => name.includes(p))) return 1;
   return parseInt(osmLevels ?? '2');
+}
+function shopIcon(shopType, name) {
+  if (/mall|department_store|hypermarket/.test(shopType)) return '🏬';
+  if (/supermarket|grocery/.test(shopType) || /フクハラ|コープ|トライアル|イオン|ハピネス|ビッグ/.test(name)) return '🛒';
+  return '🛍️';
 }
 
 // ===== 施設マーカー共通描画 =====
