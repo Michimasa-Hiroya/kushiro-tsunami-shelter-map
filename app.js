@@ -1001,7 +1001,7 @@ const HOSP_FLOORS = {
 const HOSP_RENAME = { '星が浦病院': '孝仁会リハビリテーション病院' };
 
 // 商業施設: 除外する名前（部分一致）
-const SHOP_REMOVE_PATTERNS = ['水野商店', '藤田ストアーまりも', '藤田ストアー まりも'];
+const SHOP_REMOVE_PATTERNS = ['水野商店', '藤田ストアーまりも', '藤田ストアー まりも', 'ヤマダ電機', 'ヤマダデンキ'];
 // 商業施設: 1階建て扱いにする名前（部分一致）
 const SHOP_1F_PATTERNS = [
   'トライアル','フクハラ','ビッグ','DCM','アクロスプラザ',
