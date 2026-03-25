@@ -112,7 +112,8 @@ function distSeg2(lat, lng, la, loa, lb, lob) {
 }
 
 // 河川からの距離に応じたブースト量を返す（補正なし）
-function riverBoost(lat, lng) {
+// eslint-disable-next-line no-unused-vars
+function riverBoost(_lat, _lng) {
   return 0;
 }
 
