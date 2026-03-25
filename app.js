@@ -326,6 +326,7 @@ function setArrivalTime(t) {
   document.querySelectorAll('#time-btns .scenario-btn').forEach(b => {
     b.classList.toggle('active', +b.dataset.val === t);
   });
+  updateScenarioChip();
   if (currentLat !== null) {
     showRadiusCircles(currentLat, currentLng);
     findShelters(currentLat, currentLng);
