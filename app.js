@@ -369,7 +369,6 @@ document.addEventListener('DOMContentLoaded', () => {
   showAllSheltersOnMap();
   addMapLegend();
   loadHospitals();
-  loadShops();
 });
 
 // ===== GPS 取得 =====
