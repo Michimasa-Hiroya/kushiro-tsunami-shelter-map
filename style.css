@@ -547,6 +547,9 @@ body {
 .badge.cap-md { background: rgba(56,189,248,0.12); border-color: rgba(56,189,248,0.40); color: #7dd3fc; font-weight: 700; }
 .badge.cap-sm { background: rgba(148,163,184,0.10); border-color: rgba(148,163,184,0.25); color: #94a3b8; }
 
+/* 徒歩バッジ */
+.badge.walk-ok { background: rgba(163,230,53,0.10); border-color: rgba(163,230,53,0.30); color: #bef264; }
+
 /* 時間・距離の行 */
 .time-row {
   display: flex;
