@@ -486,22 +486,33 @@ async function searchAddress() {
       .replace(new RegExp('^(北海道)?' + town.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), '')
       .trim();
 
-    // 検索クエリを詳細 → 粗い順に3段階用意（号なし・番地号なし）
-    const addrNoGo      = addr.replace(/(\d+)号\s*$/, '').trim();
-    const addrNoBanchi  = addrNoGo.replace(/(\d+番地?\s*)$/, '').trim();
-    const queries = [...new Set([
+    // 号なし・番地号なし・番地→番（OSM形式）のバリアントを生成
+    const addrNoGo     = addr.replace(/(\d+)号\s*$/, '').trim();
+    const addrNoBanchi = addrNoGo.replace(/\d+番地?\s*$/, '').trim();
+    // "5番地6号" → "5番6号"（Nominatim/OSMが好む形式）
+    const addrBanNo    = addr.replace(/番地(\d)/g, '番$1');
+    const addrBanNoNoGo = addrNoGo.replace(/番地(\d)/g, '番$1');
+
+    const gsiQueries = [...new Set([
       prefix + addr,
+      prefix + addrNoGo,
+      prefix + addrNoBanchi,
+    ])];
+    const nomQueries = [...new Set([
+      prefix + addrBanNo,       // 番号形式（OSMに最も多い）
+      prefix + addr,
+      prefix + addrBanNoNoGo,
       prefix + addrNoGo,
       prefix + addrNoBanchi,
     ])];
 
     let hit = null;
-    for (const q of queries) {
+    for (const q of gsiQueries) {
       hit = await tryGSI(q, bounds);
       if (hit) break;
     }
     if (!hit) {
-      for (const q of queries) {
+      for (const q of nomQueries) {
         hit = await tryNominatim(q, bounds);
         if (hit) break;
       }
