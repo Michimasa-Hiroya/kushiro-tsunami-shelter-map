@@ -788,9 +788,7 @@ function showRadiusCircles(lat, lng) {
       weight: 2,
       dashArray: '6 4',
     }).addTo(map).bindPopup(
-      `<b>🚗 車 ${tsunamiArrivalMin}分圏内</b><br>` +
-      `半径 約${(carRadius / 1000).toFixed(1)}km<br>` +
-      `点線の範囲内の避難所へは<br>車で${tsunamiArrivalMin}分以内に到達できます。`
+      `<b>🚗 車の到達圏</b><br>半径 約${(carRadius / 1000).toFixed(1)}km`
     ));
   }
 
@@ -803,9 +801,7 @@ function showRadiusCircles(lat, lng) {
       fillOpacity: 0.08,
       weight: 2,
     }).addTo(map).bindPopup(
-      `<b>🏃 ジョギング ${tsunamiArrivalMin}分圏内</b><br>` +
-      `半径 約${(walkRadius / 1000).toFixed(1)}km<br>` +
-      `青い線の範囲内の避難所へは<br>ジョギングで${tsunamiArrivalMin}分以内に到達できます。`
+      `<b>🏃 ジョギングの到達圏</b><br>半径 約${(walkRadius / 1000).toFixed(1)}km`
     ));
   }
 
@@ -819,9 +815,7 @@ function showRadiusCircles(lat, lng) {
       weight: 2,
       dashArray: '4 4',
     }).addTo(map).bindPopup(
-      `<b>🚶 徒歩 ${tsunamiArrivalMin}分圏内</b><br>` +
-      `半径 約${(walkSlowRadius / 1000).toFixed(1)}km<br>` +
-      `紫点線の範囲内の避難所へは<br>徒歩で${tsunamiArrivalMin}分以内に到達できます。`
+      `<b>🚶 徒歩の到達圏</b><br>半径 約${(walkSlowRadius / 1000).toFixed(1)}km`
     ));
   }
 }
