@@ -1039,9 +1039,15 @@ async function loadHospitals() {
     const query = `[out:json][timeout:25];(node["amenity"="hospital"](${bbox});way["amenity"="hospital"](${bbox});node["amenity"~"clinic|doctors"]["name"~"病院"](${bbox});way["amenity"~"clinic|doctors"]["name"~"病院"](${bbox}););out center tags;`;
     const data = await overpassFetch(query);
 
+    // 手動追加病院（OSMに未登録または座標が不正確なもの）
+    const MANUAL_HOSPITALS = [
+      { name: '東北海道病院',   lat: 42.998647, lng: 144.375030, floors: 5 },
+      { name: '釧路脳神経外科', lat: 43.012089, lng: 144.401274, floors: 3 },
+    ];
+
     // フィルタ・変換して候補リストを作成
-    const items = [];
-    const seen  = new Set();
+    const items = [...MANUAL_HOSPITALS]; // 手動分を先に追加
+    const seen  = new Set(MANUAL_HOSPITALS.map(h => h.name));
     for (const el of data.elements) {
       const lat = el.lat ?? el.center?.lat;
       const lng = el.lon ?? el.center?.lon;
