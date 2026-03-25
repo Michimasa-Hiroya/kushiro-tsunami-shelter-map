@@ -386,7 +386,7 @@ function consentGPS(agreed) {
   navigator.geolocation.getCurrentPosition(
     pos => setUserLocation(pos.coords.latitude, pos.coords.longitude),
     ()  => { showLoading(false); alert('位置情報の取得に失敗しました。\n\nスマートフォンの場合は「設定 → プライバシー → 位置情報サービス」をオンにしてください。\nブラウザの位置情報アクセスを許可してから再度お試しください。'); },
-    { timeout: 10000, maximumAge: 0 }
+    { timeout: 15000, maximumAge: 0, enableHighAccuracy: true }
   );
 }
 
