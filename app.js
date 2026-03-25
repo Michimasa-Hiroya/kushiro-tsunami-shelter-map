@@ -314,6 +314,7 @@ function setTsunamiHeight(h) {
   document.querySelectorAll('#height-btns .scenario-btn').forEach(b => {
     b.classList.toggle('active', +b.dataset.val === h);
   });
+  updateScenarioChip();
   updateFloodLayer();
   showWarningMarkers();
   showAllSheltersOnMap(); // 津波高さ変更時にマップ上の避難所表示も更新
