@@ -1082,12 +1082,12 @@ async function loadHospitals() {
       if (seen.has(name)) continue;
       seen.add(name);
 
-      name = HOSP_RENAME[name] ?? name;
+      name = lookupPartial(HOSP_RENAME, name) ?? name;
       const osmLevels = el.tags?.['building:levels'] ?? el.tags?.levels;
-      const floors = HOSP_FLOORS[name] ?? parseInt(osmLevels ?? '4');
+      const floors = lookupPartial(HOSP_FLOORS, name) ?? parseInt(osmLevels ?? '4');
 
       await placeFacilityMarker({
-        lat, lng, name, emoji: '🏥', floors,
+        lat, lng, name, emoji: '🏥',
         labelHtml: '<span style="color:#f87171;font-weight:600">医療機関（病院）</span><br>',
         defaultFloors: floors,
       });
