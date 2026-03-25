@@ -975,10 +975,24 @@ function toggleAllShelters() {
 const showLoading = show =>
   (document.getElementById('loading').style.display = show ? 'flex' : 'none');
 
+// ===== GSI標高取得ヘルパー =====
+async function getGsiElevation(lat, lng) {
+  try {
+    const resp = await fetch(
+      `https://cyberjapandata2.gsi.go.jp/general/dem/scripts/getelevation.php?lon=${lng}&lat=${lat}&outtype=JSON`,
+      { signal: AbortSignal.timeout(5000) }
+    );
+    const data = await resp.json();
+    const e = parseFloat(data.elevation);
+    return isNaN(e) ? null : Math.round(e);
+  } catch { return null; }
+}
+
 // ===== 病院マーカー（Overpass API）=====
 async function loadHospitals() {
   try {
-    const query = `[out:json][timeout:15];(node["amenity"="hospital"](42.78,143.80,43.15,144.70);way["amenity"="hospital"](42.78,143.80,43.15,144.70););out center;`;
+    const bbox = '42.78,143.80,43.15,144.70';
+    const query = `[out:json][timeout:15];(node["amenity"="hospital"](${bbox});way["amenity"="hospital"](${bbox}););out center tags;`;
     const ctrl  = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 15000);
     const resp  = await fetch(
@@ -988,9 +1002,10 @@ async function loadHospitals() {
     clearTimeout(timer);
     const data = await resp.json();
 
+    // ② Chrome mobile対応: flexコンテナで明示的サイズ指定
     const hospitalIcon = L.divIcon({
-      html: '<div style="font-size:20px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))">🏥</div>',
-      iconSize: [24, 24], iconAnchor: [12, 12], className: ''
+      html: '<div style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))">🏥</div>',
+      iconSize: [26, 26], iconAnchor: [13, 13], className: ''
     });
 
     for (const el of data.elements) {
@@ -998,17 +1013,76 @@ async function loadHospitals() {
       const lng = el.lon ?? el.center?.lon;
       if (!lat || !lng) continue;
       const name = el.tags?.name || '病院';
-      // 診療所・クリニック、および個別除外施設をスキップ
       if (/診療所|クリニック|clinic/i.test(name)) continue;
       if (name === 'うえはら耳鼻科') continue;
+
+      // ④ 建物階数と最上階標高を取得
+      const levels   = parseInt(el.tags?.['building:levels'] ?? el.tags?.levels ?? '4');
+      const groundElev = await getGsiElevation(lat, lng);
+      const topElev  = groundElev !== null ? groundElev + Math.max(0, levels - 1) * 4 : null;
+      const elevLine = topElev !== null
+        ? `地面標高: ${groundElev}m　最上階(${levels}F)標高: 約${topElev}m<br>`
+        : '';
+
       L.marker([lat, lng], { icon: hospitalIcon })
         .bindPopup(
           `<b>🏥 ${name}</b><br>` +
-          `<span style="color:#f87171;font-weight:600">医療機関（病院）</span>`
+          `<span style="color:#f87171;font-weight:600">医療機関（病院）</span><br>` +
+          elevLine
         )
         .addTo(map);
     }
   } catch {
     // オフライン時は病院マーカーを表示しない（無視）
+  }
+}
+
+// ===== 商業施設マーカー（Overpass API）③ =====
+async function loadShops() {
+  try {
+    const bbox = '42.78,143.80,43.15,144.70';
+    const shopTypes = 'mall|department_store|supermarket|hypermarket|doityourself|furniture|electronics';
+    const query = `[out:json][timeout:15];(way["shop"~"${shopTypes}"](${bbox}););out center tags;`;
+    const ctrl  = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 15000);
+    const resp  = await fetch(
+      `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`,
+      { signal: ctrl.signal }
+    );
+    clearTimeout(timer);
+    const data = await resp.json();
+
+    for (const el of data.elements) {
+      const lat = el.lat ?? el.center?.lat;
+      const lng = el.lon ?? el.center?.lon;
+      if (!lat || !lng) continue;
+      const name   = el.tags?.name || '商業施設';
+      const shop   = el.tags?.shop || '';
+      const isMall = /mall|department_store|hypermarket/.test(shop);
+      const emoji  = isMall ? '🏬' : '🏪';
+
+      const icon = L.divIcon({
+        html: `<div style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))">${emoji}</div>`,
+        iconSize: [26, 26], iconAnchor: [13, 13], className: ''
+      });
+
+      const levels     = parseInt(el.tags?.['building:levels'] ?? el.tags?.levels ?? '2');
+      const groundElev = await getGsiElevation(lat, lng);
+      const topElev    = groundElev !== null ? groundElev + Math.max(0, levels - 1) * 4 : null;
+      const elevLine   = topElev !== null
+        ? `地面標高: ${groundElev}m　最上階(${levels}F)標高: 約${topElev}m<br>`
+        : '';
+      const shopLabel  = isMall ? 'ショッピングモール・百貨店' : 'スーパー・商業施設';
+
+      L.marker([lat, lng], { icon })
+        .bindPopup(
+          `<b>${emoji} ${name}</b><br>` +
+          `<span style="color:#fbbf24;font-weight:600">${shopLabel}</span><br>` +
+          elevLine
+        )
+        .addTo(map);
+    }
+  } catch {
+    // オフライン時は商業施設マーカーを表示しない（無視）
   }
 }
