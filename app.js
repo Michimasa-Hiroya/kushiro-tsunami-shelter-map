@@ -1120,8 +1120,8 @@ async function loadShops() {
       if (!lat || !lng) continue;
       let name = el.tags?.name || '商業施設';
 
-      // 名前変換
-      name = SHOP_RENAME[name] ?? name;
+      // 名前変換（部分一致）
+      name = lookupPartial(SHOP_RENAME, name) ?? name;
 
       // 除外チェック
       if (shopShouldRemove(name, lat, lng)) continue;
@@ -1131,8 +1131,8 @@ async function loadShops() {
       const osmLevels = el.tags?.['building:levels'] ?? el.tags?.levels;
       const floors    = shopFloors(name, osmLevels);
       const shop      = el.tags?.shop || '';
-      const isMall    = /mall|department_store|hypermarket/.test(shop);
-      const emoji     = isMall ? '🏬' : '🏪';
+      const emoji     = shopIcon(shop, name);
+      const isMall    = emoji === '🏬';
       const shopLabel = isMall ? 'ショッピングモール・百貨店' : 'スーパー・商業施設';
 
       await placeFacilityMarker({
