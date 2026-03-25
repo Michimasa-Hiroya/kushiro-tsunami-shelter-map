@@ -1116,15 +1116,8 @@ async function loadShops() {
   try {
     const bbox = '42.78,143.80,43.15,144.70';
     const shopTypes = 'mall|department_store|supermarket|hypermarket|doityourself|furniture|electronics';
-    const query = `[out:json][timeout:20];(way["shop"~"${shopTypes}"](${bbox});way["name"~"コーチャンフォー"](${bbox});node["name"~"コーチャンフォー"](${bbox}););out center tags;`;
-    const ctrl  = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 20000);
-    const resp  = await fetch(
-      `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`,
-      { signal: ctrl.signal }
-    );
-    clearTimeout(timer);
-    const data = await resp.json();
+    const query = `[out:json][timeout:25];(way["shop"~"${shopTypes}"](${bbox});way["name"~"コーチャンフォー"](${bbox});node["name"~"コーチャンフォー"](${bbox}););out center tags;`;
+    const data = await overpassFetch(query);
 
     // フィルタ・変換して候補リストを作成
     const items = [];
