@@ -1039,31 +1039,26 @@ function shopIcon(shopType, name) {
   return '🛍️';
 }
 
-// ===== 施設マーカー共通描画 =====
-async function placeFacilityMarker({ lat, lng, name, emoji, labelHtml, defaultFloors }) {
-  const groundElev = await getGsiElevation(lat, lng);
-  const floors     = defaultFloors;
-  const topElev    = groundElev !== null ? groundElev + Math.max(0, floors - 1) * 4 : null;
-  const elevLine   = topElev !== null
-    ? `地面標高: ${groundElev}m　最上階(${floors}F)標高: 約${topElev}m<br>`
-    : '';
-  const icon = L.divIcon({
+// ===== 施設マーカー配置ヘルパー =====
+function makeFacilityIcon(emoji) {
+  return L.divIcon({
     html: `<div style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))">${emoji}</div>`,
     iconSize: [26, 26], iconAnchor: [13, 13], className: ''
   });
-  L.marker([lat, lng], { icon })
-    .bindPopup(`<b>${emoji} ${name}</b><br>${labelHtml}${elevLine}`)
-    .addTo(map);
+}
+function elevLine(groundElev, floors) {
+  if (groundElev === null) return '';
+  const top = groundElev + Math.max(0, floors - 1) * 4;
+  return `地面標高: ${groundElev}m　最上階(${floors}F)標高: 約${top}m<br>`;
 }
 
 // ===== 病院マーカー（Overpass API）=====
 async function loadHospitals() {
   try {
     const bbox = '42.78,143.80,43.15,144.70';
-    // 東北海道病院がclinicタグで登録されている可能性もあるため幅広く検索
-    const query = `[out:json][timeout:15];(node["amenity"="hospital"](${bbox});way["amenity"="hospital"](${bbox});node["amenity"~"clinic|doctors"]["name"~"病院"](${bbox});way["amenity"~"clinic|doctors"]["name"~"病院"](${bbox}););out center tags;`;
+    const query = `[out:json][timeout:20];(node["amenity"="hospital"](${bbox});way["amenity"="hospital"](${bbox});node["amenity"~"clinic|doctors"]["name"~"病院"](${bbox});way["amenity"~"clinic|doctors"]["name"~"病院"](${bbox}););out center tags;`;
     const ctrl  = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 15000);
+    const timer = setTimeout(() => ctrl.abort(), 20000);
     const resp  = await fetch(
       `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`,
       { signal: ctrl.signal }
@@ -1071,7 +1066,9 @@ async function loadHospitals() {
     clearTimeout(timer);
     const data = await resp.json();
 
-    const seen = new Set();
+    // フィルタ・変換して候補リストを作成
+    const items = [];
+    const seen  = new Set();
     for (const el of data.elements) {
       const lat = el.lat ?? el.center?.lat;
       const lng = el.lon ?? el.center?.lon;
@@ -1081,19 +1078,29 @@ async function loadHospitals() {
       if (name === 'うえはら耳鼻科') continue;
       if (seen.has(name)) continue;
       seen.add(name);
-
       name = lookupPartial(HOSP_RENAME, name) ?? name;
-      const osmLevels = el.tags?.['building:levels'] ?? el.tags?.levels;
-      const floors = lookupPartial(HOSP_FLOORS, name) ?? parseInt(osmLevels ?? '4');
-
-      await placeFacilityMarker({
-        lat, lng, name, emoji: '🏥',
-        labelHtml: '<span style="color:#f87171;font-weight:600">医療機関（病院）</span><br>',
-        defaultFloors: floors,
-      });
+      const osmL  = el.tags?.['building:levels'] ?? el.tags?.levels;
+      const floors = lookupPartial(HOSP_FLOORS, name) ?? (osmL ? parseInt(osmL) : 4);
+      items.push({ lat, lng, name, floors });
     }
-  } catch {
-    // オフライン時は病院マーカーを表示しない（無視）
+
+    // 標高を並行取得（順番に待たない）
+    const elevs = await Promise.all(items.map(it => getGsiElevation(it.lat, it.lng)));
+
+    // マーカーを一括配置
+    const icon = makeFacilityIcon('🏥');
+    for (let i = 0; i < items.length; i++) {
+      const { lat, lng, name, floors } = items[i];
+      L.marker([lat, lng], { icon })
+        .bindPopup(
+          `<b>🏥 ${name}</b><br>` +
+          `<span style="color:#f87171;font-weight:600">医療機関（病院）</span><br>` +
+          elevLine(elevs[i], floors)
+        )
+        .addTo(map);
+    }
+  } catch (e) {
+    console.warn('loadHospitals:', e);
   }
 }
 
@@ -1102,10 +1109,9 @@ async function loadShops() {
   try {
     const bbox = '42.78,143.80,43.15,144.70';
     const shopTypes = 'mall|department_store|supermarket|hypermarket|doityourself|furniture|electronics';
-    // コーチャンフォーは shop=books 等で登録されている可能性があるため名前検索も追加
-    const query = `[out:json][timeout:15];(way["shop"~"${shopTypes}"](${bbox});way["name"~"コーチャンフォー"](${bbox});node["name"~"コーチャンフォー"](${bbox}););out center tags;`;
+    const query = `[out:json][timeout:20];(way["shop"~"${shopTypes}"](${bbox});way["name"~"コーチャンフォー"](${bbox});node["name"~"コーチャンフォー"](${bbox}););out center tags;`;
     const ctrl  = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 15000);
+    const timer = setTimeout(() => ctrl.abort(), 20000);
     const resp  = await fetch(
       `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`,
       { signal: ctrl.signal }
@@ -1113,35 +1119,43 @@ async function loadShops() {
     clearTimeout(timer);
     const data = await resp.json();
 
-    const seen = new Set();
+    // フィルタ・変換して候補リストを作成
+    const items = [];
+    const seen  = new Set();
     for (const el of data.elements) {
       const lat = el.lat ?? el.center?.lat;
       const lng = el.lon ?? el.center?.lon;
       if (!lat || !lng) continue;
       let name = el.tags?.name || '商業施設';
-
-      // 名前変換（部分一致）
       name = lookupPartial(SHOP_RENAME, name) ?? name;
-
-      // 除外チェック
       if (shopShouldRemove(name, lat, lng)) continue;
-      if (seen.has(name + `${lat.toFixed(4)}`)) continue;
-      seen.add(name + `${lat.toFixed(4)}`);
+      const key = name + lat.toFixed(4);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      const osmL  = el.tags?.['building:levels'] ?? el.tags?.levels;
+      const floors = shopFloors(name, osmL);
+      const shop   = el.tags?.shop || '';
+      const emoji  = shopIcon(shop, name);
+      items.push({ lat, lng, name, floors, emoji });
+    }
 
-      const osmLevels = el.tags?.['building:levels'] ?? el.tags?.levels;
-      const floors    = shopFloors(name, osmLevels);
-      const shop      = el.tags?.shop || '';
-      const emoji     = shopIcon(shop, name);
+    // 標高を並行取得
+    const elevs = await Promise.all(items.map(it => getGsiElevation(it.lat, it.lng)));
+
+    // マーカーを一括配置
+    for (let i = 0; i < items.length; i++) {
+      const { lat, lng, name, floors, emoji } = items[i];
       const isMall    = emoji === '🏬';
       const shopLabel = isMall ? 'ショッピングモール・百貨店' : 'スーパー・商業施設';
-
-      await placeFacilityMarker({
-        lat, lng, name, emoji, floors,
-        labelHtml: `<span style="color:#fbbf24;font-weight:600">${shopLabel}</span><br>`,
-        defaultFloors: floors,
-      });
+      L.marker([lat, lng], { icon: makeFacilityIcon(emoji) })
+        .bindPopup(
+          `<b>${emoji} ${name}</b><br>` +
+          `<span style="color:#fbbf24;font-weight:600">${shopLabel}</span><br>` +
+          elevLine(elevs[i], floors)
+        )
+        .addTo(map);
     }
-  } catch {
-    // オフライン時は商業施設マーカーを表示しない（無視）
+  } catch (e) {
+    console.warn('loadShops:', e);
   }
 }
