@@ -419,7 +419,7 @@ const TOWN_BOUNDS = {
   '音別町': { latMin: 42.85, latMax: 43.08, lngMin: 143.82, lngMax: 144.18 },
 };
 
-// ===== 国土地理院 住所検索API（番地・号レベルまで対応）=====
+// ===== 国土地理院 住所検索API =====
 async function tryGSI(query, bounds) {
   try {
     const url = `https://msearch.gsi.go.jp/address-search/AddressSearch?q=${encodeURIComponent(query)}`;
@@ -428,16 +428,28 @@ async function tryGSI(query, bounds) {
     const data = await fetch(url, { signal: ctrl.signal }).then(r => r.json());
     clearTimeout(timer);
     if (!Array.isArray(data) || !data.length) return null;
-    // bounds内の候補を抽出し、title長（より詳細な住所）降順で並べて最上位を取得
+
+    // bounds内に絞る
     const inBounds = data.filter(d => {
       if (!d.properties?.title) return false;
       const [lng, lat] = d.geometry.coordinates;
       return lat >= bounds.latMin && lat <= bounds.latMax &&
              lng >= bounds.lngMin && lng <= bounds.lngMax;
-    }).sort((a, b) => b.properties.title.length - a.properties.title.length);
+    });
     if (!inBounds.length) return null;
-    const [lng, lat] = inBounds[0].geometry.coordinates;
-    return { lat, lon: lng };
+
+    // クエリのキーワードがタイトルに含まれる数 × 100 + タイトル長 でスコアリング
+    const tokens = query.replace(/北海道|郡|都|道|府/g, ' ')
+      .split(/[市区町村\s]+/).filter(t => t.length >= 2);
+    const scored = inBounds.map(d => {
+      const title = d.properties.title;
+      const matchCount = tokens.filter(t => title.includes(t)).length;
+      return { d, score: matchCount * 100 + title.length };
+    }).sort((a, b) => b.score - a.score);
+
+    const best = scored[0].d;
+    const [lng, lat] = best.geometry.coordinates;
+    return { lat, lon: lng, label: best.properties.title };
   } catch { return null; }
 }
 
@@ -449,13 +461,14 @@ async function tryNominatim(query, bounds) {
     const data = await fetch(url, { headers: { 'Accept-Language': 'ja' } }).then(r => r.json());
     if (!data.length) return null;
     const candidates = data.filter(d => d.class !== 'boundary' && d.type !== 'administrative');
-    // importance降順（より具体的な結果を優先）
     candidates.sort((a, b) => (+b.importance || 0) - (+a.importance || 0));
-    return candidates.find(d => {
+    const hit = candidates.find(d => {
       const la = +d.lat, lo = +d.lon;
       return la >= bounds.latMin && la <= bounds.latMax &&
              lo >= bounds.lngMin && lo <= bounds.lngMax;
-    }) || null;
+    });
+    if (!hit) return null;
+    return { ...hit, label: hit.display_name?.split(',')[0] || null };
   } catch { return null; }
 }
 
@@ -469,18 +482,30 @@ async function searchAddress() {
   try {
     const prefix = TOWN_PREFIXES[town];
     const bounds = TOWN_BOUNDS[town];
-    // 入力から選択済み市町村名を除去してから付与（二重付与防止）
     const addr = normalizeAddress(raw)
       .replace(new RegExp('^(北海道)?' + town.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), '')
       .trim();
-    const q1 = prefix + addr;
-    const q2 = prefix + ' ' + addr;
 
-    const hit =
-      await tryGSI(q1, bounds)       ||
-      await tryGSI(q2, bounds)       ||
-      await tryNominatim(q1, bounds) ||
-      await tryNominatim(q2, bounds);
+    // 検索クエリを詳細 → 粗い順に3段階用意（号なし・番地号なし）
+    const addrNoGo      = addr.replace(/(\d+)号\s*$/, '').trim();
+    const addrNoBanchi  = addrNoGo.replace(/(\d+番地?\s*)$/, '').trim();
+    const queries = [...new Set([
+      prefix + addr,
+      prefix + addrNoGo,
+      prefix + addrNoBanchi,
+    ])];
+
+    let hit = null;
+    for (const q of queries) {
+      hit = await tryGSI(q, bounds);
+      if (hit) break;
+    }
+    if (!hit) {
+      for (const q of queries) {
+        hit = await tryNominatim(q, bounds);
+        if (hit) break;
+      }
+    }
 
     if (!hit) {
       showLoading(false);
@@ -488,7 +513,7 @@ async function searchAddress() {
       return;
     }
 
-    setUserLocation(+hit.lat, +hit.lon);
+    setUserLocation(+hit.lat, +hit.lon, hit.label);
   } catch {
     showLoading(false);
     alert('住所検索に失敗しました。もう一度お試しください。');
