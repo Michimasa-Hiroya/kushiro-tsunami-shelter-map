@@ -1126,7 +1126,8 @@ async function loadShops() {
       const lat = el.lat ?? el.center?.lat;
       const lng = el.lon ?? el.center?.lon;
       if (!lat || !lng) continue;
-      let name = el.tags?.name || '商業施設';
+      let name = el.tags?.name;
+      if (!name || name.trim() === '' || name === '商業施設') continue; // 名前なし・汎用名は除外
       name = lookupPartial(SHOP_RENAME, name) ?? name;
       if (shopShouldRemove(name, lat, lng)) continue;
       const key = name + lat.toFixed(4);
