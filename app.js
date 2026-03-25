@@ -1037,9 +1037,28 @@ function shopIcon(shopType, name) {
 // ===== 施設マーカー配置ヘルパー =====
 function makeFacilityIcon(emoji) {
   return L.divIcon({
-    html: `<div style="width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:22px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))">${emoji}</div>`,
-    iconSize: [26, 26], iconAnchor: [13, 13], className: ''
+    html: `<div style="width:13px;height:13px;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))">${emoji}</div>`,
+    iconSize: [13, 13], iconAnchor: [7, 7], className: ''
   });
+}
+
+// Overpass 取得（主→副エンドポイントにフォールバック）
+async function overpassFetch(query) {
+  const endpoints = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.openstreetmap.ru/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter',
+  ];
+  for (const ep of endpoints) {
+    try {
+      const ctrl  = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 25000);
+      const resp  = await fetch(`${ep}?data=${encodeURIComponent(query)}`, { signal: ctrl.signal });
+      clearTimeout(timer);
+      if (resp.ok) return await resp.json();
+    } catch { /* 次のエンドポイントを試す */ }
+  }
+  return { elements: [] };
 }
 function elevLine(groundElev, floors) {
   if (groundElev === null) return '';
