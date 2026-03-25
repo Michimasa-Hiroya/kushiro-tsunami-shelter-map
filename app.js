@@ -521,18 +521,22 @@ async function searchAddress() {
 }
 
 // ===== 現在地セット =====
-async function setUserLocation(lat, lng) {
+async function setUserLocation(lat, lng, label) {
   currentLat = lat;
   currentLng = lng;
-  map.setView([lat, lng], 14);
+  // 住所検索時はより詳細なズームで表示（確認しやすく）
+  map.setView([lat, lng], label ? 16 : 14);
 
   if (userMarker) userMarker.remove();
+  const popupHtml = label
+    ? `<b>検索位置</b><br><span style="font-size:11px;color:#aaa">${label}</span>`
+    : '<b>現在地</b>';
   userMarker = L.marker([lat, lng], {
     icon: L.divIcon({
       html: '<div style="background:#cc0000;width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 6px rgba(0,0,0,.5)"></div>',
       iconSize: [18, 18], className: ''
     })
-  }).addTo(map).bindPopup('<b>現在地</b>').openPopup();
+  }).addTo(map).bindPopup(popupHtml).openPopup();
 
   // ゾーンバナー非表示
   document.getElementById('zone-warning').style.display = 'none';
