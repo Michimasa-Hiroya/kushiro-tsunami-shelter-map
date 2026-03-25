@@ -749,6 +749,7 @@ function renderResults(results, userLat, userLng) {
 
   document.getElementById('results').style.display = 'block';
   document.getElementById('walking-list').innerHTML = cards + adviceHtml;
+  setBottomSheetHeight(Math.round(window.innerHeight * 0.5));
 }
 
 // ===== ルート表示 =====
