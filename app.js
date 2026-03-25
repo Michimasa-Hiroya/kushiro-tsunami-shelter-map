@@ -1013,7 +1013,7 @@ const SHOP_RENAME = { '100満ボルト': 'エディオン' };
 // 商業施設: 座標ベース除外ゾーン（範囲内でexceptに含まれない名前を削除）
 const SHOP_EXCL_ZONES = [
   { latMin:43.027, latMax:43.043, lngMin:144.390, lngMax:144.420, except:[] },         // 桂木3丁目
-  { latMin:42.994, latMax:43.006, lngMin:144.347, lngMax:144.374, except:['イオン'] }, // 昭和中央3丁目（イオンは残す）
+  { latMin:42.990, latMax:43.010, lngMin:144.335, lngMax:144.382, except:['イオン'] }, // 昭和中央3丁目付近（イオンは残す、範囲拡大）
 ];
 
 // テーブルを部分一致で引く（OSMの正式名に前後の文字が付いていても対応）
