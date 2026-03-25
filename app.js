@@ -1001,23 +1001,6 @@ function lookupPartial(table, name) {
   return key ? table[key] : undefined;
 }
 
-function shopShouldRemove(name, lat, lng) {
-  if (SHOP_REMOVE_PATTERNS.some(p => name.includes(p))) return true;
-  return SHOP_EXCL_ZONES.some(z =>
-    lat >= z.latMin && lat <= z.latMax && lng >= z.lngMin && lng <= z.lngMax &&
-    !z.except.some(ex => name.includes(ex))
-  );
-}
-function shopFloors(name, osmLevels) {
-  if (SHOP_1F_PATTERNS.some(p => name.includes(p))) return 1;
-  return parseInt(osmLevels ?? '2');
-}
-function shopIcon(shopType, name) {
-  if (/mall|department_store|hypermarket/.test(shopType)) return '🏬';
-  if (/supermarket|grocery/.test(shopType) || /フクハラ|コープ|トライアル|イオン|ハピネス|ビッグ/.test(name)) return '🛒';
-  return '🛍️';
-}
-
 // ===== 施設マーカー配置ヘルパー =====
 function makeFacilityIcon(emoji) {
   return L.divIcon({
