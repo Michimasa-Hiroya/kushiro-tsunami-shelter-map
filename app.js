@@ -762,7 +762,6 @@ async function showRoute(profile, fromLat, fromLng, toLat, toLng) {
     : L.polyline([[fromLat, fromLng], [toLat, toLng]], { color, weight: 4, dashArray: '10,8', opacity: 0.8 }).addTo(map);
 
   map.fitBounds(routeLayer.getBounds(), { padding: [50, 50] });
-  document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
 }
 
 // ===== 徒歩・車の圏内サークル（到達時間連動）=====
