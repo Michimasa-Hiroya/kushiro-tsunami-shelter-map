@@ -428,14 +428,15 @@ async function tryGSI(query, bounds) {
     const data = await fetch(url, { signal: ctrl.signal }).then(r => r.json());
     clearTimeout(timer);
     if (!Array.isArray(data) || !data.length) return null;
-    const hit = data.find(d => {
+    // bounds内の候補を抽出し、title長（より詳細な住所）降順で並べて最上位を取得
+    const inBounds = data.filter(d => {
       if (!d.properties?.title) return false;
       const [lng, lat] = d.geometry.coordinates;
       return lat >= bounds.latMin && lat <= bounds.latMax &&
              lng >= bounds.lngMin && lng <= bounds.lngMax;
-    });
-    if (!hit) return null;
-    const [lng, lat] = hit.geometry.coordinates;
+    }).sort((a, b) => b.properties.title.length - a.properties.title.length);
+    if (!inBounds.length) return null;
+    const [lng, lat] = inBounds[0].geometry.coordinates;
     return { lat, lon: lng };
   } catch { return null; }
 }
@@ -443,10 +444,13 @@ async function tryGSI(query, bounds) {
 // ===== Nominatim 検索（フォールバック用）=====
 async function tryNominatim(query, bounds) {
   try {
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=jp`;
+    const viewbox = `${bounds.lngMin},${bounds.latMax},${bounds.lngMax},${bounds.latMin}`;
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=jp&viewbox=${viewbox}&bounded=1`;
     const data = await fetch(url, { headers: { 'Accept-Language': 'ja' } }).then(r => r.json());
     if (!data.length) return null;
     const candidates = data.filter(d => d.class !== 'boundary' && d.type !== 'administrative');
+    // importance降順（より具体的な結果を優先）
+    candidates.sort((a, b) => (+b.importance || 0) - (+a.importance || 0));
     return candidates.find(d => {
       const la = +d.lat, lo = +d.lon;
       return la >= bounds.latMin && la <= bounds.latMax &&
