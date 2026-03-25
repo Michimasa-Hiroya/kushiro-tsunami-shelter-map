@@ -694,6 +694,14 @@ function timeBadge(min, profile) {
   return `<span class="${cls}">${label} 約${min}分${warn}</span>`;
 }
 
+function walkBadge(distM) {
+  const min = Math.ceil(distM / 2000 * 60); // 徒歩2km/h
+  const over = tsunamiArrivalMin > 0 && min > tsunamiArrivalMin;
+  const warn = over ? ' ⚠ 津波到達前に間に合わない可能性' : '';
+  const cls  = over ? 'badge time-danger' : 'badge walk-ok';
+  return `<span class="${cls}">🚶 徒歩 約${min}分${warn}</span>`;
+}
+
 const cardClass = elev => (elev === null || tsunamiHeightM === 0) ? '' :
   elev >= tsunamiHeightM + 5 ? 'safe' : elev >= tsunamiHeightM ? 'caution' : '';
 
