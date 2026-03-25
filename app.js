@@ -1083,3 +1083,86 @@ async function loadHospitals() {
   }
 }
 
+// ===== 設定モーダル =====
+function openSettings() {
+  document.getElementById('settings-modal').classList.add('open');
+}
+
+function closeSettings() {
+  document.getElementById('settings-modal').classList.remove('open');
+}
+
+// ===== シナリオチップ更新 =====
+function updateScenarioChip() {
+  const hLabel = tsunamiHeightM === 0 ? '0m' : `${tsunamiHeightM}m`;
+  const tLabel = tsunamiArrivalMin === 0 ? '0分' : `${tsunamiArrivalMin}分`;
+  const chip = document.getElementById('scenario-chip');
+  if (chip) chip.textContent = `🌊${hLabel} ⏱${tLabel}`;
+}
+
+// ===== ボトムシート高さ設定 =====
+function setBottomSheetHeight(h) {
+  const sheet = document.getElementById('bottom-sheet');
+  if (!sheet) return;
+  sheet.style.height = h + 'px';
+  document.documentElement.style.setProperty('--bs-h', h + 'px');
+}
+
+// ===== ボトムシート ドラッグ制御 =====
+function initBottomSheet() {
+  const sheet  = document.getElementById('bottom-sheet');
+  const handle = document.getElementById('bs-handle');
+  if (!sheet || !handle) return;
+
+  const snap = (h) => {
+    const vh = window.innerHeight;
+    const states = [180, Math.round(vh * 0.5), Math.round(vh * 0.9)];
+    const nearest = states.reduce((a, b) => Math.abs(b - h) < Math.abs(a - h) ? b : a);
+    sheet.style.transition = '';
+    setBottomSheetHeight(nearest);
+  };
+
+  let startY = 0, startH = 0, dragging = false;
+
+  handle.addEventListener('touchstart', e => {
+    dragging = true;
+    startY = e.touches[0].clientY;
+    startH = sheet.offsetHeight;
+    sheet.style.transition = 'none';
+  }, { passive: true });
+
+  document.addEventListener('touchmove', e => {
+    if (!dragging) return;
+    const dy  = startY - e.touches[0].clientY;
+    const newH = Math.min(Math.max(startH + dy, 60), window.innerHeight * 0.93);
+    sheet.style.height = newH + 'px';
+    document.documentElement.style.setProperty('--bs-h', newH + 'px');
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => {
+    if (!dragging) return;
+    dragging = false;
+    snap(sheet.offsetHeight);
+  });
+
+  // デスクトップ確認用マウスドラッグ
+  handle.addEventListener('mousedown', e => {
+    dragging = true;
+    startY = e.clientY;
+    startH = sheet.offsetHeight;
+    sheet.style.transition = 'none';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const dy  = startY - e.clientY;
+    const newH = Math.min(Math.max(startH + dy, 60), window.innerHeight * 0.93);
+    sheet.style.height = newH + 'px';
+    document.documentElement.style.setProperty('--bs-h', newH + 'px');
+  });
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    snap(sheet.offsetHeight);
+  });
+}
