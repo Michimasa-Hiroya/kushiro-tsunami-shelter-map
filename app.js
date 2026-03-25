@@ -759,7 +759,7 @@ function showRadiusCircles(lat, lng) {
       dashArray: '4 4',
     }).addTo(map).bindPopup(
       `<b>🚶 徒歩 ${tsunamiArrivalMin}分圏内</b><br>` +
-      `半径 約${(walkSlowRadius / 1000).toFixed(1)}km（2km/h）<br>` +
+      `半径 約${(walkSlowRadius / 1000).toFixed(1)}km<br>` +
       `紫点線の範囲内の避難所へは<br>徒歩で${tsunamiArrivalMin}分以内に到達できます。`
     ));
   }
