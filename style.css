@@ -860,6 +860,279 @@ body {
   .alert-chip      { font-size: 11px; padding: 3px 9px; }
 }
 
+/* ===== 地図ファースト レイアウト ===== */
+:root {
+  --bs-h: 180px;
+  --header-h: 52px;
+}
+
+body {
+  overflow: hidden;
+}
+
+/* ヘッダー：固定・コンパクト */
+#header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-h);
+  z-index: 900;
+  overflow: visible;
+}
+
+#header::before, #header::after { display: none; }
+
+#header-main {
+  padding: 0 10px;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.header-logo { flex-shrink: 0; }
+
+.header-text h1 {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.5px;
+}
+
+/* シナリオチップ */
+#scenario-chip {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(56,189,248,0.12);
+  border: 1px solid rgba(56,189,248,0.30);
+  border-radius: 20px;
+  padding: 3px 9px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+
+/* 設定ボタン */
+#settings-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--text);
+  border-radius: 9px;
+  width: 36px;
+  height: 36px;
+  font-size: 17px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+#settings-btn:active { background: rgba(56,189,248,0.15); }
+
+/* オフラインバナー */
+#offline-banner {
+  position: fixed;
+  top: var(--header-h);
+  left: 0; right: 0;
+  z-index: 880;
+}
+
+/* 地図：フルスクリーン */
+#map {
+  position: fixed;
+  top: var(--header-h);
+  bottom: var(--bs-h);
+  left: 0; right: 0;
+  height: auto;
+  min-height: unset;
+  z-index: 100;
+  transition: bottom 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* 地図コントロール：地図上に浮かぶ */
+#map-controls {
+  position: fixed;
+  bottom: calc(var(--bs-h) + 8px);
+  left: 10px;
+  right: auto;
+  z-index: 500;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 0;
+  background: none;
+  border: none;
+  transition: bottom 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+#toggle-all-btn {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background: rgba(8,13,26,0.80);
+}
+
+#shelter-count-label {
+  background: rgba(8,13,26,0.75);
+  padding: 4px 8px;
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* ボトムシート */
+#bottom-sheet {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: var(--bs-h);
+  background: var(--surface);
+  border-top: 2px solid rgba(56,189,248,0.22);
+  border-radius: 16px 16px 0 0;
+  z-index: 1000;
+  overflow: hidden;
+  transition: height 0.3s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.55);
+}
+
+/* ドラッグハンドル */
+#bs-handle {
+  width: 40px;
+  height: 4px;
+  background: rgba(255,255,255,0.20);
+  border-radius: 2px;
+  margin: 10px auto 0;
+  cursor: grab;
+  touch-action: none;
+  flex-shrink: 0;
+}
+#bs-handle:active { cursor: grabbing; }
+
+/* ボトムシートの中身 */
+#bs-content {
+  height: calc(100% - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ボトムシート内の location-section */
+#bs-content #location-section {
+  border-top: none;
+}
+
+/* ボトムシート内の zone-warning */
+#bs-content #zone-warning {
+  display: none;
+}
+#bs-content #zone-warning.zone-danger,
+#bs-content #zone-warning.zone-safe {
+  display: block;
+}
+
+/* 設定モーダル */
+#settings-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(8,13,26,0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 11000;
+}
+#settings-modal.open {
+  display: flex;
+}
+
+#settings-box {
+  background: var(--surface);
+  border: 1px solid rgba(56,189,248,0.20);
+  border-radius: 18px 18px 0 0;
+  padding: 20px 18px 40px;
+  width: 100%;
+  max-width: 640px;
+  max-height: 85vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+#settings-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+}
+
+#settings-close {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text);
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+#settings-close:active { background: rgba(255,255,255,0.15); }
+
+/* 設定モーダル内のシナリオ選択 */
+#settings-modal #scenario-section {
+  padding: 0 0 14px;
+  border: none;
+}
+
+/* 設定モーダル内の使い方（details） */
+#settings-modal #app-description {
+  margin: 0;
+  padding: 14px 0 0;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+#settings-modal #app-description > summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  list-style: none;
+  padding: 4px 0 8px;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#settings-modal #app-description > summary::-webkit-details-marker { display: none; }
+#settings-modal #app-description > summary::after { content: '▼'; font-size: 10px; opacity: 0.7; }
+#settings-modal #app-description[open] > summary::after { content: '▲'; }
+
+#settings-modal #app-description p,
+#settings-modal #app-description ol {
+  margin-top: 6px;
+}
+
+/* ===== END 地図ファースト レイアウト ===== */
+
 /* ===== Footer ===== */
 #app-footer {
   margin-top: 32px;
