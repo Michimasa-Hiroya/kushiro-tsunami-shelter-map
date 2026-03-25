@@ -994,22 +994,6 @@ const HOSP_FLOORS = {
 // 病院: 旧名 → 新名
 const HOSP_RENAME = { '星が浦病院': '孝仁会リハビリテーション病院' };
 
-// 商業施設: 除外する名前（部分一致）
-const SHOP_REMOVE_PATTERNS = ['水野商店', '藤田ストアーまりも', '藤田ストアー まりも', 'ヤマダ電機', 'ヤマダデンキ'];
-// 商業施設: 1階建て扱いにする名前（部分一致）
-const SHOP_1F_PATTERNS = [
-  'トライアル','フクハラ','ビッグ','DCM','アクロスプラザ',
-  'ケーズデンキ','エディオン','あいちょう','ハピネスマート',
-  'コープさっぽろ','雷佐藤','コーチャンフォー',
-];
-// 商業施設: 名前変換
-const SHOP_RENAME = { '100満ボルト': 'エディオン' };
-// 商業施設: 座標ベース除外ゾーン（範囲内でexceptに含まれない名前を削除）
-const SHOP_EXCL_ZONES = [
-  { latMin:43.027, latMax:43.043, lngMin:144.390, lngMax:144.420, except:[] },         // 桂木3丁目
-  { latMin:42.990, latMax:43.010, lngMin:144.335, lngMax:144.382, except:['イオン'] }, // 昭和中央3丁目付近（イオンは残す、範囲拡大）
-];
-
 // テーブルを部分一致で引く（OSMの正式名に前後の文字が付いていても対応）
 function lookupPartial(table, name) {
   if (name in table) return table[name];
