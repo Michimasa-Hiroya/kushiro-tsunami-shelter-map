@@ -461,7 +461,13 @@ async function tryNominatim(query, bounds) {
     const data = await fetch(url, { headers: { 'Accept-Language': 'ja' } }).then(r => r.json());
     if (!data.length) return null;
     const candidates = data.filter(d => d.class !== 'boundary' && d.type !== 'administrative');
-    candidates.sort((a, b) => (+b.importance || 0) - (+a.importance || 0));
+    // 建物・住居タイプを最優先、次にimportance降順
+    const PRIORITY = { building: 3, house: 3, residential: 2, place: 1 };
+    candidates.sort((a, b) => {
+      const pa = PRIORITY[a.type] || 0, pb = PRIORITY[b.type] || 0;
+      if (pa !== pb) return pb - pa;
+      return (+b.importance || 0) - (+a.importance || 0);
+    });
     const hit = candidates.find(d => {
       const la = +d.lat, lo = +d.lon;
       return la >= bounds.latMin && la <= bounds.latMax &&
