@@ -273,7 +273,7 @@ const FloodLayer = L.GridLayer.extend({
 function showWarningMarkers() {
   warningMarkers.forEach(m => m.remove());
   warningMarkers = [];
-  if (tsunamiHeightM < 5) return;
+  if (effectiveTsunamiH() < 5) return;
 
   const bridgeIcon = L.divIcon({
     html: '<div style="font-size:20px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))">⚠️</div>',
