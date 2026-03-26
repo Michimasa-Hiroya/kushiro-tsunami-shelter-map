@@ -1781,6 +1781,79 @@ body {
 }
 .howto-note strong { color: var(--text); }
 
+/* ── 用語解説 ── */
+.howto-glossary {
+  margin-top: 20px;
+  background: rgba(56,189,248,0.05);
+  border: 1px solid rgba(56,189,248,0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.howto-glossary-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.howto-glossary-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.howto-glossary-item:last-child { border-bottom: none; }
+.howto-glossary-term {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+.howto-glossary-def {
+  font-size: 12px;
+  color: var(--accent);
+}
+
+/* ── 多言語翻訳案内 ── */
+.howto-translate {
+  margin-top: 16px;
+  background: rgba(52,211,153,0.05);
+  border: 1px solid rgba(52,211,153,0.18);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.howto-translate-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.howto-translate > p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.howto-translate-langs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.howto-translate-langs span {
+  background: rgba(52,211,153,0.10);
+  border: 1px solid rgba(52,211,153,0.20);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--text);
+}
+.howto-translate-hint { display: flex; flex-direction: column; gap: 6px; }
+.translate-hint-item {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.translate-hint-item strong { color: var(--text); }
+
 /* ── 製作者リンクボタン ── */
 .creator-links {
   display: flex;
