@@ -862,6 +862,7 @@ function resetSearch() {
   document.getElementById('results').style.display = 'none';
   document.getElementById('walking-list').innerHTML = '';
   document.getElementById('address-input').value = '';
+  document.getElementById('reset-btn').style.display = 'none';
   if (routeLayer) { routeLayer.remove(); routeLayer = null; }
   if (userMarker) { userMarker.remove(); userMarker = null; }
   radiusCircles.forEach(c => c.remove());
