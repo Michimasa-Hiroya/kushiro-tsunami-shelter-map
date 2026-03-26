@@ -1254,6 +1254,8 @@ function markHelpSeen() {
   localStorage.setItem('helpSeen', '1');
   const btn = document.getElementById('help-btn');
   if (btn) btn.classList.remove('pulse');
+  const tooltip = document.getElementById('help-tooltip');
+  if (tooltip) tooltip.style.display = 'none';
 }
 
 // ===== ボトムシート高さ設定 =====
