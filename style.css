@@ -1109,10 +1109,11 @@ body {
   bottom: calc(var(--bs-h) + 8px);
   left: 10px;
   right: auto;
+  max-width: 55vw;
   z-index: 500;
   display: flex;
-  gap: 6px;
-  align-items: center;
+  gap: 5px;
+  align-items: stretch;
   padding: 0;
   background: none;
   border: none;
