@@ -2067,6 +2067,17 @@ details[open] .howto-translate-title::after { content: '▼'; }
   flex-wrap: wrap;
 }
 .admin-panel-title { font-size: 13px; font-weight: 700; color: var(--accent); }
+.admin-role-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 8px;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+.admin-role-badge.master   { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+.admin-role-badge.standard { background: rgba(148,163,184,0.12); color: #94a3b8; border: 1px solid rgba(148,163,184,0.2); }
 .admin-view-tabs { display: flex; gap: 4px; }
 .admin-tab {
   font-size: 12px;
