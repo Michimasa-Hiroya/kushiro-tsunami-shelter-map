@@ -1107,17 +1107,17 @@ function addMapLegend() {
       </div>
       <div class="legend-body">
         <b style="font-size:10px">避難所種別</b>
-        <br><span class="map-legend-dot" style="background:#38bdf8"></span>指定緊急避難場所
-        <br><span class="map-legend-dot" style="background:#34d399"></span>指定避難所
+        <br><span class="map-legend-dot" style="background:#38bdf8"></span>緊急避難場所
+        <br><span class="map-legend-dot" style="background:#34d399"></span>避難所
         <hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">
         <b style="font-size:10px">空き状況</b>
         <br><span class="map-legend-char" style="color:#fff">空</span>空き
         <br><span class="map-legend-char" style="color:#fbbf24">混</span>混雑(50%)
         <br><span class="map-legend-char" style="color:#f87171">満</span>満室
         <hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">
-        <b style="font-size:10px">到達圏（シナリオ設定時）</b>
+        <b style="font-size:10px">到達圏</b>
         <br><span style="display:inline-block;width:13px;border-top:2px dashed #a78bfa;vertical-align:middle;margin-right:3px"></span>🚶 徒歩圏
-        <br><span style="display:inline-block;width:13px;border-top:2px solid #38bdf8;vertical-align:middle;margin-right:3px"></span>🏃 ジョギング圏
+        <br><span style="display:inline-block;width:13px;border-top:2px solid #38bdf8;vertical-align:middle;margin-right:3px"></span>🏃 ジョグ圏
         <br><span style="display:inline-block;width:13px;border-top:2px dashed #f59e0b;vertical-align:middle;margin-right:3px"></span>🚗 車圏
         <hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">
         <b style="font-size:10px">浸水深（想定）</b>
