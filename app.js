@@ -1552,8 +1552,8 @@ function selectAdminStatus(e, name) {
   clicked.classList.add('active');
 }
 
-async function saveAdminItem(name) {
-  const id        = simpleHash(name);
+async function saveAdminItem(name, prefix = '') {
+  const id        = prefix + simpleHash(name);
   const activeBtn = document.querySelector(`#admin-sbtn-${id} .admin-status-btn.active`);
   const status    = activeBtn ? activeBtn.dataset.status : '';
   const supplies  = (document.getElementById('admin-sup-' + id)?.value || '').trim();
