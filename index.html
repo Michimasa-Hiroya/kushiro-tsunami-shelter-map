@@ -31,7 +31,11 @@
       <div class="header-text">
         <h1>釧路津波避難所マップ</h1>
       </div>
-      <button id="scenario-chip" onclick="openSettings()" aria-label="シナリオ設定">🌊0m ⏱0分</button>
+      <div class="scenario-area">
+        <span class="scenario-label-top">シナリオ設定</span>
+        <button id="scenario-chip" onclick="openSettings()" aria-label="シナリオ設定">🌊0m ⏱0分</button>
+      </div>
+      <button id="help-btn" onclick="openHelp()" aria-label="使い方">？</button>
       <button id="settings-btn" onclick="openSettings()" aria-label="設定を開く">⚙</button>
     </div>
   </header>
