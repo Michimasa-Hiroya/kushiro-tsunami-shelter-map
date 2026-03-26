@@ -1713,7 +1713,7 @@ function renderAdminList() {
       <button class="admin-cancel-btn" onclick="toggleAdminEditMeta('${nameEsc}')">キャンセル</button>
     </div>
     <span class="admin-save-msg" id="admin-meta-msg-${id}"></span>
-  </div>
+  </div>` : ''}
 </div>`;
   }).join('');
 }
