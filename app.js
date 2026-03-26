@@ -382,9 +382,10 @@ function setArrivalTime(t) {
 // ===== 初期化 =====
 document.addEventListener('DOMContentLoaded', () => {
   map = L.map('map').setView([42.984, 144.382], 12);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 18
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
   }).addTo(map);
 
   // 浸水レイヤー用ペイン（タイル z-200 の直上、他要素より下）
