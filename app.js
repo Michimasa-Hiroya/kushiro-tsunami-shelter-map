@@ -734,6 +734,9 @@ function renderResults(results, userLat, userLng) {
         ${capacityBadge(s.capacity)}
       </div>
       <div class="shelter-addr">${s.address}</div>
+      <div class="shelter-link-row">
+        ${shelterOfficialLink(s)}
+      </div>
       <button class="route-btn" onclick="showRoute('foot',${userLat},${userLng},${s.lat},${s.lng})">
         ルートを地図に表示
       </button>
