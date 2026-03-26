@@ -1357,8 +1357,8 @@ function switchAdminView(view) {
     setTimeout(() => {
       if (!adminMap) {
         adminMap = L.map('admin-map').setView([42.984, 144.382], 13);
-        L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
-          attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>',
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
           maxZoom: 18
         }).addTo(adminMap);
       }
