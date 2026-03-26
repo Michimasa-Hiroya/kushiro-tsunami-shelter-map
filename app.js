@@ -1406,9 +1406,9 @@ function openAdminMapForm(name) {
   const sd = shelterStatusData[name] || {};
   const st = sd.status || '';
   const id = simpleHash(name);
-  const statBtns = ['open','half','full'].map(v =>
-    `<button class="admin-status-btn admin-status-btn-${v}${st===v?' active':''}" data-status="${v}"
-      onclick="selectAdminStatus(event,'${s.name.replace(/'/g,"\\'")}')">${STATUS_EMOJI[v]} ${STATUS_LABELS[v]}</button>`
+  const statBtns = [['','不明','⬜'],['open','空き','🟢'],['half','混雑','🟡'],['full','満室','🔴']].map(([v,label,emoji]) =>
+    `<button class="admin-status-btn admin-status-btn-${v||'none'}${st===v?' active':''}" data-status="${v}"
+      onclick="selectAdminStatus(event,'${s.name.replace(/'/g,"\\'")}')">${emoji} ${label}</button>`
   ).join('');
   const typeLabel = s.types[0] === 'kinkyuu' ? '緊急避難場所' : '避難所';
   document.getElementById('admin-map-form').innerHTML = `
