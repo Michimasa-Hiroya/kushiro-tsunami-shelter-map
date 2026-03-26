@@ -1257,6 +1257,13 @@ function navigateTo(page) {
   const titleEl = document.getElementById('info-title');
   if (titleEl) titleEl.textContent = PAGE_TITLES[page] || '';
 
+  // 管理者ページ: ログイン済みならパネルを表示
+  if (page === 'admin' && isAdminLoggedIn) {
+    document.getElementById('admin-login-area').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    renderAdminList();
+  }
+
   // ページを開く（スクロールを先頭に戻す）
   const infoBody = document.getElementById('info-body');
   if (infoBody) infoBody.scrollTop = 0;
