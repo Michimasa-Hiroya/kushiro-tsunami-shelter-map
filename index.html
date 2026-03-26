@@ -130,6 +130,14 @@
             <button class="scenario-btn" data-val="20" onclick="setArrivalTime(20)">20分</button>
           </div>
         </div>
+        <div class="scenario-row">
+          <span class="scenario-label">🌊 潮位</span>
+          <div class="scenario-btns" id="tide-btns">
+            <button class="scenario-btn" data-val="-1" onclick="setTide(-1)">干潮 −1m</button>
+            <button class="scenario-btn active" data-val="0" onclick="setTide(0)">平均潮位</button>
+            <button class="scenario-btn" data-val="1" onclick="setTide(1)">満潮 +1m</button>
+          </div>
+        </div>
       </div>
 
       <!-- 使い方（折りたたみ） -->
