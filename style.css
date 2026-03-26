@@ -113,7 +113,7 @@ body {
   padding: 10px 18px 14px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 14px;
   position: relative;
   z-index: 1;
   border-top: 1px solid rgba(255,255,255,0.06);
@@ -122,30 +122,31 @@ body {
 .scenario-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .scenario-label {
-  font-size: 11px;
+  font-size: 14px;
   color: var(--muted);
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
   white-space: nowrap;
-  min-width: 72px;
+  min-width: 90px;
 }
 
 .scenario-btns {
   display: flex;
   gap: 6px;
+  flex-wrap: wrap;
 }
 
 .scenario-btn {
-  padding: 4px 14px;
+  padding: 7px 16px;
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.15);
   background: rgba(255,255,255,0.05);
   color: var(--muted);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.18s;
