@@ -1017,6 +1017,22 @@ async function getGsiElevation(lat, lng) {
   } catch { return null; }
 }
 
+// ===== 病院公式サイトURL =====
+const HOSP_URLS = {
+  '市立釧路総合病院':         'https://www.kushiro-cghp.jp/',
+  '釧路労災病院':             'https://kushiroh.johas.go.jp/',
+  '釧路ろうさい病院':         'https://kushiroh.johas.go.jp/',
+  '釧路赤十字病院':           'https://kushiro.jrc.or.jp/',
+  '孝仁会記念病院':           'https://www.kojinkai.or.jp/hospital/hp-kojinkaikinen.html',
+  '孝仁会リハビリテーション病院': 'https://www.kojinkai.or.jp/hospital/hp-hoshigaura.html',
+  '釧路脳神経外科':           'https://www.kojinkai.or.jp/hospital/hp-kushironoushinkeigeka.html',
+  '優心病院':                 'https://www.kushiro-yushin.jp/',
+  '東北海道病院':             'https://www.easthokkaidohospital.com/',
+  'みなみ病院':               'https://mhosp.or.jp/',
+  '中央病院':                 'https://www.kch.or.jp/',
+  '釧路中央病院':             'https://www.kch.or.jp/',
+};
+
 // ===== 施設データ補正テーブル =====
 // 病院: 名前 → 総階数（指定なければOSMのbuilding:levelsか4F）
 const HOSP_FLOORS = {
