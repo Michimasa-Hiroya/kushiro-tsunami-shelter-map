@@ -1408,7 +1408,7 @@ function openAdminMapForm(name) {
   if (!s) return;
   const sd = shelterStatusData[name] || {};
   const st = sd.status || '';
-  const id = simpleHash(name);
+  const mid = 'map-' + simpleHash(name);
   const statBtns = [['','不明','⬜'],['open','空き','🟢'],['half','混雑','🟡'],['full','満室','🔴']].map(([v,label,emoji]) =>
     `<button class="admin-status-btn admin-status-btn-${v||'none'}${st===v?' active':''}" data-status="${v}"
       onclick="selectAdminStatus(event,'${s.name.replace(/'/g,"\\'")}')">${emoji} ${label}</button>`
@@ -1424,18 +1424,18 @@ function openAdminMapForm(name) {
     </div>
     <div class="admin-form-field">
       <label class="admin-label">空き状況</label>
-      <div class="admin-status-btns" id="admin-sbtn-${id}">${statBtns}</div>
+      <div class="admin-status-btns" id="admin-sbtn-${mid}">${statBtns}</div>
     </div>
     <div class="admin-form-field">
       <label class="admin-label">必要物資</label>
-      <textarea class="admin-textarea" id="admin-sup-${id}" placeholder="例: 飲料水・食料・毛布">${sd.supplies||''}</textarea>
+      <textarea class="admin-textarea" id="admin-sup-${mid}" placeholder="例: 飲料水・食料・毛布">${sd.supplies||''}</textarea>
     </div>
     <div class="admin-form-field">
       <label class="admin-label">メモ</label>
-      <textarea class="admin-textarea" id="admin-memo-${id}" placeholder="特記事項・連絡先など">${sd.memo||''}</textarea>
+      <textarea class="admin-textarea" id="admin-memo-${mid}" placeholder="特記事項・連絡先など">${sd.memo||''}</textarea>
     </div>
-    <button class="admin-save-btn" onclick="saveAdminItem('${s.name.replace(/'/g,"\\'")}')">💾 保存</button>
-    <span class="admin-save-msg" id="admin-msg-${id}"></span>
+    <button class="admin-save-btn" onclick="saveAdminItem('${s.name.replace(/'/g,"\\'")}','map-')">💾 保存</button>
+    <span class="admin-save-msg" id="admin-msg-${mid}"></span>
   `;
 }
 
