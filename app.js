@@ -381,9 +381,10 @@ document.addEventListener('DOMContentLoaded', () => {
   loadHospitals();
   initBottomSheet();
 
-  // 初回利用時は？ボタンをパルスアニメーションでアピール
+  // 初回利用時は？ボタンをパルスアニメーション＋吹き出しでアピール
   if (!localStorage.getItem('helpSeen')) {
     document.getElementById('help-btn').classList.add('pulse');
+    document.getElementById('help-tooltip').style.display = 'block';
   }
 });
 
