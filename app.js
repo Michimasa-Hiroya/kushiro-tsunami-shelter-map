@@ -956,12 +956,14 @@ function showAllSheltersOnMap() {
     const capacityLine = s.capacity > 0 ? `受け入れ人数: ${s.capacity}人<br>` : '';
 
     const targetLayer = primaryType === 'kinkyuu' ? kinkyuuLayer : hinanjoLayer;
+    const sd0 = shelterStatusData[s.name];
+    const sc0 = sd0?.status ? STATUS_COLORS[sd0.status] : null;
     L.circleMarker([s.lat, s.lng], {
       radius: 12,
-      color: color,
-      fillColor: color,
-      fillOpacity: 0.75,
-      weight: 1.5,
+      color: sc0 || color,
+      fillColor: sc0 || color,
+      fillOpacity: sc0 ? 0.90 : 0.75,
+      weight: sc0 ? 3.5 : 1.5,
       opacity: 0.9,
     })
       .bindPopup(
@@ -970,7 +972,8 @@ function showAllSheltersOnMap() {
         `${s.address}<br>` +
         elevLine +
         capacityLine +
-        `対応災害: ${disasters}`
+        `対応災害: ${disasters}` +
+        shelterStatusPopup(s.name)
       )
       .addTo(targetLayer);
   }
@@ -993,12 +996,14 @@ function showAllSheltersOnMap() {
 
       const elevLine = s.elevation_m != null ? `標高: ${s.elevation_m}m<br>` : '';
       const targetLayer = primaryType === 'kinkyuu' ? kinkyuuLayer : hinanjoLayer;
+      const sd1 = shelterStatusData[s.name];
+      const sc1 = sd1?.status ? STATUS_COLORS[sd1.status] : null;
       L.circleMarker([s.lat, s.lng], {
         radius: 12,
-        color: color,
-        fillColor: color,
-        fillOpacity: 0.75,
-        weight: 1.5,
+        color: sc1 || color,
+        fillColor: sc1 || color,
+        fillOpacity: sc1 ? 0.90 : 0.75,
+        weight: sc1 ? 3.5 : 1.5,
         opacity: 0.9,
       })
         .bindPopup(
@@ -1008,7 +1013,8 @@ function showAllSheltersOnMap() {
           `${s.address}<br>` +
           elevLine +
           capacityLine +
-          `対応災害: ${disasters}`
+          `対応災害: ${disasters}` +
+          shelterStatusPopup(s.name)
         )
         .addTo(targetLayer);
     }
