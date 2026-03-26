@@ -1375,6 +1375,7 @@ function setAdminMapArea(town) {
   document.querySelectorAll('.admin-area-btn').forEach(b =>
     b.classList.toggle('active', b.textContent === town));
   document.getElementById('admin-map-form').innerHTML = '';
+  if (!adminMap) return;
   const c = ADMIN_AREA_CENTERS[town] || ADMIN_AREA_CENTERS['釧路市'];
   adminMap.setView([c.lat, c.lng], c.zoom);
   renderAdminMapMarkers(town);
