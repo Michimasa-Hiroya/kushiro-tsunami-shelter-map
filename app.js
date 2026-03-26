@@ -385,8 +385,8 @@ function setArrivalTime(t) {
 // ===== 初期化 =====
 document.addEventListener('DOMContentLoaded', () => {
   map = L.map('map').setView([42.984, 144.382], 12);
-  L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
-    attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>',
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     maxZoom: 18
   }).addTo(map);
 
