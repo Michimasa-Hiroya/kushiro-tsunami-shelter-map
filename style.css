@@ -2284,6 +2284,118 @@ details[open] .howto-translate-title::after { content: '▼'; }
   text-align: center;
 }
 
+/* ── 管理者 CRUD ── */
+.admin-edit-meta-btn {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 3px 7px;
+  font-size: 13px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.admin-edit-meta-btn:hover { color: var(--accent); border-color: var(--accent); }
+
+.admin-delete-shelter-btn {
+  background: rgba(248,113,113,0.07);
+  border: 1px solid rgba(248,113,113,0.18);
+  color: #f87171;
+  border-radius: 6px;
+  padding: 3px 7px;
+  font-size: 13px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.admin-meta-form {
+  padding: 12px 14px 14px;
+  background: rgba(56,189,248,0.04);
+  border-top: 1px solid rgba(56,189,248,0.12);
+}
+
+.admin-form-row { display: flex; gap: 10px; }
+.admin-form-row .admin-form-field { flex: 1; min-width: 0; }
+
+.admin-input, .admin-select {
+  width: 100%;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+}
+.admin-input:focus, .admin-select:focus { border-color: var(--accent); }
+.admin-select option { background: #101825; }
+
+.admin-form-btns { display: flex; gap: 8px; margin-top: 12px; }
+.admin-save-btn.admin-save-half { flex: 1; margin-top: 0; }
+.admin-cancel-btn {
+  flex: 1;
+  padding: 10px;
+  background: rgba(255,255,255,0.07);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-badge-custom { background: rgba(52,211,153,0.12); color: #34d399; font-size: 10px; }
+
+.admin-create-bar { padding: 10px 14px 0; }
+.admin-add-btn {
+  width: 100%;
+  padding: 10px;
+  background: rgba(52,211,153,0.10);
+  color: #34d399;
+  border: 1px solid rgba(52,211,153,0.22);
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.admin-add-btn:active { background: rgba(52,211,153,0.20); }
+
+.admin-create-form {
+  margin: 10px 14px 0;
+  padding: 14px;
+  background: rgba(52,211,153,0.05);
+  border: 1px solid rgba(52,211,153,0.18);
+  border-radius: 12px;
+}
+.admin-create-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #34d399;
+  margin-bottom: 8px;
+}
+
+.admin-map-add-btn {
+  display: block;
+  margin: 8px 8px 0;
+  padding: 8px 14px;
+  background: rgba(52,211,153,0.10);
+  color: #34d399;
+  border: 1px solid rgba(52,211,153,0.22);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  width: calc(100% - 16px);
+  box-sizing: border-box;
+}
+.admin-map-add-btn.active {
+  background: rgba(52,211,153,0.22);
+  border-color: #34d399;
+  animation: gps-pulse 1.2s ease-out infinite;
+}
+
 /* ── 製作者リンクボタン ── */
 .creator-links {
   display: flex;
