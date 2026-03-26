@@ -858,9 +858,11 @@ function showRadiusCircles(lat, lng) {
 
 // ===== 全避難所マーカー表示 =====
 function showAllSheltersOnMap() {
-  if (allShelterLayer) allShelterLayer.remove();
+  if (kinkyuuLayer) kinkyuuLayer.remove();
+  if (hinanjoLayer) hinanjoLayer.remove();
 
-  allShelterLayer = L.layerGroup();
+  kinkyuuLayer = L.layerGroup();
+  hinanjoLayer = L.layerGroup();
 
   // SHELTERS_DATA から標高・海岸距離を名前で引けるマップを作成
   const elevMap = {};
@@ -877,12 +879,10 @@ function showAllSheltersOnMap() {
   };
 
   const hideInMap = tsunamiHeightM >= 10;
-  let shownCount = 0;
   for (const s of ALL_SHELTERS) {
     const primaryType = s.types[0];
     if (!colorMap[primaryType]) continue; // 福祉・臨時・その他は非表示
     if (hideInMap && TSUNAMI_HIDE_NAMES.has(s.name)) continue; // 津波10m+で除外
-    shownCount++;
 
     const color = colorMap[primaryType];
     const typeLabel = {
@@ -897,8 +897,9 @@ function showAllSheltersOnMap() {
       : '';
     const capacityLine = s.capacity > 0 ? `受け入れ人数: ${s.capacity}人<br>` : '';
 
+    const targetLayer = primaryType === 'kinkyuu' ? kinkyuuLayer : hinanjoLayer;
     L.circleMarker([s.lat, s.lng], {
-      radius: 8,
+      radius: 12,
       color: color,
       fillColor: color,
       fillOpacity: 0.75,
@@ -913,7 +914,7 @@ function showAllSheltersOnMap() {
         capacityLine +
         `対応災害: ${disasters}`
       )
-      .addTo(allShelterLayer);
+      .addTo(targetLayer);
   }
 
   // EXTRA_SHELTERS（釧路町・白糠町）を追加
@@ -921,7 +922,6 @@ function showAllSheltersOnMap() {
     for (const s of EXTRA_SHELTERS) {
       const primaryType = s.types[0];
       if (!colorMap[primaryType]) continue;
-      shownCount++;
 
       const color = colorMap[primaryType];
       const typeLabel = {
@@ -934,8 +934,9 @@ function showAllSheltersOnMap() {
       const townLabel = s.town ? `<span style="color:#aaa">${s.town}</span><br>` : '';
 
       const elevLine = s.elevation_m != null ? `標高: ${s.elevation_m}m<br>` : '';
+      const targetLayer = primaryType === 'kinkyuu' ? kinkyuuLayer : hinanjoLayer;
       L.circleMarker([s.lat, s.lng], {
-        radius: 8,
+        radius: 12,
         color: color,
         fillColor: color,
         fillOpacity: 0.75,
@@ -951,12 +952,13 @@ function showAllSheltersOnMap() {
           capacityLine +
           `対応災害: ${disasters}`
         )
-        .addTo(allShelterLayer);
+        .addTo(targetLayer);
     }
   }
 
-  if (allSheltersVisible) allShelterLayer.addTo(map);
-  document.getElementById('shelter-count-label').textContent = `${shownCount}件`;
+  // 現在のフィルターに応じてレイヤーを表示
+  if (shelterFilter === 'kinkyuu' || shelterFilter === 'all') kinkyuuLayer.addTo(map);
+  if (shelterFilter === 'hinanjo' || shelterFilter === 'all') hinanjoLayer.addTo(map);
 }
 
 // ===== 地図凡例 =====
