@@ -945,7 +945,6 @@ function showAllSheltersOnMap() {
     if (!colorMap[primaryType]) continue; // 福祉・臨時・その他は非表示
     if (hideInMap && TSUNAMI_HIDE_NAMES.has(s.name)) continue; // 津波10m+で除外
 
-    const color = colorMap[primaryType];
     const typeLabel = {
       kinkyuu: '指定緊急避難場所',
       hinanjo: '指定避難所',
