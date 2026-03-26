@@ -969,18 +969,9 @@ function showAllSheltersOnMap() {
     const capacityLine = s.capacity > 0 ? `受け入れ人数: ${s.capacity}人<br>` : '';
 
     const targetLayer = primaryType === 'kinkyuu' ? kinkyuuLayer : hinanjoLayer;
-    const sd0 = shelterStatusData[s.name];
-    const st0 = sd0?.status;
-    const fc0 = st0 ? STATUS_COLORS[st0] : GRAY_COLOR;
-    const sk0 = st0 ? STATUS_STROKE[st0] : GRAY_COLOR;
-    L.circleMarker([s.lat, s.lng], {
-      radius: 12,
-      color: sk0,
-      fillColor: fc0,
-      fillOpacity: 0.85,
-      weight: st0 === 'open' ? 2.5 : 2,
-      opacity: 0.9,
-    })
+    const sd0  = shelterStatusData[s.name];
+    const char0 = sd0?.status ? STATUS_CHAR[sd0.status] : '不';
+    L.marker([s.lat, s.lng], { icon: makeShelterIcon(color, char0) })
       .bindPopup(
         `<b>${s.name}</b><br>` +
         `<span style="color:#888">${typeLabel}</span><br>` +
