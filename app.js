@@ -1141,19 +1141,19 @@ function elevLine(groundElev, floors) {
 // ===== 病院マーカー（ハードコード）=====
 async function loadHospitals() {
   const HOSPITALS = [
-    { name: '市立釧路総合病院',           lat: 43.005800, lng: 144.374400, floors: 8 },
-    { name: '釧路赤十字病院',             lat: 43.003700, lng: 144.369400, floors: 8 },
-    { name: '釧路ろうさい病院',           lat: 43.017400, lng: 144.368400, floors: 8 },
-    { name: '孝仁会記念病院',             lat: 42.994900, lng: 144.392900, floors: 6 },
-    { name: '孝仁会リハビリテーション病院', lat: 42.979200, lng: 144.404300, floors: 3 },
-    { name: '釧路脳神経外科',             lat: 43.012089, lng: 144.401274, floors: 3 },
-    { name: '優心病院',                   lat: 43.010800, lng: 144.391900, floors: 5 },
-    { name: '東北海道病院',               lat: 42.998647, lng: 144.375030, floors: 5 },
-    { name: 'みなみ病院',                 lat: 42.987300, lng: 144.376900, floors: 3 },
-    { name: '釧路中央病院',               lat: 43.010000, lng: 144.380800, floors: 6 },
-    { name: '三慈会病院',                 lat: 43.019900, lng: 144.383100, floors: 4 },
-    { name: '釧路共立病院',               lat: 43.009100, lng: 144.396100, floors: 4 },
-    { name: '白樺台病院',                 lat: 43.001800, lng: 144.413800, floors: 3 },
+    { name: '市立釧路総合病院',           lat: 42.9767052, lng: 144.4032830, floors: 8 },
+    { name: '釧路赤十字病院',             lat: 43.0016449, lng: 144.3810529, floors: 8 },
+    { name: '釧路ろうさい病院',           lat: 43.0063196, lng: 144.3850986, floors: 8 },
+    { name: '孝仁会記念病院',             lat: 43.0282237, lng: 144.3980151, floors: 6 },
+    { name: '孝仁会リハビリテーション病院', lat: 43.0160192, lng: 144.3162653, floors: 3 },
+    { name: '釧路脳神経外科',             lat: 43.0071201, lng: 144.3799771, floors: 3 },
+    { name: '優心病院',                   lat: 43.0094624, lng: 144.2736009, floors: 5 },
+    { name: '東北海道病院',               lat: 42.9986470, lng: 144.3750300, floors: 5 },
+    { name: 'みなみ病院',                 lat: 42.9788577, lng: 144.4187925, floors: 3 },
+    { name: '釧路中央病院',               lat: 42.9854281, lng: 144.3779511, floors: 6 },
+    { name: '三慈会病院',                 lat: 42.9785071, lng: 144.3868384, floors: 4 },
+    { name: '釧路共立病院',               lat: 43.0085349, lng: 144.3714792, floors: 4 },
+    { name: '白樺台病院',                 lat: 42.9601041, lng: 144.4456418, floors: 3 },
   ];
 
   const icon = makeFacilityIcon('🏥');
