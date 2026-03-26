@@ -1389,7 +1389,7 @@ function renderAdminList() {
       : `<span class="admin-badge admin-badge-none">未設定</span>`;
     const statBtns = ['open','half','full'].map(v =>
       `<button class="admin-status-btn admin-status-btn-${v}${st===v?' active':''}" data-status="${v}"
-        onclick="selectAdminStatus('${s.name.replace(/'/g,"\\'")}')">${STATUS_EMOJI[v]} ${STATUS_LABELS[v]}</button>`
+        onclick="selectAdminStatus(event,'${s.name.replace(/'/g,"\\'")}')">${STATUS_EMOJI[v]} ${STATUS_LABELS[v]}</button>`
     ).join('');
     return `
 <div class="admin-item" id="admin-item-${id}">
@@ -1435,13 +1435,11 @@ function toggleAdminItem(name) {
   }
 }
 
-function selectAdminStatus(name) {
-  // クリックされたボタンを特定
+function selectAdminStatus(e, name) {
   const id   = simpleHash(name);
   const container = document.getElementById('admin-sbtn-' + id);
   if (!container) return;
-  // event.target をもとにアクティブ切り替え
-  const clicked = event.target.closest('.admin-status-btn');
+  const clicked = e.target.closest('.admin-status-btn');
   if (!clicked) return;
   container.querySelectorAll('.admin-status-btn').forEach(b => b.classList.remove('active'));
   clicked.classList.add('active');
