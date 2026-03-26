@@ -1528,6 +1528,13 @@ function openAdminMapForm(name) {
   `;
 }
 
+function openAdminHelp() {
+  document.getElementById('admin-help-modal').style.display = 'flex';
+}
+function closeAdminHelp() {
+  document.getElementById('admin-help-modal').style.display = 'none';
+}
+
 function logoutAdmin() {
   isAdminLoggedIn = false;
   adminRole = null;
