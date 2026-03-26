@@ -1473,6 +1473,7 @@ async function saveAdminItem(name) {
   showAllSheltersOnMap();
   if (msgEl) { msgEl.textContent = '✅ 保存しました'; setTimeout(() => { msgEl.textContent = ''; }, 2500); }
   renderAdminList();
+  if (adminMap) renderAdminMapMarkers(adminSelectedTown);
 }
 
 // ===== Firebase Firestore 連携 =====
