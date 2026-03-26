@@ -424,6 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadHospitals();
   initBottomSheet();
   loadShelterStatus();
+  loadCustomShelters();
 
   // 初回のみ：ハンドルバウンス + GPS パルスアニメーション
   if (!localStorage.getItem('firstVisitAnim')) {
