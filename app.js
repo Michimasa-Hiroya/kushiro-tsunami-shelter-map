@@ -960,13 +960,15 @@ function showAllSheltersOnMap() {
 
     const targetLayer = primaryType === 'kinkyuu' ? kinkyuuLayer : hinanjoLayer;
     const sd0 = shelterStatusData[s.name];
-    const sc0 = sd0?.status ? STATUS_COLORS[sd0.status] : null;
+    const st0 = sd0?.status;
+    const fc0 = st0 ? STATUS_COLORS[st0] : GRAY_COLOR;
+    const sk0 = st0 ? STATUS_STROKE[st0] : GRAY_COLOR;
     L.circleMarker([s.lat, s.lng], {
       radius: 12,
-      color: sc0 || color,
-      fillColor: sc0 || color,
-      fillOpacity: sc0 ? 0.90 : 0.75,
-      weight: sc0 ? 3.5 : 1.5,
+      color: sk0,
+      fillColor: fc0,
+      fillOpacity: 0.85,
+      weight: st0 === 'open' ? 2.5 : 2,
       opacity: 0.9,
     })
       .bindPopup(
