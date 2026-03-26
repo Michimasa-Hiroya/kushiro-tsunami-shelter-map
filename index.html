@@ -69,9 +69,12 @@
 
       <!-- 現在地入力 -->
       <section id="location-section">
-        <button id="gps-btn" onclick="getGPSLocation()">
-          📍 現在地から最寄りの避難所を探す
-        </button>
+        <div id="gps-row">
+          <button id="gps-btn" onclick="getGPSLocation()">
+            📍 現在地から最寄りの避難所を探す
+          </button>
+          <button id="reset-btn" onclick="resetSearch()" style="display:none">✕</button>
+        </div>
         <div id="or-divider">または住所を入力</div>
         <div id="address-input-wrap">
           <select id="town-select">
