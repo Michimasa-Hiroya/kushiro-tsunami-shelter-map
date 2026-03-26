@@ -37,8 +37,8 @@ function shelterStatusPopup(name) {
   const label = sd.status ? STATUS_LABELS[sd.status] : '';
   let html = `<hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">`;
   if (label) html += `<span style="color:${col};font-weight:700">${emoji} ${label}</span><br>`;
-  if (sd.supplies) html += `<span style="font-size:12px">🛒 ${sd.supplies}</span><br>`;
-  if (sd.memo)     html += `<span style="font-size:12px">📝 ${sd.memo}</span><br>`;
+  if (sd.supplies) html += `<span style="font-size:12px">🛒支援物資の要望 ${sd.supplies}</span><br>`;
+  if (sd.memo)     html += `<span style="font-size:12px">📝メモ ${sd.memo}</span><br>`;
   if (sd.updatedAt) {
     const d = new Date(sd.updatedAt);
     const ts = isNaN(d) ? '' : d.toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
