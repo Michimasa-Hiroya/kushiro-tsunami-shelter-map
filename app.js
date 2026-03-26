@@ -10,9 +10,11 @@ let radiusCircles = [];
 let shelterStatusData = {};  // { [name]: { status, supplies, memo, updatedAt } }
 let isAdminLoggedIn   = false;
 
-const STATUS_LABELS = { open: '空き', half: '混雑（50%）', full: '満室' };
-const STATUS_COLORS = { open: '#34d399', half: '#fbbf24', full: '#f87171' };
-const STATUS_EMOJI  = { open: '🟢',    half: '🟡',       full: '🔴'    };
+const STATUS_LABELS  = { open: '空き', half: '混雑（50%）', full: '満室' };
+const STATUS_COLORS  = { open: '#ffffff', half: '#fbbf24', full: '#f87171' };
+const STATUS_STROKE  = { open: '#888888', half: '#d97706', full: '#dc2626' };
+const STATUS_EMOJI   = { open: '⬜',     half: '🟡',       full: '🔴'    };
+const GRAY_COLOR     = '#94a3b8'; // 空き状況未設定のマーカー色
 
 // DOM-safe な ID を日本語名から生成
 function simpleHash(str) {
