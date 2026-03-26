@@ -1176,7 +1176,7 @@ async function loadHospitals() {
 
   // 標高を非同期取得してポップアップを更新
   const elevs = await Promise.all(HOSPITALS.map(h => getGsiElevation(h.lat, h.lng)));
-  markers.forEach(({ marker, name, floors, hospLinkHtml }, i) => {
+  markers.forEach(({ marker, name, floors }, i) => {
     const hospUrl = lookupPartial(HOSP_URLS, name);
     const link = hospUrl
       ? `<a href="${hospUrl}" target="_blank" rel="noopener" style="color:#38bdf8;font-size:12px">🔗 公式サイト</a><br>`
