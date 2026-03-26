@@ -29,7 +29,7 @@ function simpleHash(str) {
 function shelterStatusPopup(name) {
   const sd = shelterStatusData[name];
   if (!sd) return '';
-  const col = sd.status ? STATUS_STROKE[sd.status] : GRAY_COLOR;
+  const col = sd.status ? STATUS_STROKE[sd.status] : '#94a3b8';
   const emoji = sd.status ? STATUS_EMOJI[sd.status] : '';
   const label = sd.status ? STATUS_LABELS[sd.status] : '';
   let html = `<hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">`;
