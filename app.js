@@ -814,7 +814,6 @@ function shelterOfficialLink(s) {
 // ===== 結果レンダリング =====
 function renderResults(results, userLat, userLng) {
   const cards = results.map((s, i) => {
-    const est = s.route.is_estimated ? '<span class="badge est-badge">概算</span>' : '';
     const rank = i === 0 ? '🥇 第1候補' : i === 1 ? '🥈 第2候補' : '🥉 第3候補';
     return `
     <div class="shelter-card ${cardClass(s.elevation_m)}">
@@ -822,22 +821,27 @@ function renderResults(results, userLat, userLng) {
       <div class="shelter-name" data-name="${s.name}">${s.name}</div>
       <div class="time-row">
         ${walkBadge(s.route.distance_m)}
-        ${timeBadge(s.route.duration_min, 'foot')}
-        <span class="badge dist-badge">📏 距離 ${s.route.distance_m}m</span>
-        ${est}
-      </div>
-      <div class="info-row">
         ${elevBadge(s.elevation_m)}
-        ${s.distance_from_sea_m !== null ? `<span class="badge">🌊 海岸から ${(s.distance_from_sea_m / 1000).toFixed(1)}km</span>` : ''}
-        ${capacityBadge(s.capacity)}
-      </div>
-      <div class="shelter-addr">${s.address}</div>
-      <div class="shelter-link-row">
-        ${shelterOfficialLink(s)}
       </div>
       <button class="route-btn" onclick="showRoute('foot',${userLat},${userLng},${s.lat},${s.lng})">
         ルートを地図に表示
       </button>
+      <details class="shelter-details">
+        <summary>詳細を見る</summary>
+        <div class="time-row" style="margin-top:8px">
+          ${timeBadge(s.route.duration_min, 'foot')}
+          <span class="badge dist-badge">📏 距離 ${s.route.distance_m}m</span>
+          ${s.route.is_estimated ? '<span class="badge est-badge">概算</span>' : ''}
+        </div>
+        <div class="info-row">
+          ${s.distance_from_sea_m !== null ? `<span class="badge">🌊 海岸から ${(s.distance_from_sea_m / 1000).toFixed(1)}km</span>` : ''}
+          ${capacityBadge(s.capacity)}
+        </div>
+        <div class="shelter-addr">${s.address}</div>
+        <div class="shelter-link-row">
+          ${shelterOfficialLink(s)}
+        </div>
+      </details>
     </div>`;
   }).join('');
 
