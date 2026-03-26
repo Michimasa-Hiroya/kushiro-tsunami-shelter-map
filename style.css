@@ -955,31 +955,37 @@ body {
 }
 
 /* 初回アピール吹き出し */
-@keyframes tooltip-drop {
-  0%   { opacity: 0; transform: translateY(-6px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
 #help-tooltip {
   position: fixed;
-  top: calc(var(--header-h) + 8px);
+  top: calc(var(--header-h) + 10px);
   right: 10px;
   background: var(--accent);
   color: #080d1a;
   font-size: 13px;
   font-weight: 700;
-  padding: 8px 14px;
+  padding: 9px 15px;
   border-radius: 10px;
   white-space: nowrap;
   z-index: 1100;
   cursor: pointer;
-  animation: tooltip-drop 0.35s ease-out;
   user-select: none;
+  /* 初期は非表示 */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+}
+#help-tooltip.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0s;
 }
 /* 上矢印（ ? ボタンを指す） */
 #help-tooltip-arrow {
   position: absolute;
   top: -8px;
-  right: 14px;
+  right: 15px;
   width: 0; height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
