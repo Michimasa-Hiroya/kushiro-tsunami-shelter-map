@@ -1383,12 +1383,16 @@ function getAllSheltersForAdmin() {
 
 function renderAdminList() {
   if (!isAdminLoggedIn) return;
-  const query   = (document.getElementById('admin-search-input')?.value || '').trim();
-  const filterV = document.getElementById('admin-filter-status')?.value || 'all';
+  const query      = (document.getElementById('admin-search-input')?.value || '').trim();
+  const filterV    = document.getElementById('admin-filter-status')?.value || 'all';
+  const filterTown = document.getElementById('admin-filter-town')?.value || 'all';
+  const filterType = document.getElementById('admin-filter-type')?.value || 'all';
 
   let list = getAllSheltersForAdmin();
-  if (query)           list = list.filter(s => s.name.includes(query) || (s.address||'').includes(query));
-  if (filterV === 'none')  list = list.filter(s => !shelterStatusData[s.name]?.status);
+  if (query)              list = list.filter(s => s.name.includes(query) || (s.address||'').includes(query));
+  if (filterTown !== 'all') list = list.filter(s => getShelterTown(s) === filterTown);
+  if (filterType !== 'all') list = list.filter(s => s.types[0] === filterType);
+  if (filterV === 'none')   list = list.filter(s => !shelterStatusData[s.name]?.status);
   else if (filterV !== 'all') list = list.filter(s => shelterStatusData[s.name]?.status === filterV);
 
   const container = document.getElementById('admin-shelter-list');
