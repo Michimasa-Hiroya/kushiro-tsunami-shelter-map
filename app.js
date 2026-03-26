@@ -1424,6 +1424,11 @@ function switchAdminView(view) {
           attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
           maxZoom: 18
         }).addTo(adminMap);
+        adminMap.on('click', function(e) {
+          if (!adminMapAddMode) return;
+          adminMapAddMode = false;
+          openAdminMapCreateForm(e.latlng.lat, e.latlng.lng);
+        });
       }
       adminMap.invalidateSize();
       setAdminMapArea(adminSelectedTown);
