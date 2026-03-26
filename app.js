@@ -988,7 +988,6 @@ function showAllSheltersOnMap() {
       const primaryType = s.types[0];
       if (!colorMap[primaryType]) continue;
 
-      const color = colorMap[primaryType];
       const typeLabel = {
         kinkyuu: '指定緊急避難場所',
         hinanjo: '指定避難所',
@@ -1001,13 +1000,15 @@ function showAllSheltersOnMap() {
       const elevLine = s.elevation_m != null ? `標高: ${s.elevation_m}m<br>` : '';
       const targetLayer = primaryType === 'kinkyuu' ? kinkyuuLayer : hinanjoLayer;
       const sd1 = shelterStatusData[s.name];
-      const sc1 = sd1?.status ? STATUS_COLORS[sd1.status] : null;
+      const st1 = sd1?.status;
+      const fc1 = st1 ? STATUS_COLORS[st1] : GRAY_COLOR;
+      const sk1 = st1 ? STATUS_STROKE[st1] : GRAY_COLOR;
       L.circleMarker([s.lat, s.lng], {
         radius: 12,
-        color: sc1 || color,
-        fillColor: sc1 || color,
-        fillOpacity: sc1 ? 0.90 : 0.75,
-        weight: sc1 ? 3.5 : 1.5,
+        color: sk1,
+        fillColor: fc1,
+        fillOpacity: 0.85,
+        weight: st1 === 'open' ? 2.5 : 2,
         opacity: 0.9,
       })
         .bindPopup(
