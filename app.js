@@ -1674,7 +1674,7 @@ function renderAdminList() {
     <button class="admin-save-btn" onclick="saveAdminItem('${nameEsc}')">💾 保存</button>
     <span class="admin-save-msg" id="admin-msg-${id}"></span>
   </div>
-  <div class="admin-meta-form" id="admin-meta-${id}" style="display:none">
+  ${isMaster ? `<div class="admin-meta-form" id="admin-meta-${id}" style="display:none">
     <div class="admin-form-field">
       <label class="admin-label">住所</label>
       <input class="admin-input" id="admin-meta-addr-${id}" type="text" value="${curAddr}" placeholder="住所" />
