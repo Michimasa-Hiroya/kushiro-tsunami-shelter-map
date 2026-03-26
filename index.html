@@ -43,8 +43,9 @@
 
   <!-- 地図コントロール（地図上に重なるオーバーレイ） -->
   <div id="map-controls">
-    <button id="toggle-all-btn" onclick="toggleAllShelters()">🗺 全避難所を表示中</button>
-    <span id="shelter-count-label"></span>
+    <button class="filter-btn active" data-filter="kinkyuu" onclick="setShelterFilter('kinkyuu')">緊急避難場所</button>
+    <button class="filter-btn" data-filter="hinanjo" onclick="setShelterFilter('hinanjo')">避難所</button>
+    <button class="filter-btn" data-filter="all" onclick="setShelterFilter('all')">全避難所</button>
   </div>
 
   <!-- 地図 -->
