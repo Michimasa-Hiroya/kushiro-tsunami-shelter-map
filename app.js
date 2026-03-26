@@ -1971,7 +1971,7 @@ async function saveAdminMapNewShelter() {
   await saveCustomShelterRemote(name, data);
   showAllSheltersOnMap();
   renderAdminList();
-  renderAdminMapMarkers(adminSelectedTown);
+  if (adminMap) renderAdminMapMarkers(adminSelectedTown);
   if (msgEl) msgEl.textContent = '✅ 追加しました';
   setTimeout(() => { document.getElementById('admin-map-form').innerHTML = ''; }, 1500);
 }
