@@ -917,6 +917,17 @@ function showRadiusCircles(lat, lng) {
   }
 }
 
+// 避難所マーカーアイコン生成（丸＋漢字1文字）
+function makeShelterIcon(bgColor, char) {
+  return L.divIcon({
+    className: '',
+    html: `<div class="shelter-dot-marker" style="background:${bgColor}">${char}</div>`,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
+    popupAnchor: [0, -14],
+  });
+}
+
 // ===== 全避難所マーカー表示 =====
 function showAllSheltersOnMap() {
   if (kinkyuuLayer) kinkyuuLayer.remove();
