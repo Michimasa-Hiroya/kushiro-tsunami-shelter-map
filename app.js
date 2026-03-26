@@ -985,7 +985,10 @@ function showAllSheltersOnMap() {
   };
 
   const hideInMap = effectiveTsunamiH() >= 10;
-  for (const s of ALL_SHELTERS) {
+  for (const origS of ALL_SHELTERS) {
+    const cust = customSheltersData[origS.name];
+    if (cust?.deleted) continue;
+    const s = (cust && !cust.deleted) ? { ...origS, ...cust } : origS;
     const primaryType = s.types[0];
     if (!colorMap[primaryType]) continue; // 福祉・臨時・その他は非表示
     if (hideInMap && TSUNAMI_HIDE_NAMES.has(s.name)) continue; // 津波10m+で除外
