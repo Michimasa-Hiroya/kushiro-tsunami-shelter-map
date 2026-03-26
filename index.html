@@ -590,6 +590,29 @@
   window.addEventListener('online',  () => document.getElementById('offline-banner').style.display = 'none');
   window.addEventListener('offline', () => document.getElementById('offline-banner').style.display = 'block');
 </script>
+<!-- Firebase SDK (Firestore リアルタイム共有用) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+// ========================================================
+// Firebase 設定
+// Firebase Console (https://console.firebase.google.com)
+//   → プロジェクト設定 → マイアプリ → SDK の設定と構成
+//   から取得した値を以下に入力してください。
+// 未設定の場合はデータが端末内（localStorage）にのみ保存されます。
+// ========================================================
+const FIREBASE_CONFIG = {
+  apiKey:            "",   // ← 入力
+  authDomain:        "",
+  projectId:         "",   // ← 入力（必須）
+  storageBucket:     "",
+  messagingSenderId: "",
+  appId:             "",
+};
+if (FIREBASE_CONFIG.projectId) {
+  firebase.initializeApp(FIREBASE_CONFIG);
+}
+</script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="all-shelters-data.js"></script>
 <script src="shelters-data.js"></script>
