@@ -1454,6 +1454,7 @@ function switchAdminView(view) {
       }
       adminMap.invalidateSize();
       setAdminMapArea(adminSelectedTown);
+      updateAdminRoleUI();
     }, 100);
   }
 }
