@@ -1121,11 +1121,16 @@ async function loadHospitals() {
     const icon = makeFacilityIcon('🏥');
     for (let i = 0; i < items.length; i++) {
       const { lat, lng, name, floors } = items[i];
+      const hospUrl = lookupPartial(HOSP_URLS, name);
+      const hospLinkHtml = hospUrl
+        ? `<a href="${hospUrl}" target="_blank" rel="noopener" style="color:#38bdf8;font-size:12px">🔗 公式サイト</a><br>`
+        : '';
       L.marker([lat, lng], { icon })
         .bindPopup(
           `<b>🏥 ${name}</b><br>` +
           `<span style="color:#f87171;font-weight:600">医療機関（病院）</span><br>` +
-          elevLine(elevs[i], floors)
+          elevLine(elevs[i], floors) +
+          hospLinkHtml
         )
         .addTo(map);
     }
