@@ -1058,6 +1058,28 @@ function showAllSheltersOnMap() {
     }
   }
 
+  // カスタム追加避難所（isCustom=true で基本データに存在しないもの）
+  const baseNames = new Set([
+    ...ALL_SHELTERS.map(x => x.name),
+    ...(typeof EXTRA_SHELTERS !== 'undefined' ? EXTRA_SHELTERS.map(x => x.name) : []),
+  ]);
+  for (const s of Object.values(customSheltersData)) {
+    if (!s.isCustom || s.deleted || !s.name || !s.lat || !s.lng) continue;
+    if (baseNames.has(s.name)) continue;
+    const primaryType = s.types?.[0];
+    if (!colorMap[primaryType]) continue;
+    const typeLabel = primaryType === 'kinkyuu' ? '指定緊急避難場所' : '指定避難所';
+    const elevLine = s.elevation_m != null ? `標高: ${s.elevation_m}m<br>` : '';
+    const capacityLine = s.capacity > 0 ? `受け入れ人数: ${s.capacity}人<br>` : '';
+    const townLabel = s.town ? `<span style="color:#aaa">${s.town}</span><br>` : '';
+    const targetLayer = primaryType === 'kinkyuu' ? kinkyuuLayer : hinanjoLayer;
+    const sdC  = shelterStatusData[s.name];
+    const charC = sdC?.status ? STATUS_CHAR[sdC.status] : '';
+    L.marker([s.lat, s.lng], { icon: makeShelterIcon(colorMap[primaryType], charC) })
+      .bindPopup(`<b>${s.name}</b><br>${townLabel}<span style="color:#888">${typeLabel} ＋カスタム</span><br>${s.address || ''}<br>${elevLine}${capacityLine}${shelterStatusPopup(s.name)}`)
+      .addTo(targetLayer);
+  }
+
   // 現在のフィルターに応じてレイヤーを表示
   if (shelterFilter === 'kinkyuu' || shelterFilter === 'all') kinkyuuLayer.addTo(map);
   if (shelterFilter === 'hinanjo' || shelterFilter === 'all') hinanjoLayer.addTo(map);
