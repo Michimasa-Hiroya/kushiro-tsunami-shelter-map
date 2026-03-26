@@ -1746,6 +1746,200 @@ async function saveAdminItem(name, prefix = '') {
   if (adminMap) renderAdminMapMarkers(adminSelectedTown);
 }
 
+// ===== 管理者 CRUD（避難所の追加・編集・削除）=====
+
+function openAdminCreate() {
+  document.getElementById('admin-create-area').style.display = '';
+  document.getElementById('admin-create-area').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function cancelAdminCreate() {
+  document.getElementById('admin-create-area').style.display = 'none';
+}
+
+async function saveAdminNewShelter() {
+  const name    = (document.getElementById('admin-new-name')?.value || '').trim();
+  const address = (document.getElementById('admin-new-address')?.value || '').trim();
+  const type    = document.getElementById('admin-new-type')?.value || 'kinkyuu';
+  const town    = document.getElementById('admin-new-town')?.value || '釧路市';
+  const lat     = parseFloat(document.getElementById('admin-new-lat')?.value);
+  const lng     = parseFloat(document.getElementById('admin-new-lng')?.value);
+  const elevVal = document.getElementById('admin-new-elev')?.value;
+  const capVal  = document.getElementById('admin-new-cap')?.value;
+  const msgEl   = document.getElementById('admin-new-msg');
+
+  if (!name) { if (msgEl) msgEl.textContent = '⚠ 施設名は必須です'; return; }
+  if (isNaN(lat) || isNaN(lng)) { if (msgEl) msgEl.textContent = '⚠ 緯度・経度は必須です'; return; }
+  if (getAllSheltersForAdmin().find(s => s.name === name)) {
+    if (msgEl) msgEl.textContent = '⚠ 同じ名前の避難所が既に存在します'; return;
+  }
+
+  const data = {
+    name, address, lat, lng,
+    types: [type], town,
+    elevation_m: elevVal !== '' ? parseFloat(elevVal) : null,
+    distance_from_sea_m: null,
+    capacity: capVal !== '' ? parseInt(capVal) : 0,
+    disasters: [], isCustom: true, deleted: false,
+  };
+  customSheltersData[name] = data;
+  await saveCustomShelterRemote(name, data);
+  showAllSheltersOnMap();
+  renderAdminList();
+  if (adminMap) renderAdminMapMarkers(adminSelectedTown);
+  cancelAdminCreate();
+}
+
+async function saveAdminMetaEdit(name) {
+  const id      = simpleHash(name);
+  const address = (document.getElementById(`admin-meta-addr-${id}`)?.value || '').trim();
+  const type    = document.getElementById(`admin-meta-type-${id}`)?.value || 'kinkyuu';
+  const town    = document.getElementById(`admin-meta-town-${id}`)?.value || '釧路市';
+  const elevVal = document.getElementById(`admin-meta-elev-${id}`)?.value;
+  const capVal  = document.getElementById(`admin-meta-cap-${id}`)?.value;
+  const msgEl   = document.getElementById(`admin-meta-msg-${id}`);
+
+  const existing = customSheltersData[name];
+  const isCustom = existing?.isCustom === true;
+
+  let lat, lng;
+  if (isCustom) {
+    lat = parseFloat(document.getElementById(`admin-meta-lat-${id}`)?.value);
+    lng = parseFloat(document.getElementById(`admin-meta-lng-${id}`)?.value);
+    if (isNaN(lat) || isNaN(lng)) { if (msgEl) msgEl.textContent = '⚠ 緯度・経度を入力してください'; return; }
+  } else {
+    const base = getAllSheltersForAdmin().find(s => s.name === name);
+    lat = base?.lat; lng = base?.lng;
+  }
+
+  const data = {
+    ...(existing && !existing.deleted ? existing : {}),
+    name, address, lat, lng,
+    types: [type], town,
+    elevation_m: elevVal !== '' ? parseFloat(elevVal) : null,
+    capacity: capVal !== '' ? parseInt(capVal) : 0,
+    disasters: existing?.disasters || [],
+    isCustom, deleted: false,
+  };
+  customSheltersData[name] = data;
+  await saveCustomShelterRemote(name, data);
+  showAllSheltersOnMap();
+  if (adminMap) renderAdminMapMarkers(adminSelectedTown);
+  if (msgEl) msgEl.textContent = '✅ 保存しました';
+  setTimeout(() => renderAdminList(), 1200);
+}
+
+async function confirmDeleteShelter(name) {
+  if (!confirm(`「${name}」を削除しますか？`)) return;
+  const existing = customSheltersData[name];
+  const data = { name, deleted: true, isCustom: existing?.isCustom || false };
+  customSheltersData[name] = data;
+  await saveCustomShelterRemote(name, data);
+  showAllSheltersOnMap();
+  renderAdminList();
+  if (adminMap) renderAdminMapMarkers(adminSelectedTown);
+}
+
+function enableAdminMapAddMode() {
+  adminMapAddMode = true;
+  const btn = document.getElementById('admin-map-add-btn');
+  if (btn) { btn.textContent = '📍 地図をクリックして位置を指定中…'; btn.classList.add('active'); }
+  document.getElementById('admin-map-form').innerHTML = '';
+}
+
+function openAdminMapCreateForm(lat, lng) {
+  const btn = document.getElementById('admin-map-add-btn');
+  if (btn) { btn.textContent = '＋ 地図をクリックして追加'; btn.classList.remove('active'); }
+  document.getElementById('admin-map-form').innerHTML = `
+    <div class="admin-map-form-header">
+      <div><span class="admin-item-name">新規避難所を追加</span></div>
+      <button class="admin-map-form-close" onclick="document.getElementById('admin-map-form').innerHTML=''">✕</button>
+    </div>
+    <div class="admin-form-field">
+      <label class="admin-label">施設名 <span style="color:#f87171">*</span></label>
+      <input class="admin-input" id="admin-map-new-name" type="text" placeholder="施設名" />
+    </div>
+    <div class="admin-form-field">
+      <label class="admin-label">住所</label>
+      <input class="admin-input" id="admin-map-new-addr" type="text" placeholder="住所" />
+    </div>
+    <div class="admin-form-row">
+      <div class="admin-form-field">
+        <label class="admin-label">種別</label>
+        <select class="admin-select" id="admin-map-new-type">
+          <option value="kinkyuu">緊急避難場所</option>
+          <option value="hinanjo">避難所</option>
+        </select>
+      </div>
+      <div class="admin-form-field">
+        <label class="admin-label">市町村</label>
+        <select class="admin-select" id="admin-map-new-town">
+          <option value="釧路市">釧路市</option>
+          <option value="釧路町">釧路町</option>
+          <option value="白糠町">白糠町</option>
+          <option value="音別町">音別町</option>
+        </select>
+      </div>
+    </div>
+    <div class="admin-form-row">
+      <div class="admin-form-field">
+        <label class="admin-label">緯度</label>
+        <input class="admin-input" id="admin-map-new-lat" type="number" step="0.000001" value="${lat.toFixed(6)}" />
+      </div>
+      <div class="admin-form-field">
+        <label class="admin-label">経度</label>
+        <input class="admin-input" id="admin-map-new-lng" type="number" step="0.000001" value="${lng.toFixed(6)}" />
+      </div>
+    </div>
+    <div class="admin-form-row">
+      <div class="admin-form-field">
+        <label class="admin-label">標高 (m)</label>
+        <input class="admin-input" id="admin-map-new-elev" type="number" placeholder="m" />
+      </div>
+      <div class="admin-form-field">
+        <label class="admin-label">収容人数</label>
+        <input class="admin-input" id="admin-map-new-cap" type="number" placeholder="人" />
+      </div>
+    </div>
+    <button class="admin-save-btn" onclick="saveAdminMapNewShelter()">💾 追加</button>
+    <span class="admin-save-msg" id="admin-map-new-msg"></span>
+  `;
+}
+
+async function saveAdminMapNewShelter() {
+  const name    = (document.getElementById('admin-map-new-name')?.value || '').trim();
+  const address = (document.getElementById('admin-map-new-addr')?.value || '').trim();
+  const type    = document.getElementById('admin-map-new-type')?.value || 'kinkyuu';
+  const town    = document.getElementById('admin-map-new-town')?.value || '釧路市';
+  const lat     = parseFloat(document.getElementById('admin-map-new-lat')?.value);
+  const lng     = parseFloat(document.getElementById('admin-map-new-lng')?.value);
+  const elevVal = document.getElementById('admin-map-new-elev')?.value;
+  const capVal  = document.getElementById('admin-map-new-cap')?.value;
+  const msgEl   = document.getElementById('admin-map-new-msg');
+
+  if (!name) { if (msgEl) msgEl.textContent = '⚠ 施設名は必須です'; return; }
+  if (isNaN(lat) || isNaN(lng)) { if (msgEl) msgEl.textContent = '⚠ 緯度・経度を確認してください'; return; }
+  if (getAllSheltersForAdmin().find(s => s.name === name)) {
+    if (msgEl) msgEl.textContent = '⚠ 同じ名前の避難所が既に存在します'; return;
+  }
+
+  const data = {
+    name, address, lat, lng,
+    types: [type], town,
+    elevation_m: elevVal !== '' ? parseFloat(elevVal) : null,
+    distance_from_sea_m: null,
+    capacity: capVal !== '' ? parseInt(capVal) : 0,
+    disasters: [], isCustom: true, deleted: false,
+  };
+  customSheltersData[name] = data;
+  await saveCustomShelterRemote(name, data);
+  showAllSheltersOnMap();
+  renderAdminList();
+  renderAdminMapMarkers(adminSelectedTown);
+  if (msgEl) msgEl.textContent = '✅ 追加しました';
+  setTimeout(() => { document.getElementById('admin-map-form').innerHTML = ''; }, 1500);
+}
+
 // ===== Firebase Firestore 連携 =====
 // （Firebase が未設定の場合は localStorage のみ動作）
 
