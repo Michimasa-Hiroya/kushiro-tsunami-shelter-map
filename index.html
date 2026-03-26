@@ -594,6 +594,65 @@
                 </select>
               </div>
             </div>
+            <div class="admin-create-bar">
+              <button class="admin-add-btn" onclick="openAdminCreate()">＋ 新規避難所を追加</button>
+            </div>
+            <div id="admin-create-area" style="display:none">
+              <div class="admin-create-form">
+                <div class="admin-create-title">＋ 新規避難所を追加</div>
+                <div class="admin-form-field">
+                  <label class="admin-label">施設名 <span style="color:#f87171">*</span></label>
+                  <input class="admin-input" id="admin-new-name" type="text" placeholder="施設名" />
+                </div>
+                <div class="admin-form-field">
+                  <label class="admin-label">住所</label>
+                  <input class="admin-input" id="admin-new-address" type="text" placeholder="住所" />
+                </div>
+                <div class="admin-form-row">
+                  <div class="admin-form-field">
+                    <label class="admin-label">種別</label>
+                    <select class="admin-select" id="admin-new-type">
+                      <option value="kinkyuu">緊急避難場所</option>
+                      <option value="hinanjo">避難所</option>
+                    </select>
+                  </div>
+                  <div class="admin-form-field">
+                    <label class="admin-label">市町村</label>
+                    <select class="admin-select" id="admin-new-town">
+                      <option value="釧路市">釧路市</option>
+                      <option value="釧路町">釧路町</option>
+                      <option value="白糠町">白糠町</option>
+                      <option value="音別町">音別町</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="admin-form-row">
+                  <div class="admin-form-field">
+                    <label class="admin-label">緯度 <span style="color:#f87171">*</span></label>
+                    <input class="admin-input" id="admin-new-lat" type="number" step="0.000001" placeholder="例: 42.984" />
+                  </div>
+                  <div class="admin-form-field">
+                    <label class="admin-label">経度 <span style="color:#f87171">*</span></label>
+                    <input class="admin-input" id="admin-new-lng" type="number" step="0.000001" placeholder="例: 144.382" />
+                  </div>
+                </div>
+                <div class="admin-form-row">
+                  <div class="admin-form-field">
+                    <label class="admin-label">標高 (m)</label>
+                    <input class="admin-input" id="admin-new-elev" type="number" placeholder="m" />
+                  </div>
+                  <div class="admin-form-field">
+                    <label class="admin-label">収容人数</label>
+                    <input class="admin-input" id="admin-new-cap" type="number" placeholder="人" />
+                  </div>
+                </div>
+                <div class="admin-form-btns">
+                  <button class="admin-save-btn admin-save-half" onclick="saveAdminNewShelter()">💾 追加</button>
+                  <button class="admin-cancel-btn" onclick="cancelAdminCreate()">キャンセル</button>
+                </div>
+                <span class="admin-save-msg" id="admin-new-msg"></span>
+              </div>
+            </div>
             <div id="admin-shelter-list"></div>
           </div>
 
@@ -605,6 +664,7 @@
               <button class="admin-area-btn" onclick="setAdminMapArea('白糠町')">白糠町</button>
               <button class="admin-area-btn" onclick="setAdminMapArea('音別町')">音別町</button>
             </div>
+            <button id="admin-map-add-btn" class="admin-map-add-btn" onclick="enableAdminMapAddMode()">＋ 地図をクリックして追加</button>
             <div id="admin-map"></div>
             <div id="admin-map-form"></div>
           </div>
