@@ -416,6 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
   addMapLegend();
   loadHospitals();
   initBottomSheet();
+  loadShelterStatus();
 
   // 初回利用時は？ボタンをパルスアニメーション＋吹き出しでアピール
   if (!localStorage.getItem('helpSeen_v3')) {
