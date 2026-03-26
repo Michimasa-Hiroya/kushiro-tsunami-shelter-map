@@ -1026,11 +1026,14 @@ const HOSP_URLS = {
   '孝仁会記念病院':           'https://www.kojinkai.or.jp/hospital/hp-kojinkaikinen.html',
   '孝仁会リハビリテーション病院': 'https://www.kojinkai.or.jp/hospital/hp-hoshigaura.html',
   '釧路脳神経外科':           'https://www.kojinkai.or.jp/hospital/hp-kushironoushinkeigeka.html',
-  '優心病院':                 'https://www.kushiro-yushin.jp/',
+  '優心病院':                 'https://kushiro-yushin-hospital.jp/',
   '東北海道病院':             'https://www.easthokkaidohospital.com/',
   'みなみ病院':               'https://mhosp.or.jp/',
   '中央病院':                 'https://www.kch.or.jp/',
   '釧路中央病院':             'https://www.kch.or.jp/',
+  '三慈会病院':               'https://www.sanjikai.net/',
+  '釧路共立病院':             'https://www.dotokin-medwel.jp/',
+  '白樺台病院':               'https://www.shirakabadai.jp/',
 };
 
 // ===== 施設データ補正テーブル =====
