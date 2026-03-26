@@ -971,7 +971,7 @@ function showAllSheltersOnMap() {
 
     const targetLayer = primaryType === 'kinkyuu' ? kinkyuuLayer : hinanjoLayer;
     const sd0  = shelterStatusData[s.name];
-    const char0 = sd0?.status ? STATUS_CHAR[sd0.status] : '不';
+    const char0 = sd0?.status ? STATUS_CHAR[sd0.status] : '';
     L.marker([s.lat, s.lng], { icon: makeShelterIcon(colorMap[primaryType], char0) })
       .bindPopup(
         `<b>${s.name}</b><br>` +
