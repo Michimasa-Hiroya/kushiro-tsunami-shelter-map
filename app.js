@@ -9,6 +9,9 @@ let radiusCircles = [];
 // ===== 管理者パネル =====
 let shelterStatusData = {};  // { [name]: { status, supplies, memo, updatedAt } }
 let isAdminLoggedIn   = false;
+let adminMap          = null;
+let adminMapLayer     = null;
+let adminSelectedTown = '釧路市';
 
 const STATUS_LABELS  = { open: '空き', half: '混雑（50%）', full: '満室' };
 const STATUS_COLORS  = { open: '#34d399', half: '#fbbf24', full: '#f87171' };
