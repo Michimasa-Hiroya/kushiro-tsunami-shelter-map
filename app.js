@@ -423,6 +423,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initBottomSheet();
   loadShelterStatus();
 
+  // 初回のみ：ハンドルバウンス + GPS パルスアニメーション
+  if (!localStorage.getItem('firstVisitAnim')) {
+    const handle = document.getElementById('bs-handle');
+    const gpsbtn = document.getElementById('gps-btn');
+    if (handle) handle.classList.add('bounce');
+    if (gpsbtn) gpsbtn.classList.add('pulse-ring');
+    localStorage.setItem('firstVisitAnim', '1');
+  }
+
   // 初回利用時は？ボタンをパルスアニメーション＋吹き出しでアピール
   if (!localStorage.getItem('helpSeen_v3')) {
     const helpBtn = document.getElementById('help-btn');
