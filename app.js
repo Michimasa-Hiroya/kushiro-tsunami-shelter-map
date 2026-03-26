@@ -1584,10 +1584,12 @@ function renderAdminList() {
   if (!container) return;
 
   container.innerHTML = list.map(s => {
-    const sd    = shelterStatusData[s.name] || {};
-    const st    = sd.status || '';
-    const typeL = s.types[0] === 'kinkyuu' ? '緊急' : '避難所';
-    const id    = simpleHash(s.name);
+    const sd       = shelterStatusData[s.name] || {};
+    const st       = sd.status || '';
+    const typeL    = s.types[0] === 'kinkyuu' ? '緊急' : '避難所';
+    const id       = simpleHash(s.name);
+    const isCustom = customSheltersData[s.name]?.isCustom === true;
+    const customBadge = isCustom ? '<span class="admin-badge admin-badge-custom">＋追加</span>' : '';
     const badge = st
       ? `<span class="admin-badge admin-badge-${st}">${STATUS_EMOJI[st]} ${STATUS_LABELS[st]}</span>`
       : `<span class="admin-badge admin-badge-none">未設定</span>`;
@@ -1595,14 +1597,37 @@ function renderAdminList() {
       `<button class="admin-status-btn admin-status-btn-${v||'none'}${st===v?' active':''}" data-status="${v}"
         onclick="selectAdminStatus(event,'${s.name.replace(/'/g,"\\'")}')">${emoji} ${label}</button>`
     ).join('');
+    const nameEsc  = s.name.replace(/'/g,"\\'");
+    const curAddr  = (s.address || '').replace(/"/g,'&quot;');
+    const curType  = s.types[0] || 'kinkyuu';
+    const curTown  = getShelterTown(s);
+    const curElev  = getShelterElevation(s.name) ?? '';
+    const curCap   = getShelterCapacity(s.name) || '';
+    const latLngRow = isCustom ? `
+    <div class="admin-form-row">
+      <div class="admin-form-field">
+        <label class="admin-label">緯度</label>
+        <input class="admin-input" id="admin-meta-lat-${id}" type="number" step="0.000001" value="${s.lat}" />
+      </div>
+      <div class="admin-form-field">
+        <label class="admin-label">経度</label>
+        <input class="admin-input" id="admin-meta-lng-${id}" type="number" step="0.000001" value="${s.lng}" />
+      </div>
+    </div>` : `<div class="admin-form-field"><span class="admin-label">位置</span><span style="font-size:12px;color:var(--muted)">${s.lat?.toFixed(5)}, ${s.lng?.toFixed(5)}</span></div>`;
     return `
 <div class="admin-item" id="admin-item-${id}">
-  <div class="admin-item-header" onclick="toggleAdminItem('${s.name.replace(/'/g,"\\'")}')">
+  <div class="admin-item-header" onclick="toggleAdminItem('${nameEsc}')">
     <div class="admin-item-info">
       <span class="admin-type-tag admin-type-${s.types[0]}">${typeL}</span>
       <span class="admin-item-name">${s.name}</span>
+      ${customBadge}
     </div>
-    <div class="admin-item-right">${badge}<span class="admin-chevron">›</span></div>
+    <div class="admin-item-right">
+      ${badge}
+      <button class="admin-edit-meta-btn" title="施設情報を編集" onclick="event.stopPropagation();toggleAdminEditMeta('${nameEsc}')">✎</button>
+      <button class="admin-delete-shelter-btn" title="削除" onclick="event.stopPropagation();confirmDeleteShelter('${nameEsc}')">🗑</button>
+      <span class="admin-chevron">›</span>
+    </div>
   </div>
   <div class="admin-item-form" id="admin-form-${id}">
     <div class="admin-form-field">
@@ -1617,8 +1642,48 @@ function renderAdminList() {
       <label class="admin-label">メモ</label>
       <textarea class="admin-textarea" id="admin-memo-${id}" placeholder="特記事項・連絡先など">${sd.memo||''}</textarea>
     </div>
-    <button class="admin-save-btn" onclick="saveAdminItem('${s.name.replace(/'/g,"\\'")}')">💾 保存</button>
+    <button class="admin-save-btn" onclick="saveAdminItem('${nameEsc}')">💾 保存</button>
     <span class="admin-save-msg" id="admin-msg-${id}"></span>
+  </div>
+  <div class="admin-meta-form" id="admin-meta-${id}" style="display:none">
+    <div class="admin-form-field">
+      <label class="admin-label">住所</label>
+      <input class="admin-input" id="admin-meta-addr-${id}" type="text" value="${curAddr}" placeholder="住所" />
+    </div>
+    <div class="admin-form-row">
+      <div class="admin-form-field">
+        <label class="admin-label">種別</label>
+        <select class="admin-select" id="admin-meta-type-${id}">
+          <option value="kinkyuu"${curType==='kinkyuu'?' selected':''}>緊急避難場所</option>
+          <option value="hinanjo"${curType==='hinanjo'?' selected':''}>避難所</option>
+        </select>
+      </div>
+      <div class="admin-form-field">
+        <label class="admin-label">市町村</label>
+        <select class="admin-select" id="admin-meta-town-${id}">
+          <option value="釧路市"${curTown==='釧路市'?' selected':''}>釧路市</option>
+          <option value="釧路町"${curTown==='釧路町'?' selected':''}>釧路町</option>
+          <option value="白糠町"${curTown==='白糠町'?' selected':''}>白糠町</option>
+          <option value="音別町"${curTown==='音別町'?' selected':''}>音別町</option>
+        </select>
+      </div>
+    </div>
+    ${latLngRow}
+    <div class="admin-form-row">
+      <div class="admin-form-field">
+        <label class="admin-label">標高 (m)</label>
+        <input class="admin-input" id="admin-meta-elev-${id}" type="number" value="${curElev}" placeholder="m" />
+      </div>
+      <div class="admin-form-field">
+        <label class="admin-label">収容人数</label>
+        <input class="admin-input" id="admin-meta-cap-${id}" type="number" value="${curCap}" placeholder="人" />
+      </div>
+    </div>
+    <div class="admin-form-btns">
+      <button class="admin-save-btn admin-save-half" onclick="saveAdminMetaEdit('${nameEsc}')">💾 保存</button>
+      <button class="admin-cancel-btn" onclick="toggleAdminEditMeta('${nameEsc}')">キャンセル</button>
+    </div>
+    <span class="admin-save-msg" id="admin-meta-msg-${id}"></span>
   </div>
 </div>`;
   }).join('');
