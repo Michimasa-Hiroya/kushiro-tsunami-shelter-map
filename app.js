@@ -626,7 +626,7 @@ async function getRoute(profile, fromLat, fromLng, toLat, toLng) {
 async function findShelters(lat, lng) {
   // 指定緊急避難場所のみを候補に（指定避難所は除外）
   // 津波10m以上は危険な低標高避難所を除外
-  const hide = tsunamiHeightM >= 10;
+  const hide = effectiveTsunamiH() >= 10;
   const candidates = [...shelters].filter(s =>
     kinkyuuNames.has(s.name) && (!hide || !TSUNAMI_HIDE_NAMES.has(s.name))
   );
