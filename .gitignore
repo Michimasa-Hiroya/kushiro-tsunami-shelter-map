@@ -1,3 +1,6 @@
+# Firebase 設定（APIキーを含むため除外）
+firebase-config.js
+
 # ソースデータ（デプロイ不要）
 *.csv
 *.geojson
