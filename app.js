@@ -1416,7 +1416,7 @@ function renderAdminMapMarkers(town) {
     const icon = L.divIcon({
       className: '',
       html: `<div class="shelter-dot-marker" style="background:${bgColor};color:${textColor}">${char}</div>`,
-      iconSize: [24, 24], iconAnchor: [12, 12],
+      iconSize: [30, 30], iconAnchor: [15, 15],
     });
     L.marker([s.lat, s.lng], { icon })
       .bindTooltip(s.name, { permanent: false, direction: 'top', offset: [0, -14] })
