@@ -2171,6 +2171,7 @@ body {
 .admin-status-btn-open.active { background: rgba(52,211,153,0.20); color: #34d399; border-color: #34d399; }
 .admin-status-btn-half.active { background: rgba(251,191,36,0.20); color: #fbbf24; border-color: #fbbf24; }
 .admin-status-btn-full.active { background: rgba(248,113,113,0.20); color: #f87171; border-color: #f87171; }
+.admin-status-btn-none.active { background: rgba(255,255,255,0.10); color: var(--text); border-color: rgba(255,255,255,0.4); }
 .admin-textarea {
   width: 100%;
   min-height: 58px;
