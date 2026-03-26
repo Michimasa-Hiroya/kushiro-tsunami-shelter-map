@@ -1219,10 +1219,35 @@ function closeSettings() {
 
 // ===== シナリオチップ更新 =====
 function updateScenarioChip() {
-  const hLabel = tsunamiHeightM === 0 ? '0m' : `${tsunamiHeightM}m`;
+  const effH = effectiveTsunamiH();
+  const hLabel = tsunamiHeightM === 0 ? '0m' : `${effH}m`;
   const tLabel = tsunamiArrivalMin === 0 ? '0分' : `${tsunamiArrivalMin}分`;
   const chip = document.getElementById('scenario-chip');
   if (chip) chip.textContent = `🌊${hLabel} ⏱${tLabel}`;
+}
+
+// ===== 潮位設定 =====
+function setTide(offset) {
+  tideOffset = offset;
+  document.querySelectorAll('#tide-btns .scenario-btn').forEach(b => {
+    b.classList.toggle('active', +b.dataset.val === offset);
+  });
+  updateScenarioChip();
+  updateFloodLayer();
+  showWarningMarkers();
+  showAllSheltersOnMap();
+  if (currentLat !== null) findShelters(currentLat, currentLng);
+}
+
+// ===== 使い方ボタン =====
+function openHelp() {
+  markHelpSeen();
+  navigateTo('howto');
+}
+function markHelpSeen() {
+  localStorage.setItem('helpSeen', '1');
+  const btn = document.getElementById('help-btn');
+  if (btn) btn.classList.remove('pulse');
 }
 
 // ===== ボトムシート高さ設定 =====
