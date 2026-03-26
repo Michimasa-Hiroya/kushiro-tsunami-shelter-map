@@ -2,8 +2,9 @@
 let map, userMarker, routeLayer = null;
 let shelters = [];
 let currentLat = null, currentLng = null;
-let allShelterLayer = null;
-let allSheltersVisible = true;
+let kinkyuuLayer = null;
+let hinanjoLayer = null;
+let shelterFilter = 'kinkyuu'; // 初期: 緊急避難場所のみ
 let radiusCircles = [];
 let tsunamiHeightM   = 0;  // シナリオ: 津波高さ（m）
 let tsunamiArrivalMin = 0; // シナリオ: 到達時間（分）
