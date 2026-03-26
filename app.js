@@ -1653,8 +1653,8 @@ function renderAdminList() {
     </div>
     <div class="admin-item-right">
       ${badge}
-      <button class="admin-edit-meta-btn" title="施設情報を編集" onclick="event.stopPropagation();toggleAdminEditMeta('${nameEsc}')">✎</button>
-      <button class="admin-delete-shelter-btn" title="削除" onclick="event.stopPropagation();confirmDeleteShelter('${nameEsc}')">🗑</button>
+      ${isMaster ? `<button class="admin-edit-meta-btn" title="施設情報を編集" onclick="event.stopPropagation();toggleAdminEditMeta('${nameEsc}')">✎</button>` : ''}
+      ${isMaster ? `<button class="admin-delete-shelter-btn" title="削除" onclick="event.stopPropagation();confirmDeleteShelter('${nameEsc}')">🗑</button>` : ''}
       <span class="admin-chevron">›</span>
     </div>
   </div>
