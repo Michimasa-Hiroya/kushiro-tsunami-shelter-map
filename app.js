@@ -1230,6 +1230,7 @@ const PAGE_TITLES = {
   shelters: '📂 避難所データ',
   privacy:  '🔒 プライバシーポリシー',
   creator:  '👤 製作者情報',
+  admin:    '🔐 管理者パネル',
 };
 
 function navigateTo(page) {
