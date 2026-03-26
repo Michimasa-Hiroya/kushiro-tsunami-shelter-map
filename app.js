@@ -1102,7 +1102,7 @@ function addMapLegend() {
     const div = L.DomUtil.create('div', 'map-legend');
     div.innerHTML = `
       <div class="legend-header" onclick="this.parentElement.classList.toggle('collapsed')">
-        <b>凡例</b><span class="legend-arrow">▲</span>
+        <b>マップ説明</b><span class="legend-arrow">▲</span>
       </div>
       <div class="legend-body">
         <b style="font-size:10px">避難所種別</b>
@@ -1113,6 +1113,11 @@ function addMapLegend() {
         <br><span class="map-legend-char" style="color:#fff">空</span>空き
         <br><span class="map-legend-char" style="color:#fbbf24">混</span>混雑(50%)
         <br><span class="map-legend-char" style="color:#f87171">満</span>満室
+        <hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">
+        <b style="font-size:10px">到達圏（シナリオ設定時）</b>
+        <br><span style="display:inline-block;width:13px;border-top:2px dashed #a78bfa;vertical-align:middle;margin-right:3px"></span>🚶 徒歩圏
+        <br><span style="display:inline-block;width:13px;border-top:2px solid #38bdf8;vertical-align:middle;margin-right:3px"></span>🏃 ジョギング圏
+        <br><span style="display:inline-block;width:13px;border-top:2px dashed #f59e0b;vertical-align:middle;margin-right:3px"></span>🚗 車圏
         <hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">
         <b style="font-size:10px">浸水深（想定）</b>
         <br><span class="map-legend-dot" style="background:rgba(70,0,200,0.92)"></span>20m〜
