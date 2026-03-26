@@ -1153,7 +1153,7 @@ async function loadHospitals() {
     { name: 'みなみ病院',                 lat: 42.9788577, lng: 144.4187925, floors: 3 },
     { name: '釧路中央病院',               lat: 42.9854281, lng: 144.3779511, floors: 6 },
     { name: '三慈会病院',                 lat: 42.9785071, lng: 144.3868384, floors: 4 },
-    { name: '釧路共立病院',               lat: 43.0085349, lng: 144.3714792, floors: 4 },
+    { name: '釧路協立病院',               lat: 43.0085349, lng: 144.3714792, floors: 4 },
     { name: '白樺台病院',                 lat: 42.9601041, lng: 144.4456418, floors: 3 },
   ];
 
