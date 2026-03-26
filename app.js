@@ -1051,24 +1051,28 @@ function addMapLegend() {
   const legend = L.control({ position: 'bottomright' });
   legend.onAdd = () => {
     const div = L.DomUtil.create('div', 'map-legend');
-    div.innerHTML = [
-      '<b style="font-size:10px">避難所種別</b>',
-      '<br><span class="map-legend-dot" style="background:#38bdf8"></span>指定緊急避難場所',
-      '<br><span class="map-legend-dot" style="background:#34d399"></span>指定避難所',
-      '<hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">',
-      '<b style="font-size:10px">空き状況</b>',
-      '<br><span class="map-legend-char" style="color:#fff">空</span>空き',
-      '<br><span class="map-legend-char" style="color:#fbbf24">混</span>混雑(50%)',
-      '<br><span class="map-legend-char" style="color:#f87171">満</span>満室',
-      '<hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">',
-      '<b style="font-size:10px">浸水深（想定）</b>',
-      '<br><span class="map-legend-dot" style="background:rgba(70,0,200,0.92)"></span>20m〜',
-      '<br><span class="map-legend-dot" style="background:rgba(140,0,70,0.88)"></span>10〜20m',
-      '<br><span class="map-legend-dot" style="background:rgba(220,0,0,0.85)"></span>5〜10m',
-      '<br><span class="map-legend-dot" style="background:rgba(255,90,0,0.82)"></span>3〜5m',
-      '<br><span class="map-legend-dot" style="background:rgba(255,200,0,0.78)"></span>0.5〜3m',
-      '<br><span class="map-legend-dot" style="background:rgba(255,255,120,0.65)"></span>〜0.5m',
-    ].join('');
+    div.innerHTML = `
+      <div class="legend-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <b>凡例</b><span class="legend-arrow">▲</span>
+      </div>
+      <div class="legend-body">
+        <b style="font-size:10px">避難所種別</b>
+        <br><span class="map-legend-dot" style="background:#38bdf8"></span>指定緊急避難場所
+        <br><span class="map-legend-dot" style="background:#34d399"></span>指定避難所
+        <hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">
+        <b style="font-size:10px">空き状況</b>
+        <br><span class="map-legend-char" style="color:#fff">空</span>空き
+        <br><span class="map-legend-char" style="color:#fbbf24">混</span>混雑(50%)
+        <br><span class="map-legend-char" style="color:#f87171">満</span>満室
+        <hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">
+        <b style="font-size:10px">浸水深（想定）</b>
+        <br><span class="map-legend-dot" style="background:rgba(70,0,200,0.92)"></span>20m〜
+        <br><span class="map-legend-dot" style="background:rgba(140,0,70,0.88)"></span>10〜20m
+        <br><span class="map-legend-dot" style="background:rgba(220,0,0,0.85)"></span>5〜10m
+        <br><span class="map-legend-dot" style="background:rgba(255,90,0,0.82)"></span>3〜5m
+        <br><span class="map-legend-dot" style="background:rgba(255,200,0,0.78)"></span>0.5〜3m
+        <br><span class="map-legend-dot" style="background:rgba(255,255,120,0.65)"></span>〜0.5m
+      </div>`;
     return div;
   };
   legend.addTo(map);
