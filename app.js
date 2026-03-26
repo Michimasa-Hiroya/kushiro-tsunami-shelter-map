@@ -1694,14 +1694,25 @@ function toggleAdminItem(name) {
   const form = document.getElementById('admin-form-' + id);
   if (!form) return;
   const opening = !form.classList.contains('open');
-  // 他を閉じる
   document.querySelectorAll('.admin-item-form.open').forEach(f => f.classList.remove('open'));
   document.querySelectorAll('.admin-chevron').forEach(c => c.textContent = '›');
+  document.querySelectorAll('.admin-meta-form').forEach(f => f.style.display = 'none');
   if (opening) {
     form.classList.add('open');
     const ch = document.querySelector('#admin-item-' + id + ' .admin-chevron');
     if (ch) ch.textContent = '⌄';
   }
+}
+
+function toggleAdminEditMeta(name) {
+  const id = simpleHash(name);
+  const el = document.getElementById('admin-meta-' + id);
+  if (!el) return;
+  const opening = el.style.display === 'none';
+  document.querySelectorAll('.admin-meta-form').forEach(f => f.style.display = 'none');
+  document.querySelectorAll('.admin-item-form.open').forEach(f => f.classList.remove('open'));
+  document.querySelectorAll('.admin-chevron').forEach(c => c.textContent = '›');
+  if (opening) el.style.display = '';
 }
 
 function selectAdminStatus(e, name) {
