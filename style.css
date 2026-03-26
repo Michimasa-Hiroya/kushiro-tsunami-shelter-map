@@ -953,26 +953,6 @@ body {
   animation: help-pulse 1.8s ease-in-out infinite;
 }
 
-/* 設定ボタン */
-#settings-btn {
-  margin-left: auto;
-  flex-shrink: 0;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: var(--text);
-  border-radius: 9px;
-  width: 36px;
-  height: 36px;
-  font-size: 17px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: inherit;
-  transition: background 0.15s;
-}
-#settings-btn:active { background: rgba(56,189,248,0.15); }
-
 /* オフラインバナー */
 #offline-banner {
   position: fixed;
