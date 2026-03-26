@@ -1861,6 +1861,7 @@ async function saveAdminMetaEdit(name) {
 }
 
 async function confirmDeleteShelter(name) {
+  if (adminRole !== 'master') return;
   if (!confirm(`「${name}」を削除しますか？`)) return;
   const existing = customSheltersData[name];
   const data = { name, deleted: true, isCustom: existing?.isCustom || false };
