@@ -125,6 +125,7 @@ const URBAN_DENSE = [
   { latMin: 42.993, latMax: 43.013, lngMin: 144.358, lngMax: 144.418 }, // 中部北
   { latMin: 43.000, latMax: 43.022, lngMin: 144.375, lngMax: 144.415 }, // 愛国西・愛国東地区
   { latMin: 43.012, latMax: 43.036, lngMin: 144.400, lngMax: 144.455 }, // 美原・芦野地区
+  { latMin: 43.010, latMax: 43.055, lngMin: 144.318, lngMax: 144.400 }, // 美原地区〜湿原道路エリア
 ];
 // -2m: 柳町公園〜釧路駅の線路沿い地区（堀川町・双葉町・松浦町・新釧路町・中島町・若松町）
 const URBAN_LIGHT = [
