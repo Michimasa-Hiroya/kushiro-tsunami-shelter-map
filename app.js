@@ -1346,7 +1346,7 @@ const ADMIN_AREA_CENTERS = {
   '釧路市': { lat: 42.984, lng: 144.382, zoom: 13 },
   '釧路町': { lat: 43.010, lng: 144.455, zoom: 12 },
   '白糠町': { lat: 42.930, lng: 144.080, zoom: 12 },
-  '音別町': { lat: 42.993, lng: 144.099, zoom: 13 },
+  '音別町': { lat: 42.893216, lng: 143.930746, zoom: 13 },
 };
 
 function switchAdminView(view) {
