@@ -1631,6 +1631,7 @@ function renderAdminList() {
     const curTown  = getShelterTown(s);
     const curElev  = getShelterElevation(s.name) ?? '';
     const curCap   = getShelterCapacity(s.name) || '';
+    const isMaster = adminRole === 'master';
     const latLngRow = isCustom ? `
     <div class="admin-form-row">
       <div class="admin-form-field">
