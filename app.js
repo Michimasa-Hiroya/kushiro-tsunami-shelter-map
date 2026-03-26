@@ -380,6 +380,11 @@ document.addEventListener('DOMContentLoaded', () => {
   addMapLegend();
   loadHospitals();
   initBottomSheet();
+
+  // 初回利用時は？ボタンをパルスアニメーションでアピール
+  if (!localStorage.getItem('helpSeen')) {
+    document.getElementById('help-btn').classList.add('pulse');
+  }
 });
 
 // ===== GPS 取得 =====
