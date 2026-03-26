@@ -575,6 +575,20 @@ body {
   letter-spacing: 0.3px;
 }
 
+.shelter-link-row {
+  margin-bottom: 8px;
+}
+
+.shelter-official-btn {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--accent);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.shelter-official-btn:hover { opacity: 1; text-decoration: underline; }
+
 .route-btn {
   display: block;
   width: 100%;
