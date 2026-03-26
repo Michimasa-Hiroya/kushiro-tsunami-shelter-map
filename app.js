@@ -1509,17 +1509,52 @@ function getShelterTown(s) {
   return '釧路市';
 }
 
-// 全避難所リスト取得（管理用）
+// 全避難所リスト取得（管理用）— カスタム上書き・削除を反映
 function getAllSheltersForAdmin() {
-  const list = ALL_SHELTERS.filter(s => s.types[0] === 'kinkyuu' || s.types[0] === 'hinanjo');
+  const list = [];
+  for (const origS of ALL_SHELTERS) {
+    if (origS.types[0] !== 'kinkyuu' && origS.types[0] !== 'hinanjo') continue;
+    const cust = customSheltersData[origS.name];
+    if (cust?.deleted) continue;
+    list.push(cust && !cust.deleted ? { ...origS, ...cust } : origS);
+  }
   if (typeof EXTRA_SHELTERS !== 'undefined') {
-    for (const s of EXTRA_SHELTERS) {
-      if ((s.types[0] === 'kinkyuu' || s.types[0] === 'hinanjo') && !list.find(x => x.name === s.name)) {
-        list.push(s);
-      }
+    for (const origS of EXTRA_SHELTERS) {
+      if (origS.types[0] !== 'kinkyuu' && origS.types[0] !== 'hinanjo') continue;
+      if (list.find(x => x.name === origS.name)) continue;
+      const cust = customSheltersData[origS.name];
+      if (cust?.deleted) continue;
+      list.push(cust && !cust.deleted ? { ...origS, ...cust } : origS);
     }
   }
+  // カスタム追加（新規）
+  for (const s of Object.values(customSheltersData)) {
+    if (!s.isCustom || s.deleted || !s.name) continue;
+    if (!list.find(x => x.name === s.name)) list.push(s);
+  }
   return list;
+}
+
+function getShelterElevation(name) {
+  if (customSheltersData[name]?.elevation_m != null) return customSheltersData[name].elevation_m;
+  const f = SHELTERS_DATA.features.find(f => f.properties.name === name);
+  if (f) return f.properties.elevation_m;
+  if (typeof EXTRA_SHELTERS !== 'undefined') {
+    const es = EXTRA_SHELTERS.find(s => s.name === name);
+    if (es?.elevation_m != null) return es.elevation_m;
+  }
+  return null;
+}
+
+function getShelterCapacity(name) {
+  if (customSheltersData[name]?.capacity != null) return customSheltersData[name].capacity;
+  const f = SHELTERS_DATA.features.find(f => f.properties.name === name);
+  if (f) return f.properties.capacity || 0;
+  if (typeof EXTRA_SHELTERS !== 'undefined') {
+    const es = EXTRA_SHELTERS.find(s => s.name === name);
+    if (es?.capacity != null) return es.capacity;
+  }
+  return 0;
 }
 
 function renderAdminList() {
