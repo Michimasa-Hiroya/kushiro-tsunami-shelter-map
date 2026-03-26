@@ -474,8 +474,14 @@
 </div>
 
 <script>
+  // オフライン機能停止：既存のSWとキャッシュを全削除して常に最新版を読み込む
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js');
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+      registrations.forEach(r => r.unregister());
+    });
+  }
+  if ('caches' in window) {
+    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
   }
   window.addEventListener('online',  () => document.getElementById('offline-banner').style.display = 'none');
   window.addEventListener('offline', () => document.getElementById('offline-banner').style.display = 'block');
