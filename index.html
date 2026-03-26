@@ -570,7 +570,75 @@
               <button class="admin-tab active" onclick="switchAdminView('list')">📋 リスト</button>
               <button class="admin-tab" onclick="switchAdminView('map')">🗾 マップ</button>
             </div>
+            <button class="admin-help-btn" onclick="openAdminHelp()" title="使い方">？</button>
             <button class="admin-logout-btn" onclick="logoutAdmin()">ログアウト</button>
+          </div>
+
+          <!-- 管理者ヘルプモーダル -->
+          <div id="admin-help-modal" style="display:none">
+            <div class="admin-help-overlay" onclick="closeAdminHelp()"></div>
+            <div class="admin-help-box">
+              <div class="admin-help-header">
+                <span>📖 管理者マニュアル</span>
+                <button class="admin-help-close" onclick="closeAdminHelp()">✕</button>
+              </div>
+              <div class="admin-help-body">
+                <div class="admin-help-section">
+                  <div class="admin-help-section-title">🔑 ログインと権限</div>
+                  <div class="admin-help-badge admin-help-badge-standard">情報更新モード（kushiro-tsunami）</div>
+                  <ul><li>空き状況・必要物資・メモの入力と更新</li><li>変更は地図にリアルタイム反映されます</li></ul>
+                  <div class="admin-help-badge admin-help-badge-master" style="margin-top:8px">全権限モード（kushiro-master）</div>
+                  <ul><li>上記に加え、避難所の新規追加・編集・削除が可能</li></ul>
+                </div>
+                <div class="admin-help-section">
+                  <div class="admin-help-section-title">📋 空き状況・物資・メモを更新する</div>
+                  <ol>
+                    <li>リスト内の避難所名をタップして展開</li>
+                    <li>空き状況ボタン（空き／混雑／満室）を選択</li>
+                    <li>必要物資・メモを入力（任意）</li>
+                    <li>「💾 保存」をタップ → 地図マーカーに即時反映</li>
+                  </ol>
+                  <p class="admin-help-note">※ 空き状況・物資・メモをすべて空欄で保存すると設定がリセットされます。</p>
+                </div>
+                <div class="admin-help-section">
+                  <div class="admin-help-section-title">➕ 避難所を新規追加する（全権限のみ）</div>
+                  <div class="admin-help-method">
+                    <b>🗾 マップから追加（推奨）</b>
+                    <ol>
+                      <li>「マップ」タブに切り替え</li>
+                      <li>「＋ 地図をクリックして追加」ボタンをタップ</li>
+                      <li>地図上の追加したい場所をタップ → 緯度・経度が自動入力される</li>
+                      <li>施設名・住所・種別などを入力して「💾 追加」</li>
+                    </ol>
+                  </div>
+                  <div class="admin-help-method">
+                    <b>📋 リストから追加</b>
+                    <ol>
+                      <li>「＋ 新規避難所を追加」ボタンをタップ</li>
+                      <li>施設名・種別・市町村・緯度・経度を入力</li>
+                      <li>緯度・経度はGoogle マップで場所を長押し → 数値をコピーして貼り付け</li>
+                      <li>「💾 追加」をタップ</li>
+                    </ol>
+                  </div>
+                </div>
+                <div class="admin-help-section">
+                  <div class="admin-help-section-title">✎ 避難所情報を編集する（全権限のみ）</div>
+                  <ol>
+                    <li>リストで対象の避難所の ✎ ボタンをタップ</li>
+                    <li>住所・種別・市町村・標高・収容人数などを変更</li>
+                    <li>「💾 保存」をタップ</li>
+                  </ol>
+                </div>
+                <div class="admin-help-section">
+                  <div class="admin-help-section-title">🗑 避難所を削除する（全権限のみ）</div>
+                  <ol>
+                    <li>リストで対象の避難所の 🗑 ボタンをタップ</li>
+                    <li>確認ダイアログで「OK」→ 削除完了</li>
+                  </ol>
+                  <p class="admin-help-note">※ 間違えて削除した場合はGitHubまたは管理者にご連絡ください。</p>
+                </div>
+              </div>
+            </div>
           </div>
 
           <!-- リスト表示 -->
