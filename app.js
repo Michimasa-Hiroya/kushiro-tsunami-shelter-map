@@ -1357,8 +1357,9 @@ function switchAdminView(view) {
     setTimeout(() => {
       if (!adminMap) {
         adminMap = L.map('admin-map').setView([42.984, 144.382], 13);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-          attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          maxZoom: 18
         }).addTo(adminMap);
       }
       adminMap.invalidateSize();
