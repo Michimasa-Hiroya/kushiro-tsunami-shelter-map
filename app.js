@@ -692,7 +692,7 @@ function elevBadge(elev) {
   const effH = effectiveTsunamiH();
   if (effH === 0) return `<span class="badge elev-safe">標高 ${elev}m</span>`;
   if (elev >= effH + 5) return `<span class="badge elev-safe">標高 ${elev}m ✓ 安全</span>`;
-  if (elev >= tsunamiHeightM)     return `<span class="badge elev-caution">標高 ${elev}m △ 要確認</span>`;
+  if (elev >= effH)               return `<span class="badge elev-caution">標高 ${elev}m △ 要確認</span>`;
   return `<span class="badge elev-danger">標高 ${elev}m ⚠ 低い</span>`;
 }
 
