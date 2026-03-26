@@ -888,7 +888,7 @@ function showAllSheltersOnMap() {
     hinanjo: '#34d399', // 指定避難所 → 緑
   };
 
-  const hideInMap = tsunamiHeightM >= 10;
+  const hideInMap = effectiveTsunamiH() >= 10;
   for (const s of ALL_SHELTERS) {
     const primaryType = s.types[0];
     if (!colorMap[primaryType]) continue; // 福祉・臨時・その他は非表示
