@@ -549,34 +549,54 @@
         <div id="admin-panel" style="display:none">
           <div class="admin-panel-topbar">
             <span class="admin-panel-title">🔐 管理者モード</span>
+            <div class="admin-view-tabs">
+              <button class="admin-tab active" onclick="switchAdminView('list')">📋 リスト</button>
+              <button class="admin-tab" onclick="switchAdminView('map')">🗺 マップ</button>
+            </div>
             <button class="admin-logout-btn" onclick="logoutAdmin()">ログアウト</button>
           </div>
-          <div class="admin-panel-controls">
-            <input type="text" id="admin-search-input" class="admin-search-input"
-                   placeholder="🔍 施設名・住所で検索" oninput="renderAdminList()" />
-            <div class="admin-filter-row">
-              <select id="admin-filter-town" class="admin-filter-select" onchange="renderAdminList()">
-                <option value="all">全市町村</option>
-                <option value="釧路市">釧路市</option>
-                <option value="釧路町">釧路町</option>
-                <option value="白糠町">白糠町</option>
-                <option value="音別町">音別町</option>
-              </select>
-              <select id="admin-filter-type" class="admin-filter-select" onchange="renderAdminList()">
-                <option value="all">全種別</option>
-                <option value="kinkyuu">緊急避難場所</option>
-                <option value="hinanjo">避難所</option>
-              </select>
-              <select id="admin-filter-status" class="admin-filter-select" onchange="renderAdminList()">
-                <option value="all">全状況</option>
-                <option value="open">⬜ 空き</option>
-                <option value="half">🟡 混雑</option>
-                <option value="full">🔴 満室</option>
-                <option value="none">未設定</option>
-              </select>
+
+          <!-- リスト表示 -->
+          <div id="admin-list-view">
+            <div class="admin-panel-controls">
+              <input type="text" id="admin-search-input" class="admin-search-input"
+                     placeholder="🔍 施設名・住所で検索" oninput="renderAdminList()" />
+              <div class="admin-filter-row">
+                <select id="admin-filter-town" class="admin-filter-select" onchange="renderAdminList()">
+                  <option value="all">全市町村</option>
+                  <option value="釧路市">釧路市</option>
+                  <option value="釧路町">釧路町</option>
+                  <option value="白糠町">白糠町</option>
+                  <option value="音別町">音別町</option>
+                </select>
+                <select id="admin-filter-type" class="admin-filter-select" onchange="renderAdminList()">
+                  <option value="all">全種別</option>
+                  <option value="kinkyuu">緊急避難場所</option>
+                  <option value="hinanjo">避難所</option>
+                </select>
+                <select id="admin-filter-status" class="admin-filter-select" onchange="renderAdminList()">
+                  <option value="all">全状況</option>
+                  <option value="open">⬜ 空き</option>
+                  <option value="half">🟡 混雑</option>
+                  <option value="full">🔴 満室</option>
+                  <option value="none">未設定</option>
+                </select>
+              </div>
             </div>
+            <div id="admin-shelter-list"></div>
           </div>
-          <div id="admin-shelter-list"></div>
+
+          <!-- マップ表示 -->
+          <div id="admin-map-view" style="display:none">
+            <div class="admin-area-btns">
+              <button class="admin-area-btn active" onclick="setAdminMapArea('釧路市')">釧路市</button>
+              <button class="admin-area-btn" onclick="setAdminMapArea('釧路町')">釧路町</button>
+              <button class="admin-area-btn" onclick="setAdminMapArea('白糠町')">白糠町</button>
+              <button class="admin-area-btn" onclick="setAdminMapArea('音別町')">音別町</button>
+            </div>
+            <div id="admin-map"></div>
+            <div id="admin-map-form"></div>
+          </div>
         </div>
 
       </div>
