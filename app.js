@@ -1001,18 +1001,9 @@ function showAllSheltersOnMap() {
 
       const elevLine = s.elevation_m != null ? `標高: ${s.elevation_m}m<br>` : '';
       const targetLayer = primaryType === 'kinkyuu' ? kinkyuuLayer : hinanjoLayer;
-      const sd1 = shelterStatusData[s.name];
-      const st1 = sd1?.status;
-      const fc1 = st1 ? STATUS_COLORS[st1] : GRAY_COLOR;
-      const sk1 = st1 ? STATUS_STROKE[st1] : GRAY_COLOR;
-      L.circleMarker([s.lat, s.lng], {
-        radius: 12,
-        color: sk1,
-        fillColor: fc1,
-        fillOpacity: 0.85,
-        weight: st1 === 'open' ? 2.5 : 2,
-        opacity: 0.9,
-      })
+      const sd1  = shelterStatusData[s.name];
+      const char1 = sd1?.status ? STATUS_CHAR[sd1.status] : '不';
+      L.marker([s.lat, s.lng], { icon: makeShelterIcon(colorMap[primaryType], char1) })
         .bindPopup(
           `<b>${s.name}</b><br>` +
           townLabel +
