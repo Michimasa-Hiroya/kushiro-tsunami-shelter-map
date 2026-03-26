@@ -8,6 +8,12 @@ let shelterFilter = 'kinkyuu'; // 初期: 緊急避難場所のみ
 let radiusCircles = [];
 let tsunamiHeightM   = 0;  // シナリオ: 津波高さ（m）
 let tsunamiArrivalMin = 0; // シナリオ: 到達時間（分）
+let tideOffset = 0;        // 潮位補正: -1=干潮, 0=平均, +1=満潮
+
+// 潮位補正済みの実効津波高さ（tsunamiHeightM=0のときは常に0）
+function effectiveTsunamiH() {
+  return tsunamiHeightM > 0 ? tsunamiHeightM + tideOffset : 0;
+}
 let floodLayer = null;     // 浸水シミュレーションレイヤー
 let kinkyuuNames = new Set(); // 指定緊急避難場所の名前セット
 
