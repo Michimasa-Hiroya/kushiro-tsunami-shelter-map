@@ -2000,6 +2000,41 @@ async function deleteShelterStatusRemote(name) {
   }
 }
 
+// カスタム避難所 Firebase CRUD
+async function loadCustomShelters() {
+  try {
+    const local = localStorage.getItem('customSheltersData');
+    if (local) customSheltersData = JSON.parse(local);
+  } catch {}
+
+  const db = getFirestoreDB();
+  if (!db) { showAllSheltersOnMap(); return; }
+
+  try {
+    const snap = await db.collection('customShelters').get();
+    snap.forEach(doc => { customSheltersData[doc.id] = doc.data(); });
+    showAllSheltersOnMap();
+    db.collection('customShelters').onSnapshot(snap => {
+      snap.docChanges().forEach(ch => {
+        if (ch.type === 'removed') delete customSheltersData[ch.doc.id];
+        else customSheltersData[ch.doc.id] = ch.doc.data();
+      });
+      showAllSheltersOnMap();
+    });
+  } catch (e) {
+    console.warn('customShelters load failed:', e);
+    showAllSheltersOnMap();
+  }
+}
+
+async function saveCustomShelterRemote(name, data) {
+  try { localStorage.setItem('customSheltersData', JSON.stringify(customSheltersData)); } catch {}
+  const db = getFirestoreDB();
+  if (db) {
+    try { await db.collection('customShelters').doc(name).set(data); } catch (e) { console.warn(e); }
+  }
+}
+
 // ===== ボトムシート ドラッグ制御 =====
 function initBottomSheet() {
   const sheet  = document.getElementById('bottom-sheet');
