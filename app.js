@@ -1529,6 +1529,7 @@ function openAdminMapForm(name) {
 
 function logoutAdmin() {
   isAdminLoggedIn = false;
+  adminRole = null;
   document.getElementById('admin-login-area').style.display = '';
   document.getElementById('admin-panel').style.display = 'none';
   document.getElementById('admin-password-input').value = '';
