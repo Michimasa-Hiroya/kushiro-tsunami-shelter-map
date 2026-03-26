@@ -1003,7 +1003,7 @@ function showAllSheltersOnMap() {
       const elevLine = s.elevation_m != null ? `標高: ${s.elevation_m}m<br>` : '';
       const targetLayer = primaryType === 'kinkyuu' ? kinkyuuLayer : hinanjoLayer;
       const sd1  = shelterStatusData[s.name];
-      const char1 = sd1?.status ? STATUS_CHAR[sd1.status] : '不';
+      const char1 = sd1?.status ? STATUS_CHAR[sd1.status] : '';
       L.marker([s.lat, s.lng], { icon: makeShelterIcon(colorMap[primaryType], char1) })
         .bindPopup(
           `<b>${s.name}</b><br>` +
