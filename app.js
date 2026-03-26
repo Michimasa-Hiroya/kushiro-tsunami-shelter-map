@@ -713,6 +713,38 @@ function capacityBadge(cap) {
   return `<span class="badge cap-sm">👥 ${cap}人収容（小）</span>`;
 }
 
+// ===== 避難所公式サイトURL =====
+// 個別施設URL（施設名 → URL）
+const SHELTER_URLS = {
+  '釧路市民活動センター': 'https://www.city.kushiro.lg.jp/shisei/bunka_sports/1000337.html',
+  '釧路市生涯学習センター': 'https://www.city.kushiro.lg.jp/shisei/bunka_sports/manabe/',
+  '釧路市中央図書館': 'https://www.lib.city.kushiro.lg.jp/',
+  '釧路市立博物館': 'https://www.city.kushiro.lg.jp/museum/',
+  '釧路市観光国際交流センター': 'https://www.city.kushiro.lg.jp/shisei/bunka_sports/1000341.html',
+};
+// 自治体別公式避難所一覧URL（フォールバック）
+const CITY_SHELTER_LIST_URL = {
+  '釧路市': 'https://www.city.kushiro.lg.jp/kurashi/bousai/1003680/1003686.html',
+  '釧路町': 'https://www.town.kushiro.hokkaido.jp/life/saigai/hinan/',
+  '白糠町': 'https://www.town.shiranuka.hokkaido.jp/administrative/disaster/',
+};
+
+function shelterOfficialLink(s) {
+  // 個別URLが既知なら優先
+  const directUrl = SHELTER_URLS[s.name];
+  if (directUrl) {
+    return `<a class="shelter-official-btn" href="${directUrl}" target="_blank" rel="noopener">🔗 施設の公式ページ</a>`;
+  }
+  // 自治体レベルのフォールバック
+  const addr = s.address || '';
+  const town = s.town || (addr.startsWith('釧路市') ? '釧路市' : addr.includes('釧路町') ? '釧路町' : addr.includes('白糠町') ? '白糠町' : '');
+  const cityUrl = CITY_SHELTER_LIST_URL[town];
+  if (cityUrl) {
+    return `<a class="shelter-official-btn" href="${cityUrl}" target="_blank" rel="noopener">🔗 ${town}公式・避難所一覧</a>`;
+  }
+  return '';
+}
+
 // ===== 結果レンダリング =====
 function renderResults(results, userLat, userLng) {
   const cards = results.map((s, i) => {
