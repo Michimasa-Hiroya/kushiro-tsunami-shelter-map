@@ -1147,7 +1147,7 @@ async function loadHospitals() {
     { name: '釧路ろうさい病院',           lat: 43.0063196, lng: 144.3850986, floors: 8 },
     { name: '孝仁会記念病院',             lat: 43.0282237, lng: 144.3980151, floors: 6 },
     { name: '孝仁会リハビリテーション病院', lat: 43.0160192, lng: 144.3162653, floors: 3 },
-    { name: '釧路脳神経外科',             lat: 43.0071201, lng: 144.3799771, floors: 3 },
+    { name: '釧路脳神経外科',             lat: 43.0120290, lng: 144.4012280, floors: 3 },
     { name: '優心病院',                   lat: 43.0094624, lng: 144.2736009, floors: 5 },
     { name: '東北海道病院',               lat: 42.9986470, lng: 144.3750300, floors: 5 },
     { name: 'みなみ病院',                 lat: 42.9788577, lng: 144.4187925, floors: 3 },
