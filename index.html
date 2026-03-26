@@ -20,8 +20,13 @@
   <!-- ヘッダー（コンパクト固定） -->
   <header id="header">
     <div id="header-main">
+      <button id="menu-btn" onclick="openDrawer()" aria-label="メニューを開く">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
       <div class="header-logo">
-        <svg width="32" height="32" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+        <svg width="30" height="30" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
           <defs><clipPath id="hsc"><path d="M96,178 Q22,144 22,102 L22,28 L170,28 L170,102 Q170,144 96,178Z"/></clipPath></defs>
           <path d="M96,184 Q16,148 16,102 L16,22 L176,22 L176,102 Q176,148 96,184Z" fill="#1e1e1e"/>
           <path d="M96,178 Q22,144 22,102 L22,28 L170,28 L170,102 Q170,144 96,178Z" fill="#fff"/>
@@ -100,50 +105,6 @@
         <div id="walking-list"></div>
       </div>
 
-      <!-- フッター -->
-      <footer id="app-footer">
-        <div class="footer-section">
-          <div class="footer-title">📋 更新履歴</div>
-          <ul class="footer-privacy">
-            <li><b>2026年3月26日</b>：地図ファースト＋ボトムシートUIに刷新。地図を全画面表示し、検索・結果パネルをスライド式に変更。設定モーダルにシナリオ選択と使い方を集約。</li>
-            <li><b>2026年3月25日</b>：病院・商業施設マーカーを追加（アイコン・標高表示付き）。収容人数バッジを色分け強調。第1候補ルートを自動表示。徒歩到達圏（時速3km）追加。津波10m以上で危険低標高施設を自動除外。各施設の名称・階数を整備。</li>
-            <li><b>2026年3月24日</b>：釧路町・白糠町の避難所データ追加（106件）。橋梁・渋滞予想マーカー追加。住所検索UI改善（市町村セレクタ）。オフライン対応（PWA）追加。浸水シミュレーション精度向上。</li>
-            <li><b>2026年3月22〜23日</b>：アプリ公開。釧路市の指定避難所・指定緊急避難場所データを収録。GPS・住所検索・避難圏表示・津波浸水シミュレーション機能を実装。</li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <div class="footer-title">📂 避難所データについて</div>
-          <ul class="footer-privacy">
-            <li>釧路市の避難所データは釧路市公開のオープンデータを使用。釧路町・白糠町のデータは北海道オープンデータポータルより取得（<a href="https://www.harp.lg.jp/opendata/dataset/1893.html" target="_blank" rel="noopener" class="footer-mail">CC BY</a>）。</li>
-            <li>浸水深表示は釧路沖地震（震度7想定）を前提とした<strong>予想</strong>です。国土地理院の標高データをもとにしたシミュレーションであり、実際の浸水範囲・深さとは異なります。</li>
-            <li>最新情報は各市町村公式サイトまたは釧路市役所（0154-23-5151）でご確認ください。</li>
-          </ul>
-          <div class="footer-creator" style="margin-top:8px">
-            <a href="https://www.city.kushiro.lg.jp/kurashi/bousai/1003680/1003686.html"
-               target="_blank" rel="noopener" class="footer-mail">
-              🔗 釧路市指定避難所・指定緊急避難場所一覧（公式）
-            </a>
-          </div>
-        </div>
-        <div class="footer-section">
-          <div class="footer-title">🔒 プライバシーポリシー</div>
-          <ul class="footer-privacy">
-            <li>位置情報・住所は外部サーバーに保存しません。距離計算はすべて端末内で処理されます。</li>
-            <li>住所検索時は入力テキストを国土地理院・OpenStreetMapへ送信します（個人情報は含みません）。ルート表示時は出発地・目的地の座標をOSRMへ送信します。</li>
-            <li>本アプリはシミュレーションです。実際の避難行動は行政の指示に従ってください。</li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <div class="footer-title">👤 製作者情報</div>
-          <div class="footer-creator">
-            <div>釧路生成AIラボ</div>
-            <div>廣谷 迪正（ひろや みちまさ）</div>
-            <div>📧 <a href="mailto:kushiro.ai.lab@gmail.com" class="footer-mail">kushiro.ai.lab@gmail.com</a></div>
-          </div>
-        </div>
-        <div class="footer-copy">© 2025 釧路生成AIラボ</div>
-      </footer>
-
     </div>
   </div>
 
@@ -218,6 +179,213 @@
         <button class="consent-btn-agree" onclick="consentGPS(true)">同意して現在地を取得</button>
         <button class="consent-btn-cancel" onclick="consentGPS(false)">キャンセル</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ドロワー背景オーバーレイ -->
+  <div id="drawer-overlay" onclick="closeDrawer()"></div>
+
+  <!-- ナビゲーションドロワー -->
+  <nav id="nav-drawer">
+    <div id="drawer-header">
+      <div id="drawer-branding">
+        <svg width="36" height="36" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+          <defs><clipPath id="hsc2"><path d="M96,178 Q22,144 22,102 L22,28 L170,28 L170,102 Q170,144 96,178Z"/></clipPath></defs>
+          <path d="M96,184 Q16,148 16,102 L16,22 L176,22 L176,102 Q176,148 96,184Z" fill="#1e1e1e"/>
+          <path d="M96,178 Q22,144 22,102 L22,28 L170,28 L170,102 Q170,144 96,178Z" fill="#fff"/>
+          <g clip-path="url(#hsc2)">
+            <polygon points="22,128 70,62 118,128" fill="#4a4a4a"/>
+            <polygon points="74,128 122,58 170,128" fill="#525252"/>
+            <polygon points="44,128 96,50 148,128" fill="#2e2e2e"/>
+            <polygon points="96,50 86,68 106,68" fill="#f0f0f0"/>
+            <polygon points="70,62 61,78 79,78" fill="#e8e8e8"/>
+            <polygon points="122,58 113,74 131,74" fill="#e8e8e8"/>
+            <rect x="22" y="126" width="148" height="54" fill="#2a6b2a"/>
+            <ellipse cx="96" cy="126" rx="74" ry="9" fill="#358035"/>
+            <polygon points="96,90 67,110 125,110" fill="#fff"/>
+            <rect x="107" y="97" width="8" height="15" fill="#fff"/>
+            <rect x="69" y="110" width="54" height="30" fill="#fff"/>
+            <rect x="79" y="115" width="34" height="21" fill="#1e1e1e"/>
+            <line x1="96" y1="115" x2="96" y2="136" stroke="#fff" stroke-width="2.5"/>
+            <line x1="79" y1="125.5" x2="113" y2="125.5" stroke="#fff" stroke-width="2.5"/>
+          </g>
+        </svg>
+        <div class="drawer-title-group">
+          <div class="drawer-app-name">釧路津波避難所マップ</div>
+          <div class="drawer-app-sub">防災情報アプリ</div>
+        </div>
+      </div>
+      <button id="drawer-close" onclick="closeDrawer()" aria-label="メニューを閉じる">×</button>
+    </div>
+
+    <div id="drawer-nav-list">
+      <button class="nav-item active" data-page="map" onclick="navigateTo('map')">
+        <span class="nav-icon">🗺</span>
+        <span class="nav-label">地図</span>
+        <span class="nav-arrow">›</span>
+      </button>
+      <button class="nav-item" data-page="history" onclick="navigateTo('history')">
+        <span class="nav-icon">📋</span>
+        <span class="nav-label">更新履歴</span>
+        <span class="nav-arrow">›</span>
+      </button>
+      <button class="nav-item" data-page="shelters" onclick="navigateTo('shelters')">
+        <span class="nav-icon">📂</span>
+        <span class="nav-label">避難所データ</span>
+        <span class="nav-arrow">›</span>
+      </button>
+      <button class="nav-item" data-page="privacy" onclick="navigateTo('privacy')">
+        <span class="nav-icon">🔒</span>
+        <span class="nav-label">プライバシーポリシー</span>
+        <span class="nav-arrow">›</span>
+      </button>
+      <button class="nav-item" data-page="creator" onclick="navigateTo('creator')">
+        <span class="nav-icon">👤</span>
+        <span class="nav-label">製作者情報</span>
+        <span class="nav-arrow">›</span>
+      </button>
+    </div>
+
+    <div id="drawer-footer">© 2025 釧路生成AIラボ</div>
+  </nav>
+
+  <!-- 情報ページ（右からスライド） -->
+  <div id="info-page">
+    <header id="info-header">
+      <button id="info-back" onclick="navigateTo('map')" aria-label="地図に戻る">
+        <span>‹</span> 地図に戻る
+      </button>
+      <h2 id="info-title"></h2>
+    </header>
+    <div id="info-body">
+
+      <!-- 更新履歴 -->
+      <div id="page-history" class="info-section">
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-date">2026年3月26日</div>
+            <div class="timeline-content">
+              <div class="timeline-tag new">最新</div>
+              <p>ハンバーガーメニュー追加。更新履歴・避難所データ・プライバシーポリシー・製作者情報を専用ページに移設。地図ファースト＋ボトムシートUIに刷新。</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2026年3月25日</div>
+            <div class="timeline-content">
+              <p>病院マーカーを追加（アイコン・標高表示付き）。収容人数バッジを色分け強調。第1候補ルートを自動表示。徒歩到達圏（時速3km）追加。津波10m以上で危険低標高施設を自動除外。</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2026年3月24日</div>
+            <div class="timeline-content">
+              <p>釧路町・白糠町の避難所データ追加（106件）。橋梁・渋滞予想マーカー追加。住所検索UI改善（市町村セレクタ）。オフライン対応（PWA）追加。浸水シミュレーション精度向上。</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2026年3月23日</div>
+            <div class="timeline-content">
+              <p>津波浸水シミュレーション機能を追加。国土地理院の標高データをもとに浸水深を色分け表示。津波高さ・到達時間のシナリオ選択に対応。</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2026年3月22日</div>
+            <div class="timeline-content">
+              <p>アプリ公開。釧路市の指定避難所・指定緊急避難場所データを収録。GPS・住所検索・避難圏表示（ジョギング/車）機能を実装。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 避難所データ -->
+      <div id="page-shelters" class="info-section">
+        <div class="info-card">
+          <div class="info-card-icon">🏛</div>
+          <div class="info-card-body">
+            <div class="info-card-title">釧路市のデータ</div>
+            <p>釧路市が公開するオープンデータを使用。指定避難所・指定緊急避難場所を収録しています。</p>
+            <a href="https://www.city.kushiro.lg.jp/kurashi/bousai/1003680/1003686.html"
+               target="_blank" rel="noopener" class="info-link">
+              🔗 釧路市指定避難所・指定緊急避難場所一覧（公式）
+            </a>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🗾</div>
+          <div class="info-card-body">
+            <div class="info-card-title">釧路町・白糠町のデータ</div>
+            <p>北海道オープンデータポータルより取得（ライセンス: CC BY）。</p>
+            <a href="https://www.harp.lg.jp/opendata/dataset/1893.html"
+               target="_blank" rel="noopener" class="info-link">
+              🔗 北海道オープンデータポータル
+            </a>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon">🏥</div>
+          <div class="info-card-body">
+            <div class="info-card-title">病院データ</div>
+            <p>OpenStreetMap（Overpass API）より取得。一部の病院は手動で座標・階数を登録しています。</p>
+          </div>
+        </div>
+        <div class="info-card warning-card">
+          <div class="info-card-icon">⚠️</div>
+          <div class="info-card-body">
+            <div class="info-card-title">浸水シミュレーションについて</div>
+            <p>釧路沖地震（震度7想定）を前提とした<strong>予想</strong>であり、国土地理院の標高データをもとにしたシミュレーションです。実際の浸水範囲・深さとは異なります。</p>
+            <p style="margin-top:8px">最新情報は各市町村公式サイトまたは釧路市役所（0154-23-5151）でご確認ください。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- プライバシーポリシー -->
+      <div id="page-privacy" class="info-section">
+        <div class="policy-block">
+          <div class="policy-icon">📍</div>
+          <div class="policy-body">
+            <div class="policy-title">位置情報の取り扱い</div>
+            <p>取得した GPS 座標は端末内のみで処理します。外部サーバーへの保存・送信は一切行いません。アプリを閉じると位置情報は破棄されます。</p>
+          </div>
+        </div>
+        <div class="policy-block">
+          <div class="policy-icon">🔍</div>
+          <div class="policy-body">
+            <div class="policy-title">住所検索の通信</div>
+            <p>住所検索時は入力テキストを国土地理院・OpenStreetMap へ送信します（個人情報は含みません）。</p>
+          </div>
+        </div>
+        <div class="policy-block">
+          <div class="policy-icon">🗺</div>
+          <div class="policy-body">
+            <div class="policy-title">ルート表示の通信</div>
+            <p>ルート表示時のみ、出発地・目的地の座標を OSRM（経路探索サービス）へ送信します。</p>
+          </div>
+        </div>
+        <div class="policy-block">
+          <div class="policy-icon">⚠️</div>
+          <div class="policy-body">
+            <div class="policy-title">免責事項</div>
+            <p>本アプリはシミュレーションです。実際の避難行動は行政・防災無線の指示に必ず従ってください。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 製作者情報 -->
+      <div id="page-creator" class="info-section">
+        <div class="creator-hero">
+          <div class="creator-org-badge">釧路生成AIラボ</div>
+          <div class="creator-name">廣谷 迪正</div>
+          <div class="creator-kana">ひろや みちまさ</div>
+          <a href="mailto:kushiro.ai.lab@gmail.com" class="creator-email">
+            📧 kushiro.ai.lab@gmail.com
+          </a>
+        </div>
+        <div class="creator-about">
+          <div class="creator-about-title">このアプリについて</div>
+          <p>釧路管内の住民が地震・津波の際に素早く避難所を確認できるよう、生成AIを活用して開発した防災支援ツールです。釧路市・釧路町・白糠町の避難所データを収録し、GPS や住所入力でご自身の最寄り避難所を瞬時に案内します。</p>
+        </div>
+        <div class="info-copy">© 2025 釧路生成AIラボ</div>
+      </div>
+
     </div>
   </div>
 
