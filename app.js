@@ -6,6 +6,42 @@ let kinkyuuLayer = null;
 let hinanjoLayer = null;
 let shelterFilter = 'kinkyuu'; // 初期: 緊急避難場所のみ
 let radiusCircles = [];
+// ===== 管理者パネル =====
+let shelterStatusData = {};  // { [name]: { status, supplies, memo, updatedAt } }
+let isAdminLoggedIn   = false;
+
+const STATUS_LABELS = { open: '空き', half: '混雑（50%）', full: '満室' };
+const STATUS_COLORS = { open: '#34d399', half: '#fbbf24', full: '#f87171' };
+const STATUS_EMOJI  = { open: '🟢',    half: '🟡',       full: '🔴'    };
+
+// DOM-safe な ID を日本語名から生成
+function simpleHash(str) {
+  let h = 5381;
+  for (let i = 0; i < str.length; i++) {
+    h = (((h << 5) + h) ^ str.charCodeAt(i)) >>> 0;
+  }
+  return 'sh' + h.toString(36);
+}
+
+// 管理状況のポップアップ追記 HTML
+function shelterStatusPopup(name) {
+  const sd = shelterStatusData[name];
+  if (!sd) return '';
+  const col = sd.status ? STATUS_COLORS[sd.status] : '#94a3b8';
+  const emoji = sd.status ? STATUS_EMOJI[sd.status] : '';
+  const label = sd.status ? STATUS_LABELS[sd.status] : '';
+  let html = `<hr style="border-color:rgba(255,255,255,0.15);margin:4px 0">`;
+  if (label) html += `<span style="color:${col};font-weight:700">${emoji} ${label}</span><br>`;
+  if (sd.supplies) html += `<span style="font-size:12px">🛒 ${sd.supplies}</span><br>`;
+  if (sd.memo)     html += `<span style="font-size:12px">📝 ${sd.memo}</span><br>`;
+  if (sd.updatedAt) {
+    const d = new Date(sd.updatedAt);
+    const ts = isNaN(d) ? '' : d.toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    if (ts) html += `<span style="font-size:11px;color:#888">更新: ${ts}</span>`;
+  }
+  return html;
+}
+
 let tsunamiHeightM   = 0;  // シナリオ: 津波高さ（m）
 let tsunamiArrivalMin = 0; // シナリオ: 到達時間（分）
 let tideOffset = 0;        // 潮位補正: -1=干潮, 0=平均, +1=満潮
