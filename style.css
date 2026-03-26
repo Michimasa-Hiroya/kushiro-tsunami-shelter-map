@@ -469,15 +469,16 @@ body {
 #gps-row #gps-btn { flex: 1; }
 #reset-btn {
   flex-shrink: 0;
-  font-size: 13px;
-  font-weight: 700;
-  width: 40px;
+  font-size: 12px;
+  font-weight: 600;
   height: 40px;
-  border-radius: 50%;
+  padding: 0 12px;
+  border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.2);
   background: rgba(255,255,255,0.07);
   color: var(--muted);
   cursor: pointer;
+  white-space: nowrap;
 }
 #reset-btn:active { opacity: 0.7; }
 
