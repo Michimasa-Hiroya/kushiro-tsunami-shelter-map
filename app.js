@@ -1779,6 +1779,7 @@ async function saveAdminItem(name, prefix = '') {
 // ===== 管理者 CRUD（避難所の追加・編集・削除）=====
 
 function openAdminCreate() {
+  if (adminRole !== 'master') return;
   document.getElementById('admin-create-area').style.display = '';
   document.getElementById('admin-create-area').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
