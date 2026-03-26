@@ -843,6 +843,7 @@ function renderResults(results, userLat, userLng) {
       <div class="time-row">
         ${walkBadge(s.route.distance_m)}
         ${elevBadge(s.elevation_m)}
+        <span class="badge dist-badge">📏 ${s.route.distance_m}m</span>
       </div>
       <button class="route-btn" onclick="showRoute('foot',${userLat},${userLng},${s.lat},${s.lng})">
         ルートを地図に表示
@@ -851,7 +852,6 @@ function renderResults(results, userLat, userLng) {
         <summary>詳細を見る</summary>
         <div class="time-row" style="margin-top:8px">
           ${timeBadge(s.route.duration_min, 'foot')}
-          <span class="badge dist-badge">📏 距離 ${s.route.distance_m}m</span>
           ${s.route.is_estimated ? '<span class="badge est-badge">概算</span>' : ''}
         </div>
         <div class="info-row">
