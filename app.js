@@ -1324,6 +1324,210 @@ function setBottomSheetHeight(h) {
   if (map) setTimeout(() => map.invalidateSize(), 320);
 }
 
+// ===== 管理者機能 =====
+
+// パスワードチェック
+function checkAdminPassword(input) {
+  return input === atob('a3VzaGlyby10c3VuYW1p');
+}
+
+function submitAdminLogin() {
+  const input = document.getElementById('admin-password-input').value;
+  const errEl = document.getElementById('admin-login-error');
+  if (checkAdminPassword(input)) {
+    isAdminLoggedIn = true;
+    document.getElementById('admin-login-area').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    errEl.textContent = '';
+    renderAdminList();
+  } else {
+    errEl.textContent = 'パスワードが正しくありません';
+  }
+}
+
+function logoutAdmin() {
+  isAdminLoggedIn = false;
+  document.getElementById('admin-login-area').style.display = '';
+  document.getElementById('admin-panel').style.display = 'none';
+  document.getElementById('admin-password-input').value = '';
+  document.getElementById('admin-login-error').textContent = '';
+}
+
+// 全避難所リスト取得（管理用）
+function getAllSheltersForAdmin() {
+  const list = ALL_SHELTERS.filter(s => s.types[0] === 'kinkyuu' || s.types[0] === 'hinanjo');
+  if (typeof EXTRA_SHELTERS !== 'undefined') {
+    for (const s of EXTRA_SHELTERS) {
+      if ((s.types[0] === 'kinkyuu' || s.types[0] === 'hinanjo') && !list.find(x => x.name === s.name)) {
+        list.push(s);
+      }
+    }
+  }
+  return list;
+}
+
+function renderAdminList() {
+  if (!isAdminLoggedIn) return;
+  const query   = (document.getElementById('admin-search-input')?.value || '').trim();
+  const filterV = document.getElementById('admin-filter-status')?.value || 'all';
+
+  let list = getAllSheltersForAdmin();
+  if (query)           list = list.filter(s => s.name.includes(query) || (s.address||'').includes(query));
+  if (filterV === 'none')  list = list.filter(s => !shelterStatusData[s.name]?.status);
+  else if (filterV !== 'all') list = list.filter(s => shelterStatusData[s.name]?.status === filterV);
+
+  const container = document.getElementById('admin-shelter-list');
+  if (!container) return;
+
+  container.innerHTML = list.map(s => {
+    const sd    = shelterStatusData[s.name] || {};
+    const st    = sd.status || '';
+    const typeL = s.types[0] === 'kinkyuu' ? '緊急' : '避難所';
+    const id    = simpleHash(s.name);
+    const badge = st
+      ? `<span class="admin-badge admin-badge-${st}">${STATUS_EMOJI[st]} ${STATUS_LABELS[st]}</span>`
+      : `<span class="admin-badge admin-badge-none">未設定</span>`;
+    const statBtns = ['open','half','full'].map(v =>
+      `<button class="admin-status-btn admin-status-btn-${v}${st===v?' active':''}" data-status="${v}"
+        onclick="selectAdminStatus('${s.name.replace(/'/g,"\\'")}')">${STATUS_EMOJI[v]} ${STATUS_LABELS[v]}</button>`
+    ).join('');
+    return `
+<div class="admin-item" id="admin-item-${id}">
+  <div class="admin-item-header" onclick="toggleAdminItem('${s.name.replace(/'/g,"\\'")}')">
+    <div class="admin-item-info">
+      <span class="admin-type-tag admin-type-${s.types[0]}">${typeL}</span>
+      <span class="admin-item-name">${s.name}</span>
+    </div>
+    <div class="admin-item-right">${badge}<span class="admin-chevron">›</span></div>
+  </div>
+  <div class="admin-item-form" id="admin-form-${id}">
+    <div class="admin-form-field">
+      <label class="admin-label">空き状況</label>
+      <div class="admin-status-btns" id="admin-sbtn-${id}">${statBtns}</div>
+    </div>
+    <div class="admin-form-field">
+      <label class="admin-label">必要物資</label>
+      <textarea class="admin-textarea" id="admin-sup-${id}" placeholder="例: 飲料水・食料・毛布・薬品">${sd.supplies||''}</textarea>
+    </div>
+    <div class="admin-form-field">
+      <label class="admin-label">メモ</label>
+      <textarea class="admin-textarea" id="admin-memo-${id}" placeholder="特記事項・連絡先など">${sd.memo||''}</textarea>
+    </div>
+    <button class="admin-save-btn" onclick="saveAdminItem('${s.name.replace(/'/g,"\\'")}')">💾 保存</button>
+    <span class="admin-save-msg" id="admin-msg-${id}"></span>
+  </div>
+</div>`;
+  }).join('');
+}
+
+function toggleAdminItem(name) {
+  const id   = simpleHash(name);
+  const form = document.getElementById('admin-form-' + id);
+  if (!form) return;
+  const opening = !form.classList.contains('open');
+  // 他を閉じる
+  document.querySelectorAll('.admin-item-form.open').forEach(f => f.classList.remove('open'));
+  document.querySelectorAll('.admin-chevron').forEach(c => c.textContent = '›');
+  if (opening) {
+    form.classList.add('open');
+    const ch = document.querySelector('#admin-item-' + id + ' .admin-chevron');
+    if (ch) ch.textContent = '⌄';
+  }
+}
+
+function selectAdminStatus(name) {
+  // クリックされたボタンを特定
+  const id   = simpleHash(name);
+  const container = document.getElementById('admin-sbtn-' + id);
+  if (!container) return;
+  // event.target をもとにアクティブ切り替え
+  const clicked = event.target.closest('.admin-status-btn');
+  if (!clicked) return;
+  container.querySelectorAll('.admin-status-btn').forEach(b => b.classList.remove('active'));
+  clicked.classList.add('active');
+}
+
+async function saveAdminItem(name) {
+  const id        = simpleHash(name);
+  const activeBtn = document.querySelector(`#admin-sbtn-${id} .admin-status-btn.active`);
+  const status    = activeBtn ? activeBtn.dataset.status : '';
+  const supplies  = (document.getElementById('admin-sup-' + id)?.value || '').trim();
+  const memo      = (document.getElementById('admin-memo-' + id)?.value || '').trim();
+  const msgEl     = document.getElementById('admin-msg-' + id);
+
+  if (!status && !supplies && !memo) {
+    delete shelterStatusData[name];
+    await deleteShelterStatusRemote(name);
+  } else {
+    const data = { status, supplies, memo, updatedAt: new Date().toISOString() };
+    shelterStatusData[name] = data;
+    await saveShelterStatusRemote(name, data);
+  }
+  showAllSheltersOnMap();
+  if (msgEl) { msgEl.textContent = '✅ 保存しました'; setTimeout(() => { msgEl.textContent = ''; }, 2500); }
+  renderAdminList();
+}
+
+// ===== Firebase Firestore 連携 =====
+// （Firebase が未設定の場合は localStorage のみ動作）
+
+async function loadShelterStatus() {
+  // ローカル保存分を先に読み込む（オフライン時のフォールバック）
+  try {
+    const local = localStorage.getItem('shelterStatusData');
+    if (local) shelterStatusData = JSON.parse(local);
+  } catch {}
+
+  const db = getFirestoreDB();
+  if (!db) { showAllSheltersOnMap(); return; }
+
+  try {
+    // 初回全件取得
+    const snap = await db.collection('shelterStatus').get();
+    snap.forEach(doc => { shelterStatusData[doc.id] = doc.data(); });
+    showAllSheltersOnMap();
+
+    // リアルタイム更新
+    db.collection('shelterStatus').onSnapshot(snap => {
+      snap.docChanges().forEach(ch => {
+        if (ch.type === 'removed') delete shelterStatusData[ch.doc.id];
+        else shelterStatusData[ch.doc.id] = ch.doc.data();
+      });
+      showAllSheltersOnMap();
+    });
+  } catch (e) {
+    console.warn('Firestore load failed:', e);
+    showAllSheltersOnMap();
+  }
+}
+
+function getFirestoreDB() {
+  try {
+    if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+      return firebase.firestore();
+    }
+  } catch {}
+  return null;
+}
+
+async function saveShelterStatusRemote(name, data) {
+  // ローカル保存
+  try { localStorage.setItem('shelterStatusData', JSON.stringify(shelterStatusData)); } catch {}
+  // Firestore 保存
+  const db = getFirestoreDB();
+  if (db) {
+    try { await db.collection('shelterStatus').doc(name).set(data); } catch (e) { console.warn(e); }
+  }
+}
+
+async function deleteShelterStatusRemote(name) {
+  try { localStorage.setItem('shelterStatusData', JSON.stringify(shelterStatusData)); } catch {}
+  const db = getFirestoreDB();
+  if (db) {
+    try { await db.collection('shelterStatus').doc(name).delete(); } catch (e) { console.warn(e); }
+  }
+}
+
 // ===== ボトムシート ドラッグ制御 =====
 function initBottomSheet() {
   const sheet  = document.getElementById('bottom-sheet');
