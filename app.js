@@ -175,8 +175,8 @@ const FloodLayer = L.GridLayer.extend({
     canvas.width  = sz.x;
     canvas.height = sz.y;
 
-    const targetH = tsunamiHeightM;
-    if (targetH === 0) { done(null, canvas); return canvas; }
+    const targetH = effectiveTsunamiH();
+    if (targetH <= 0) { done(null, canvas); return canvas; }
 
     // 高ズーム時は親タイル（MAX_NATIVE_ZOOM）から該当領域を切り出す
     const z = coords.z;
