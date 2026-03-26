@@ -1257,11 +1257,11 @@ function openHelp() {
   navigateTo('howto');
 }
 function markHelpSeen() {
-  localStorage.setItem('helpSeen', '1');
+  localStorage.setItem('helpSeen_v3', '1');
   const btn = document.getElementById('help-btn');
   if (btn) btn.classList.remove('pulse');
   const tooltip = document.getElementById('help-tooltip');
-  if (tooltip) tooltip.style.display = 'none';
+  if (tooltip) tooltip.classList.remove('visible');
 }
 
 // ===== ボトムシート高さ設定 =====
