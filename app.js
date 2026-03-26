@@ -989,19 +989,20 @@ function addMapLegend() {
   legend.addTo(map);
 }
 
-// ===== 全避難所トグル =====
-function toggleAllShelters() {
-  allSheltersVisible = !allSheltersVisible;
-  const btn = document.getElementById('toggle-all-btn');
-  if (allSheltersVisible) {
-    allShelterLayer.addTo(map);
-    btn.textContent = '🗺 全避難所を表示中';
-    btn.classList.remove('btn-off');
-  } else {
-    allShelterLayer.remove();
-    btn.textContent = '🗺 全避難所を非表示';
-    btn.classList.add('btn-off');
+// ===== 避難所フィルター =====
+function setShelterFilter(type) {
+  shelterFilter = type;
+  if (kinkyuuLayer) {
+    if (type === 'kinkyuu' || type === 'all') kinkyuuLayer.addTo(map);
+    else kinkyuuLayer.remove();
   }
+  if (hinanjoLayer) {
+    if (type === 'hinanjo' || type === 'all') hinanjoLayer.addTo(map);
+    else hinanjoLayer.remove();
+  }
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === type);
+  });
 }
 
 // ===== ローディング =====
