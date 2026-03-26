@@ -1096,6 +1096,7 @@ function closeDrawer() {
 
 // ===== ページナビゲーション =====
 const PAGE_TITLES = {
+  howto:    '📖 使い方',
   history:  '📋 更新履歴',
   shelters: '📂 避難所データ',
   privacy:  '🔒 プライバシーポリシー',
