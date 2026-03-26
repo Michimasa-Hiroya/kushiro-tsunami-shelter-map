@@ -1873,6 +1873,227 @@ body {
 }
 .translate-step strong { color: var(--text); }
 
+/* ── ナビ区切り線 ── */
+.nav-divider-line {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 6px 16px;
+}
+.nav-item-admin { opacity: 0.7; }
+.nav-item-admin:hover { opacity: 1; }
+
+/* ── 管理者パネル ── */
+.admin-login-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 20px;
+  gap: 12px;
+}
+.admin-login-icon { font-size: 44px; }
+.admin-login-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+.admin-login-desc {
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.6;
+  margin: 0;
+}
+.admin-password-input {
+  width: 100%;
+  max-width: 280px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  text-align: center;
+  letter-spacing: 2px;
+  outline: none;
+}
+.admin-password-input:focus { border-color: var(--accent); }
+.admin-login-btn {
+  width: 100%;
+  max-width: 280px;
+  padding: 12px;
+  background: var(--accent);
+  color: #080d1a;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.admin-login-error {
+  font-size: 13px;
+  color: #f87171;
+  min-height: 18px;
+}
+.admin-panel-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(56,189,248,0.07);
+  border-bottom: 1px solid rgba(56,189,248,0.15);
+}
+.admin-panel-title { font-size: 14px; font-weight: 700; color: var(--accent); }
+.admin-logout-btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+.admin-panel-controls {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.admin-search-input {
+  flex: 1;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+}
+.admin-filter-select {
+  padding: 8px 6px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+}
+
+/* 避難所リスト */
+.admin-item {
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.admin-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.admin-item-header:active { background: rgba(255,255,255,0.04); }
+.admin-item-info { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.admin-type-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.admin-type-kinkyuu { background: rgba(56,189,248,0.15); color: #38bdf8; }
+.admin-type-hinanjo  { background: rgba(52,211,153,0.15); color: #34d399; }
+.admin-item-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.admin-item-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.admin-badge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+.admin-badge-open { background: rgba(52,211,153,0.15); color: #34d399; }
+.admin-badge-half { background: rgba(251,191,36,0.15); color: #fbbf24; }
+.admin-badge-full { background: rgba(248,113,113,0.15); color: #f87171; }
+.admin-badge-none { background: rgba(148,163,184,0.10); color: #64748b; }
+.admin-chevron { color: var(--muted); font-size: 16px; transition: transform 0.2s; }
+
+/* 編集フォーム */
+.admin-item-form {
+  display: none;
+  padding: 0 14px 14px;
+  background: rgba(0,0,0,0.15);
+}
+.admin-item-form.open { display: block; }
+.admin-form-field { margin-top: 12px; }
+.admin-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.admin-status-btns { display: flex; gap: 6px; }
+.admin-status-btn {
+  flex: 1;
+  padding: 7px 4px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.admin-status-btn-open.active { background: rgba(52,211,153,0.20); color: #34d399; border-color: #34d399; }
+.admin-status-btn-half.active { background: rgba(251,191,36,0.20); color: #fbbf24; border-color: #fbbf24; }
+.admin-status-btn-full.active { background: rgba(248,113,113,0.20); color: #f87171; border-color: #f87171; }
+.admin-textarea {
+  width: 100%;
+  min-height: 58px;
+  padding: 9px 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+}
+.admin-textarea:focus { border-color: var(--accent); }
+.admin-save-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  background: var(--accent);
+  color: #080d1a;
+  border: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.admin-save-msg {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #34d399;
+  text-align: center;
+}
+
 /* ── 製作者リンクボタン ── */
 .creator-links {
   display: flex;
