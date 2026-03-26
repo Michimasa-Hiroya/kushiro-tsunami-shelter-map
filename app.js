@@ -1939,6 +1939,7 @@ function openAdminMapCreateForm(lat, lng) {
 }
 
 async function saveAdminMapNewShelter() {
+  if (adminRole !== 'master') return;
   const name    = (document.getElementById('admin-map-new-name')?.value || '').trim();
   const address = (document.getElementById('admin-map-new-addr')?.value || '').trim();
   const type    = document.getElementById('admin-map-new-type')?.value || 'kinkyuu';
