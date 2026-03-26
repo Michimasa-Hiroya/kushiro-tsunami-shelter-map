@@ -696,12 +696,21 @@ async function findShelters(lat, lng) {
     kinkyuuNames.has(s.name) && (!hide || !TSUNAMI_HIDE_NAMES.has(s.name))
   );
   if (typeof EXTRA_SHELTERS !== 'undefined') {
-    for (const s of EXTRA_SHELTERS) {
-      if (!s.types.includes('kinkyuu')) continue; // 指定緊急避難場所のみ
-      if (hide && TSUNAMI_HIDE_NAMES.has(s.name)) continue;
-      // elevation_m がデータに含まれていればそれを優先、なければ null
+    for (const origS of EXTRA_SHELTERS) {
+      if (!origS.types.includes('kinkyuu')) continue;
+      if (hide && TSUNAMI_HIDE_NAMES.has(origS.name)) continue;
+      if (customSheltersData[origS.name]?.deleted) continue;
+      const s = customSheltersData[origS.name] ? { ...origS, ...customSheltersData[origS.name] } : origS;
       candidates.push({ elevation_m: null, distance_from_sea_m: null, ...s });
     }
+  }
+  // カスタム追加避難所（指定緊急避難場所のみ）
+  for (const s of Object.values(customSheltersData)) {
+    if (!s.isCustom || s.deleted || !s.name || !s.lat || !s.lng) continue;
+    if (s.types?.[0] !== 'kinkyuu') continue;
+    if (hide && TSUNAMI_HIDE_NAMES.has(s.name)) continue;
+    if (candidates.find(c => c.name === s.name)) continue;
+    candidates.push({ elevation_m: null, distance_from_sea_m: null, capacity: 0, ...s });
   }
   // 距離順にソートして近い順に最大3件取得
   const top3 = candidates
