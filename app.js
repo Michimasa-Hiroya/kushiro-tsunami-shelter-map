@@ -1132,23 +1132,6 @@ function makeFacilityIcon(emoji) {
 }
 
 // Overpass 取得（主→副エンドポイントにフォールバック）
-async function overpassFetch(query) {
-  const endpoints = [
-    'https://overpass-api.de/api/interpreter',
-    'https://overpass.openstreetmap.ru/api/interpreter',
-    'https://overpass.kumi.systems/api/interpreter',
-  ];
-  for (const ep of endpoints) {
-    try {
-      const ctrl  = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 25000);
-      const resp  = await fetch(`${ep}?data=${encodeURIComponent(query)}`, { signal: ctrl.signal });
-      clearTimeout(timer);
-      if (resp.ok) return await resp.json();
-    } catch { /* 次のエンドポイントを試す */ }
-  }
-  return { elements: [] };
-}
 function elevLine(groundElev, floors) {
   if (groundElev === null) return '';
   const top = groundElev + Math.max(0, floors - 1) * 4;
