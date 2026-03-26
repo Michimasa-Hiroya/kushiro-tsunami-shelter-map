@@ -1101,7 +1101,7 @@ const HOSP_URLS = {
   '中央病院':                 'https://www.kch.or.jp/',
   '釧路中央病院':             'https://www.kch.or.jp/',
   '三慈会病院':               'https://www.sanjikai.net/',
-  '釧路共立病院':             'https://www.dotokin-medwel.jp/',
+  '釧路協立病院':             'https://www.dotokin-medwel.jp/',
   '白樺台病院':               'https://www.shirakabadai.jp/',
 };
 
