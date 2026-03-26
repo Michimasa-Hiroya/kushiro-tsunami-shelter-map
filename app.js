@@ -853,6 +853,7 @@ function renderResults(results, userLat, userLng) {
 
   document.getElementById('results').style.display = 'block';
   document.getElementById('walking-list').innerHTML = cards + adviceHtml;
+  document.getElementById('reset-btn').style.display = '';
   setBottomSheetHeight(Math.round(window.innerHeight * 0.5));
 }
 
