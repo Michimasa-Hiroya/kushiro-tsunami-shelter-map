@@ -190,10 +190,10 @@ body {
 }
 
 .header-text h1 {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   color: #fff;
-  letter-spacing: 1.5px;
+  letter-spacing: 0.5px;
   line-height: 1.2;
   text-shadow: 0 0 30px rgba(56,189,248,0.25);
 }
