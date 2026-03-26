@@ -1003,8 +1003,8 @@ function lookupPartial(table, name) {
 // ===== 施設マーカー配置ヘルパー =====
 function makeFacilityIcon(emoji) {
   return L.divIcon({
-    html: `<div style="width:13px;height:13px;display:flex;align-items:center;justify-content:center;font-size:11px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.8))">${emoji}</div>`,
-    iconSize: [13, 13], iconAnchor: [7, 7], className: ''
+    html: `<div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:17px;line-height:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,.9))">${emoji}</div>`,
+    iconSize: [20, 20], iconAnchor: [10, 10], className: ''
   });
 }
 
