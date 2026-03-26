@@ -413,14 +413,14 @@ body {
 
 /* ===== 避難所マーカー（丸＋漢字）===== */
 .shelter-dot-marker {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   border: 2px solid rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   color: #fff;
   text-shadow: 0 0 3px rgba(0,0,0,0.7);
