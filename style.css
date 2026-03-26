@@ -1145,11 +1145,11 @@ body {
   white-space: nowrap;
 }
 .filter-btn.active {
-  color: var(--accent);
-  border-color: rgba(56,189,248,0.45);
-  background: rgba(56,189,248,0.15);
+  color: #fff;
+  border-color: rgba(56,189,248,0.6);
+  background: rgba(56,189,248,0.30);
 }
-.filter-btn.active .filter-sub { opacity: 0.9; }
+.filter-btn.active .filter-sub { opacity: 1; color: rgba(255,255,255,0.85); }
 .filter-btn:active { opacity: 0.7; }
 
 /* ボトムシート */
