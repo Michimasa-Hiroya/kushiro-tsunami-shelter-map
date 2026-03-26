@@ -1133,15 +1133,24 @@ body {
 /* ドラッグハンドル */
 #bs-handle {
   width: 40px;
-  height: 4px;
-  background: rgba(255,255,255,0.20);
-  border-radius: 2px;
+  height: 5px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 3px;
   margin: 10px auto 0;
   cursor: grab;
   touch-action: none;
   flex-shrink: 0;
 }
 #bs-handle:active { cursor: grabbing; }
+@keyframes handle-bounce {
+  0%, 100% { transform: translateY(0); }
+  35%       { transform: translateY(-7px); }
+  65%       { transform: translateY(-3px); }
+}
+#bs-handle.bounce {
+  animation: handle-bounce 0.65s ease 3;
+  background: rgba(56,189,248,0.7);
+}
 
 /* ボトムシートの中身 */
 #bs-content {
