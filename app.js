@@ -941,9 +941,9 @@ function makeShelterIcon(bgColor, char) {
   return L.divIcon({
     className: '',
     html: `<div class="shelter-dot-marker" style="background:${bgColor};color:${textColor}">${char}</div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12],
-    popupAnchor: [0, -14],
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    popupAnchor: [0, -17],
   });
 }
 
