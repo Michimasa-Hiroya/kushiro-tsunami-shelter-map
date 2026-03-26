@@ -1106,6 +1106,8 @@ function setBottomSheetHeight(h) {
   if (!sheet) return;
   sheet.style.height = h + 'px';
   document.documentElement.style.setProperty('--bs-h', h + 'px');
+  // Leaflet に地図コンテナのリサイズを通知
+  if (map) setTimeout(() => map.invalidateSize(), 320);
 }
 
 // ===== ボトムシート ドラッグ制御 =====
