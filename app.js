@@ -1821,6 +1821,7 @@ async function saveAdminNewShelter() {
 }
 
 async function saveAdminMetaEdit(name) {
+  if (adminRole !== 'master') return;
   const id      = simpleHash(name);
   const address = (document.getElementById(`admin-meta-addr-${id}`)?.value || '').trim();
   const type    = document.getElementById(`admin-meta-type-${id}`)?.value || 'kinkyuu';
