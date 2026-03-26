@@ -389,6 +389,31 @@ body {
 }
 
 /* ===== Map Legend ===== */
+.legend-header {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  user-select: none;
+}
+.legend-arrow { font-size: 8px; transition: transform 0.2s; }
+.map-legend.collapsed .legend-body { display: none; }
+.map-legend.collapsed .legend-arrow { transform: rotate(180deg); }
+
+.shelter-details { margin-top: 8px; }
+.shelter-details summary {
+  font-size: 11px;
+  color: var(--accent);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.shelter-details summary::-webkit-details-marker { display: none; }
+.shelter-details summary::before { content: '▶ '; font-size: 9px; }
+.shelter-details[open] summary::before { content: '▼ '; }
+
 .map-legend {
   background: rgba(8,13,26,0.85);
   border: 1px solid rgba(255,255,255,0.1);
