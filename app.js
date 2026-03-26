@@ -1023,7 +1023,10 @@ function showAllSheltersOnMap() {
 
   // EXTRA_SHELTERS（釧路町・白糠町）を追加
   if (typeof EXTRA_SHELTERS !== 'undefined') {
-    for (const s of EXTRA_SHELTERS) {
+    for (const origS of EXTRA_SHELTERS) {
+      const cust = customSheltersData[origS.name];
+      if (cust?.deleted) continue;
+      const s = (cust && !cust.deleted) ? { ...origS, ...cust } : origS;
       const primaryType = s.types[0];
       if (!colorMap[primaryType]) continue;
 
