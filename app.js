@@ -382,9 +382,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initBottomSheet();
 
   // 初回利用時は？ボタンをパルスアニメーション＋吹き出しでアピール
-  if (!localStorage.getItem('helpSeen')) {
-    document.getElementById('help-btn').classList.add('pulse');
-    document.getElementById('help-tooltip').style.display = 'block';
+  if (!localStorage.getItem('helpSeen_v3')) {
+    const helpBtn = document.getElementById('help-btn');
+    const tooltip = document.getElementById('help-tooltip');
+    if (helpBtn) helpBtn.classList.add('pulse');
+    if (tooltip) {
+      tooltip.classList.add('visible');
+      // 10秒後に自動的に吹き出しのみ消す（パルスは維持）
+      setTimeout(() => { tooltip.classList.remove('visible'); }, 10000);
+    }
   }
 });
 
