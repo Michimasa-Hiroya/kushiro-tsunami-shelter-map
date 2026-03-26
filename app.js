@@ -725,8 +725,8 @@ const SHELTER_URLS = {
 // 自治体別公式避難所一覧URL（フォールバック）
 const CITY_SHELTER_LIST_URL = {
   '釧路市': 'https://www.city.kushiro.lg.jp/kurashi/bousai/1003680/1003686.html',
-  '釧路町': 'https://www.town.kushiro.hokkaido.jp/life/saigai/hinan/',
-  '白糠町': 'https://www.town.shiranuka.hokkaido.jp/administrative/disaster/',
+  '釧路町': 'http://www.town.kushiro.lg.jp/disaster/hinanbasho/place.html',
+  '白糠町': 'https://www.town.shiranuka.lg.jp/section/nfml630000001mwx.html',
 };
 
 function shelterOfficialLink(s) {
