@@ -1083,6 +1083,55 @@ async function loadHospitals() {
   }
 }
 
+// ===== ナビゲーションドロワー =====
+function openDrawer() {
+  document.getElementById('nav-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('nav-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+
+// ===== ページナビゲーション =====
+const PAGE_TITLES = {
+  history:  '📋 更新履歴',
+  shelters: '📂 避難所データ',
+  privacy:  '🔒 プライバシーポリシー',
+  creator:  '👤 製作者情報',
+};
+
+function navigateTo(page) {
+  closeDrawer();
+
+  // ドロワーのアクティブ状態を更新
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.page === page);
+  });
+
+  const infoPage = document.getElementById('info-page');
+
+  if (page === 'map') {
+    infoPage.classList.remove('open');
+    return;
+  }
+
+  // 全セクション非表示 → 対象セクションだけ表示
+  document.querySelectorAll('.info-section').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+
+  // タイトルセット
+  const titleEl = document.getElementById('info-title');
+  if (titleEl) titleEl.textContent = PAGE_TITLES[page] || '';
+
+  // ページを開く（スクロールを先頭に戻す）
+  const infoBody = document.getElementById('info-body');
+  if (infoBody) infoBody.scrollTop = 0;
+  infoPage.classList.add('open');
+}
+
 // ===== 設定モーダル =====
 function openSettings() {
   document.getElementById('settings-modal').classList.add('open');
