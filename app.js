@@ -712,8 +712,11 @@ function walkBadge(distM) {
   return `<span class="${cls}">🚶 徒歩 約${min}分${warn}</span>`;
 }
 
-const cardClass = elev => (elev === null || tsunamiHeightM === 0) ? '' :
-  elev >= tsunamiHeightM + 5 ? 'safe' : elev >= tsunamiHeightM ? 'caution' : '';
+const cardClass = elev => {
+  const effH = effectiveTsunamiH();
+  if (elev === null || effH === 0) return '';
+  return elev >= effH + 5 ? 'safe' : elev >= effH ? 'caution' : '';
+};
 
 function capacityBadge(cap) {
   if (!cap || cap <= 0) return '';
