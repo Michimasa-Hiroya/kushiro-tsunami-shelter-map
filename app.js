@@ -14,6 +14,7 @@ let adminMapLayer     = null;
 let adminSelectedTown = '釧路市';
 let customSheltersData = {}; // { [name]: shelterRecord | { deleted: true } }
 let adminMapAddMode   = false;
+let adminRole         = null; // null | 'standard' | 'master'
 
 const STATUS_LABELS  = { open: '空き', half: '混雑（50%）', full: '満室' };
 const STATUS_COLORS  = { open: '#34d399', half: '#fbbf24', full: '#f87171' };
