@@ -930,7 +930,7 @@ body {
 
 /* ===== Responsive ===== */
 @media (max-width: 380px) {
-  .header-text h1  { font-size: 17px; }
+  .header-text h1  { font-size: 14px; }
   #gps-btn         { font-size: 16px; padding: 15px; }
   .shelter-name    { font-size: 15px; }
   .alert-chip      { font-size: 11px; padding: 3px 9px; }
