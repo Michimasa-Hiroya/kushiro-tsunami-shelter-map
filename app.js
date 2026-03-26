@@ -1358,6 +1358,16 @@ function logoutAdmin() {
   document.getElementById('admin-login-error').textContent = '';
 }
 
+// 避難所の市町村を返す
+function getShelterTown(s) {
+  if (s.town) return s.town;
+  const addr = s.address || '';
+  if (addr.includes('音別')) return '音別町';
+  if (addr.includes('釧路町')) return '釧路町';
+  if (addr.includes('白糠町')) return '白糠町';
+  return '釧路市';
+}
+
 // 全避難所リスト取得（管理用）
 function getAllSheltersForAdmin() {
   const list = ALL_SHELTERS.filter(s => s.types[0] === 'kinkyuu' || s.types[0] === 'hinanjo');
