@@ -854,6 +854,19 @@ function renderResults(results, userLat, userLng) {
   setBottomSheetHeight(Math.round(window.innerHeight * 0.5));
 }
 
+// ===== 検索リセット =====
+function resetSearch() {
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('walking-list').innerHTML = '';
+  document.getElementById('address-input').value = '';
+  if (routeLayer) { routeLayer.remove(); routeLayer = null; }
+  if (userMarker) { userMarker.remove(); userMarker = null; }
+  radiusCircles.forEach(c => c.remove());
+  radiusCircles = [];
+  currentLat = null; currentLng = null;
+  setBottomSheetHeight(180);
+}
+
 // ===== ルート表示 =====
 async function showRoute(profile, fromLat, fromLng, toLat, toLng) {
   if (routeLayer) { routeLayer.remove(); routeLayer = null; }
