@@ -533,6 +533,45 @@
         <div class="info-copy">© 2025 釧路生成AIラボ</div>
       </div>
 
+      <!-- 管理者パネル -->
+      <div id="page-admin" class="info-section">
+
+        <!-- ログイン前 -->
+        <div id="admin-login-area">
+          <div class="admin-login-card">
+            <div class="admin-login-icon">🔐</div>
+            <h3 class="admin-login-title">管理者ログイン</h3>
+            <p class="admin-login-desc">避難所の空き状況・必要物資・メモを管理し、地図にリアルタイム反映します。</p>
+            <input type="password" id="admin-password-input" class="admin-password-input"
+                   placeholder="パスワードを入力"
+                   onkeydown="if(event.key==='Enter')submitAdminLogin()" />
+            <button class="admin-login-btn" onclick="submitAdminLogin()">ログイン</button>
+            <div id="admin-login-error" class="admin-login-error"></div>
+          </div>
+        </div>
+
+        <!-- ログイン後パネル -->
+        <div id="admin-panel" style="display:none">
+          <div class="admin-panel-topbar">
+            <span class="admin-panel-title">🔐 管理者モード</span>
+            <button class="admin-logout-btn" onclick="logoutAdmin()">ログアウト</button>
+          </div>
+          <div class="admin-panel-controls">
+            <input type="text" id="admin-search-input" class="admin-search-input"
+                   placeholder="🔍 施設名・住所で検索" oninput="renderAdminList()" />
+            <select id="admin-filter-status" class="admin-filter-select" onchange="renderAdminList()">
+              <option value="all">すべて</option>
+              <option value="open">🟢 空き</option>
+              <option value="half">🟡 混雑</option>
+              <option value="full">🔴 満室</option>
+              <option value="none">未設定</option>
+            </select>
+          </div>
+          <div id="admin-shelter-list"></div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 
