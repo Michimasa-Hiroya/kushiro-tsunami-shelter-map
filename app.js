@@ -1787,6 +1787,7 @@ function cancelAdminCreate() {
 }
 
 async function saveAdminNewShelter() {
+  if (adminRole !== 'master') return;
   const name    = (document.getElementById('admin-new-name')?.value || '').trim();
   const address = (document.getElementById('admin-new-address')?.value || '').trim();
   const type    = document.getElementById('admin-new-type')?.value || 'kinkyuu';
