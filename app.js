@@ -1544,11 +1544,10 @@ function toggleAdminItem(name) {
 }
 
 function selectAdminStatus(e, name) {
-  const id   = simpleHash(name);
-  const container = document.getElementById('admin-sbtn-' + id);
-  if (!container) return;
   const clicked = e.target.closest('.admin-status-btn');
   if (!clicked) return;
+  const container = clicked.closest('.admin-status-btns');
+  if (!container) return;
   container.querySelectorAll('.admin-status-btn').forEach(b => b.classList.remove('active'));
   clicked.classList.add('active');
 }
