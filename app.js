@@ -1390,23 +1390,38 @@ function setBottomSheetHeight(h) {
 
 // ===== 管理者機能 =====
 
-// パスワードチェック
-function checkAdminPassword(input) {
-  return input === atob('a3VzaGlyby10c3VuYW1p');
-}
-
+// パスワードチェック・ロール判定
 function submitAdminLogin() {
   const input = document.getElementById('admin-password-input').value;
   const errEl = document.getElementById('admin-login-error');
-  if (checkAdminPassword(input)) {
-    isAdminLoggedIn = true;
-    document.getElementById('admin-login-area').style.display = 'none';
-    document.getElementById('admin-panel').style.display = 'block';
-    errEl.textContent = '';
-    renderAdminList();
+  if (input === atob('a3VzaGlyby1tYXN0ZXI=')) {
+    adminRole = 'master';
+  } else if (input === atob('a3VzaGlyby10c3VuYW1p')) {
+    adminRole = 'standard';
   } else {
     errEl.textContent = 'パスワードが正しくありません';
+    return;
   }
+  isAdminLoggedIn = true;
+  errEl.textContent = '';
+  document.getElementById('admin-login-area').style.display = 'none';
+  document.getElementById('admin-panel').style.display = 'block';
+  updateAdminRoleUI();
+  renderAdminList();
+}
+
+function updateAdminRoleUI() {
+  const isMaster = adminRole === 'master';
+  const titleEl  = document.querySelector('.admin-panel-title');
+  if (titleEl) {
+    titleEl.innerHTML = isMaster
+      ? '🔑 マスター管理者モード <span class="admin-role-badge master">全権限</span>'
+      : '🔐 管理者モード <span class="admin-role-badge standard">情報更新のみ</span>';
+  }
+  const createBar = document.querySelector('.admin-create-bar');
+  if (createBar) createBar.style.display = isMaster ? '' : 'none';
+  const mapAddBtn = document.getElementById('admin-map-add-btn');
+  if (mapAddBtn) mapAddBtn.style.display = isMaster ? '' : 'none';
 }
 
 // ===== 管理者マップ =====
