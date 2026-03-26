@@ -1155,60 +1155,56 @@ function elevLine(groundElev, floors) {
   return `地面標高: ${groundElev}m　最上階(${floors}F)標高: 約${top}m<br>`;
 }
 
-// ===== 病院マーカー（Overpass API）=====
+// ===== 病院マーカー（ハードコード）=====
 async function loadHospitals() {
-  try {
-    const bbox = '42.78,143.80,43.15,144.70';
-    const query = `[out:json][timeout:25];(node["amenity"="hospital"](${bbox});way["amenity"="hospital"](${bbox});node["amenity"~"clinic|doctors"]["name"~"病院"](${bbox});way["amenity"~"clinic|doctors"]["name"~"病院"](${bbox}););out center tags;`;
-    const data = await overpassFetch(query);
+  const HOSPITALS = [
+    { name: '市立釧路総合病院',           lat: 43.005800, lng: 144.374400, floors: 8 },
+    { name: '釧路赤十字病院',             lat: 43.003700, lng: 144.369400, floors: 8 },
+    { name: '釧路ろうさい病院',           lat: 43.017400, lng: 144.368400, floors: 8 },
+    { name: '孝仁会記念病院',             lat: 42.994900, lng: 144.392900, floors: 6 },
+    { name: '孝仁会リハビリテーション病院', lat: 42.979200, lng: 144.404300, floors: 3 },
+    { name: '釧路脳神経外科',             lat: 43.012089, lng: 144.401274, floors: 3 },
+    { name: '優心病院',                   lat: 43.010800, lng: 144.391900, floors: 5 },
+    { name: '東北海道病院',               lat: 42.998647, lng: 144.375030, floors: 5 },
+    { name: 'みなみ病院',                 lat: 42.987300, lng: 144.376900, floors: 3 },
+    { name: '釧路中央病院',               lat: 43.010000, lng: 144.380800, floors: 6 },
+    { name: '三慈会病院',                 lat: 43.019900, lng: 144.383100, floors: 4 },
+    { name: '釧路共立病院',               lat: 43.009100, lng: 144.396100, floors: 4 },
+    { name: '白樺台病院',                 lat: 43.001800, lng: 144.413800, floors: 3 },
+  ];
 
-    // 手動追加病院（OSMに未登録または座標が不正確なもの）
-    const MANUAL_HOSPITALS = [
-      { name: '東北海道病院',   lat: 42.998647, lng: 144.375030, floors: 5 },
-      { name: '釧路脳神経外科', lat: 43.012089, lng: 144.401274, floors: 3 },
-    ];
+  const icon = makeFacilityIcon('🏥');
 
-    // フィルタ・変換して候補リストを作成
-    const items = [...MANUAL_HOSPITALS]; // 手動分を先に追加
-    const seen  = new Set(MANUAL_HOSPITALS.map(h => h.name));
-    for (const el of data.elements) {
-      const lat = el.lat ?? el.center?.lat;
-      const lng = el.lon ?? el.center?.lon;
-      if (!lat || !lng) continue;
-      let name = el.tags?.name || '病院';
-      if (/診療所|クリニック|clinic/i.test(name) && !name.includes('病院')) continue;
-      if (name === 'うえはら耳鼻科') continue;
-      if (seen.has(name)) continue;
-      seen.add(name);
-      name = lookupPartial(HOSP_RENAME, name) ?? name;
-      const osmL  = el.tags?.['building:levels'] ?? el.tags?.levels;
-      const floors = lookupPartial(HOSP_FLOORS, name) ?? (osmL ? parseInt(osmL) : 4);
-      items.push({ lat, lng, name, floors });
-    }
+  // マーカーをまず即座に配置（標高なし）
+  const markers = HOSPITALS.map(({ lat, lng, name, floors }) => {
+    const hospUrl = lookupPartial(HOSP_URLS, name);
+    const hospLinkHtml = hospUrl
+      ? `<a href="${hospUrl}" target="_blank" rel="noopener" style="color:#38bdf8;font-size:12px">🔗 公式サイト</a><br>`
+      : '';
+    const marker = L.marker([lat, lng], { icon })
+      .bindPopup(
+        `<b>🏥 ${name}</b><br>` +
+        `<span style="color:#f87171;font-weight:600">医療機関（病院）</span><br>` +
+        hospLinkHtml
+      )
+      .addTo(map);
+    return { marker, name, floors, hospLinkHtml };
+  });
 
-    // 標高を並行取得（順番に待たない）
-    const elevs = await Promise.all(items.map(it => getGsiElevation(it.lat, it.lng)));
-
-    // マーカーを一括配置
-    const icon = makeFacilityIcon('🏥');
-    for (let i = 0; i < items.length; i++) {
-      const { lat, lng, name, floors } = items[i];
-      const hospUrl = lookupPartial(HOSP_URLS, name);
-      const hospLinkHtml = hospUrl
-        ? `<a href="${hospUrl}" target="_blank" rel="noopener" style="color:#38bdf8;font-size:12px">🔗 公式サイト</a><br>`
-        : '';
-      L.marker([lat, lng], { icon })
-        .bindPopup(
-          `<b>🏥 ${name}</b><br>` +
-          `<span style="color:#f87171;font-weight:600">医療機関（病院）</span><br>` +
-          elevLine(elevs[i], floors) +
-          hospLinkHtml
-        )
-        .addTo(map);
-    }
-  } catch (e) {
-    console.warn('loadHospitals:', e);
-  }
+  // 標高を非同期取得してポップアップを更新
+  const elevs = await Promise.all(HOSPITALS.map(h => getGsiElevation(h.lat, h.lng)));
+  markers.forEach(({ marker, name, floors, hospLinkHtml }, i) => {
+    const hospUrl = lookupPartial(HOSP_URLS, name);
+    const link = hospUrl
+      ? `<a href="${hospUrl}" target="_blank" rel="noopener" style="color:#38bdf8;font-size:12px">🔗 公式サイト</a><br>`
+      : '';
+    marker.setPopupContent(
+      `<b>🏥 ${name}</b><br>` +
+      `<span style="color:#f87171;font-weight:600">医療機関（病院）</span><br>` +
+      elevLine(elevs[i], floors) +
+      link
+    );
+  });
 }
 
 // ===== ナビゲーションドロワー =====
