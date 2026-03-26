@@ -1492,9 +1492,9 @@ function renderAdminList() {
     const badge = st
       ? `<span class="admin-badge admin-badge-${st}">${STATUS_EMOJI[st]} ${STATUS_LABELS[st]}</span>`
       : `<span class="admin-badge admin-badge-none">未設定</span>`;
-    const statBtns = ['open','half','full'].map(v =>
-      `<button class="admin-status-btn admin-status-btn-${v}${st===v?' active':''}" data-status="${v}"
-        onclick="selectAdminStatus(event,'${s.name.replace(/'/g,"\\'")}')">${STATUS_EMOJI[v]} ${STATUS_LABELS[v]}</button>`
+    const statBtns = [['','不明','⬜'],['open','空き','🟢'],['half','混雑','🟡'],['full','満室','🔴']].map(([v,label,emoji]) =>
+      `<button class="admin-status-btn admin-status-btn-${v||'none'}${st===v?' active':''}" data-status="${v}"
+        onclick="selectAdminStatus(event,'${s.name.replace(/'/g,"\\'")}')">${emoji} ${label}</button>`
     ).join('');
     return `
 <div class="admin-item" id="admin-item-${id}">
