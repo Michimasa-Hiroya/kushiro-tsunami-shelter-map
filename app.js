@@ -1340,6 +1340,102 @@ function submitAdminLogin() {
   }
 }
 
+// ===== 管理者マップ =====
+const ADMIN_AREA_CENTERS = {
+  '釧路市': { lat: 42.984, lng: 144.382, zoom: 13 },
+  '釧路町': { lat: 43.010, lng: 144.455, zoom: 12 },
+  '白糠町': { lat: 42.930, lng: 144.080, zoom: 12 },
+  '音別町': { lat: 43.010, lng: 144.020, zoom: 13 },
+};
+
+function switchAdminView(view) {
+  document.getElementById('admin-list-view').style.display = view === 'list' ? '' : 'none';
+  document.getElementById('admin-map-view').style.display  = view === 'map'  ? '' : 'none';
+  document.querySelectorAll('.admin-tab').forEach(t => {
+    t.classList.toggle('active', t.textContent.includes(view === 'list' ? 'リスト' : 'マップ'));
+  });
+  if (view === 'map') {
+    setTimeout(() => {
+      if (!adminMap) {
+        adminMap = L.map('admin-map').setView([42.984, 144.382], 13);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          attribution: '© OpenStreetMap © CARTO', subdomains: 'abcd', maxZoom: 19
+        }).addTo(adminMap);
+      }
+      adminMap.invalidateSize();
+      setAdminMapArea(adminSelectedTown);
+    }, 100);
+  }
+}
+
+function setAdminMapArea(town) {
+  adminSelectedTown = town;
+  document.querySelectorAll('.admin-area-btn').forEach(b =>
+    b.classList.toggle('active', b.textContent === town));
+  document.getElementById('admin-map-form').innerHTML = '';
+  const c = ADMIN_AREA_CENTERS[town] || ADMIN_AREA_CENTERS['釧路市'];
+  adminMap.setView([c.lat, c.lng], c.zoom);
+  renderAdminMapMarkers(town);
+}
+
+function renderAdminMapMarkers(town) {
+  if (!adminMap) return;
+  if (adminMapLayer) adminMapLayer.remove();
+  adminMapLayer = L.layerGroup().addTo(adminMap);
+  const list = getAllSheltersForAdmin().filter(s => getShelterTown(s) === town);
+  list.forEach(s => {
+    const sd   = shelterStatusData[s.name];
+    const char = sd?.status ? STATUS_CHAR[sd.status] : '';
+    const textColor = char === '空' ? '#fff' : char === '混' ? '#fbbf24' : char === '満' ? '#f87171' : 'transparent';
+    const bgColor = s.types[0] === 'kinkyuu' ? '#38bdf8' : '#34d399';
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="shelter-dot-marker" style="background:${bgColor};color:${textColor}">${char}</div>`,
+      iconSize: [24, 24], iconAnchor: [12, 12],
+    });
+    L.marker([s.lat, s.lng], { icon })
+      .bindTooltip(s.name, { permanent: false, direction: 'top', offset: [0, -14] })
+      .on('click', () => openAdminMapForm(s.name))
+      .addTo(adminMapLayer);
+  });
+}
+
+function openAdminMapForm(name) {
+  const s = getAllSheltersForAdmin().find(x => x.name === name);
+  if (!s) return;
+  const sd = shelterStatusData[name] || {};
+  const st = sd.status || '';
+  const id = simpleHash(name);
+  const statBtns = ['open','half','full'].map(v =>
+    `<button class="admin-status-btn admin-status-btn-${v}${st===v?' active':''}" data-status="${v}"
+      onclick="selectAdminStatus(event,'${s.name.replace(/'/g,"\\'")}')">${STATUS_EMOJI[v]} ${STATUS_LABELS[v]}</button>`
+  ).join('');
+  const typeLabel = s.types[0] === 'kinkyuu' ? '緊急避難場所' : '避難所';
+  document.getElementById('admin-map-form').innerHTML = `
+    <div class="admin-map-form-header">
+      <div>
+        <span class="admin-type-tag admin-type-${s.types[0]}">${typeLabel}</span>
+        <span class="admin-item-name">${name}</span>
+      </div>
+      <button class="admin-map-form-close" onclick="document.getElementById('admin-map-form').innerHTML=''">✕</button>
+    </div>
+    <div class="admin-form-field">
+      <label class="admin-label">空き状況</label>
+      <div class="admin-status-btns" id="admin-sbtn-${id}">${statBtns}</div>
+    </div>
+    <div class="admin-form-field">
+      <label class="admin-label">必要物資</label>
+      <textarea class="admin-textarea" id="admin-sup-${id}" placeholder="例: 飲料水・食料・毛布">${sd.supplies||''}</textarea>
+    </div>
+    <div class="admin-form-field">
+      <label class="admin-label">メモ</label>
+      <textarea class="admin-textarea" id="admin-memo-${id}" placeholder="特記事項・連絡先など">${sd.memo||''}</textarea>
+    </div>
+    <button class="admin-save-btn" onclick="saveAdminItem('${s.name.replace(/'/g,"\\'")}')">💾 保存</button>
+    <span class="admin-save-msg" id="admin-msg-${id}"></span>
+  `;
+}
+
 function logoutAdmin() {
   isAdminLoggedIn = false;
   document.getElementById('admin-login-area').style.display = '';
