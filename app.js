@@ -911,6 +911,7 @@ function resetSearch() {
   radiusCircles.forEach(c => c.remove());
   radiusCircles = [];
   currentLat = null; currentLng = null;
+  cancelMapTapMode();
   setBottomSheetHeight(180);
 }
 
