@@ -2620,3 +2620,71 @@ details[open] .howto-translate-title::after { content: '▼'; }
   line-height: 1;
 }
 .admin-help-btn:hover { color: var(--accent); border-color: rgba(56,189,248,0.4); }
+
+/* ===== 地図タップ位置指定 ===== */
+#map-tap-btn {
+  display: block;
+  width: 100%;
+  margin: 8px 0 0;
+  padding: 11px 16px;
+  background: rgba(56,189,248,0.08);
+  border: 1px dashed rgba(56,189,248,0.35);
+  border-radius: 12px;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+#map-tap-btn:active { background: rgba(56,189,248,0.15); }
+#map-tap-banner {
+  position: fixed;
+  top: var(--header-h);
+  left: 0; right: 0;
+  z-index: 800;
+  background: rgba(56,189,248,0.92);
+  color: #080d1a;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+#map-tap-cancel {
+  background: rgba(0,0,0,0.15);
+  border: none;
+  border-radius: 6px;
+  color: #080d1a;
+  font-size: 14px;
+  padding: 3px 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ===== 地図注記（アノテーション）エディタ ===== */
+.ann-color-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 2px;
+}
+.ann-color-btn {
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+.ann-color-btn.active {
+  border-color: rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.12);
+}
