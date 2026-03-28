@@ -2032,124 +2032,104 @@ function cancelMapTapMode() {
   map.getContainer().style.cursor = '';
 }
 
-// ===== アノテーション（地図注記） =====
+// ===== アノテーション（通行止めマーカー） =====
 function renderAnnotationLayer() {
-  if (annotationLayer) annotationLayer.remove();
-  if (!map || !Object.keys(annotationsData).length) return;
-  annotationLayer = L.layerGroup().addTo(map);
+  Object.values(annotationMarkers).forEach(m => { try { m.remove(); } catch {} });
+  annotationMarkers = {};
+  if (!map) return;
   for (const ann of Object.values(annotationsData)) {
-    if (!ann.geoJson) continue;
-    try {
-      const l = L.geoJSON(ann.geoJson, {
-        style: { color: ann.color || '#f87171', weight: 4, opacity: 0.9, fillColor: ann.color || '#f87171', fillOpacity: 0.15 },
-        pointToLayer: (_f, ll) => L.circleMarker(ll, {
-          radius: 9, fillColor: ann.color || '#f87171',
-          color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.95,
-        }),
-      });
-      if (ann.label) l.bindPopup(`<span style="font-size:13px;font-weight:700">${ann.label}</span>`);
-      l.addTo(annotationLayer);
-    } catch {}
+    if (ann.lat == null || ann.lng == null) continue;
+    const m = L.circleMarker([ann.lat, ann.lng], {
+      radius: 12, color: '#fff', weight: 2,
+      fillColor: '#ef4444', fillOpacity: 0.9,
+    }).addTo(map);
+    const popupText = ann.label ? `🔴 ${ann.label}` : '🔴 通行止め';
+    m.bindPopup(`<span style="font-size:13px;font-weight:700">${popupText}</span>`);
+    annotationMarkers[ann.id] = m;
   }
 }
 
-function initAdminDrawTools() {
-  if (!adminMap || adminDrawControl) return;
-  adminAnnotationLayer = L.featureGroup().addTo(adminMap);
-  // 既存の注記を管理マップに描画
+function renderAdminAnnotations() {
+  Object.values(adminAnnMarkers).forEach(m => { try { m.remove(); } catch {} });
+  adminAnnMarkers = {};
+  if (!adminMap) return;
   for (const ann of Object.values(annotationsData)) {
-    if (!ann.geoJson) continue;
-    try {
-      const l = L.geoJSON(ann.geoJson, {
-        style: { color: ann.color || '#f87171', weight: 4 },
-      });
-      l.annotationId = ann.id;
-      l.eachLayer && l.eachLayer(sub => { sub.annotationId = ann.id; });
-      adminAnnotationLayer.addLayer(l);
-    } catch {}
+    if (ann.lat == null || ann.lng == null) continue;
+    const m = L.circleMarker([ann.lat, ann.lng], {
+      radius: 12, color: '#fff', weight: 2,
+      fillColor: '#ef4444', fillOpacity: 0.9,
+    }).addTo(adminMap);
+    const labelText = ann.label || '（説明なし）';
+    m.bindPopup(`
+      <div style="font-size:13px;min-width:140px">
+        <div style="font-weight:700;margin-bottom:8px">🔴 ${labelText}</div>
+        <button onclick="deleteAnnotation('${ann.id}')" style="background:#ef4444;color:#fff;border:none;border-radius:6px;padding:5px 12px;cursor:pointer;font-size:12px;width:100%">🗑 削除</button>
+      </div>
+    `);
+    adminAnnMarkers[ann.id] = m;
   }
-  adminDrawControl = new L.Control.Draw({
-    position: 'topright',
-    edit: { featureGroup: adminAnnotationLayer },
-    draw: {
-      polyline:      false,
-      marker:        false,
-      polygon:       { shapeOptions: { color: '#f87171', weight: 3, fillOpacity: 0.15 } },
-      rectangle:     false,
-      circle:        false,
-      circlemarker:  false,
-    },
-  });
-  adminMap.addControl(adminDrawControl);
-  adminMap.on(L.Draw.Event.CREATED, e => {
-    pendingDrawLayer = e.layer;
-    openAnnotationEditor();
-  });
-  adminMap.on(L.Draw.Event.EDITED, e => {
-    e.layers.eachLayer(layer => {
-      const id = layer.annotationId;
-      if (id && annotationsData[id] && layer.toGeoJSON) {
-        annotationsData[id].geoJson = layer.toGeoJSON();
-        saveAnnotationRemote(id, annotationsData[id]);
-      }
-    });
-    renderAnnotationLayer();
-  });
-  adminMap.on(L.Draw.Event.DELETED, e => {
-    e.layers.eachLayer(layer => {
-      const id = layer.annotationId;
-      if (id) { delete annotationsData[id]; deleteAnnotationRemote(id); }
-    });
-    renderAnnotationLayer();
-  });
 }
 
-function openAnnotationEditor() {
+function enableAnnotationTapMode() {
+  if (adminRole !== 'master') return;
+  adminAnnotationMode = true;
+  document.getElementById('admin-ann-add-btn').style.display = 'none';
+  document.getElementById('admin-ann-cancel-btn').style.display = '';
+  adminMap.getContainer().style.cursor = 'crosshair';
+}
+
+function cancelAnnotationTapMode() {
+  adminAnnotationMode = false;
+  const addBtn = document.getElementById('admin-ann-add-btn');
+  const cancelBtn = document.getElementById('admin-ann-cancel-btn');
+  if (addBtn) addBtn.style.display = '';
+  if (cancelBtn) cancelBtn.style.display = 'none';
+  if (adminMap) adminMap.getContainer().style.cursor = '';
+  const formEl = document.getElementById('admin-map-form');
+  if (formEl) formEl.innerHTML = '';
+}
+
+function openAnnotationEditor(lat, lng) {
   const formEl = document.getElementById('admin-map-form');
   if (!formEl) return;
   formEl.innerHTML = `
     <div class="admin-map-form-header">
-      <span class="admin-item-name">🔴 通行止めエリアを追加</span>
-      <button class="admin-map-form-close" onclick="cancelAnnotation()">✕</button>
+      <span class="admin-item-name">🔴 通行止めを追加</span>
+      <button class="admin-map-form-close" onclick="cancelAnnotationTapMode()">✕</button>
     </div>
     <div class="admin-form-field">
       <label class="admin-label">説明（任意）</label>
       <input class="admin-input" id="ann-label-input" type="text" placeholder="例: この道は通行止めです" />
     </div>
     <div class="admin-form-btns">
-      <button class="admin-save-btn admin-save-half" onclick="saveAnnotation()">💾 追加</button>
-      <button class="admin-cancel-btn" onclick="cancelAnnotation()">キャンセル</button>
+      <button class="admin-save-btn admin-save-half" onclick="saveAnnotation(${lat}, ${lng})">💾 追加</button>
+      <button class="admin-cancel-btn" onclick="cancelAnnotationTapMode()">キャンセル</button>
     </div>
   `;
 }
 
-
-async function saveAnnotation() {
-  if (!pendingDrawLayer) return;
-  const color = '#f87171';
+async function saveAnnotation(lat, lng) {
   const label = (document.getElementById('ann-label-input')?.value || '').trim();
-  let geoJson;
-  try { geoJson = pendingDrawLayer.toGeoJSON(); } catch { return; }
   const id = Date.now().toString();
-  geoJson.properties = { id, color, label };
-  if (pendingDrawLayer.setStyle) {
-    pendingDrawLayer.setStyle({ color, weight: 4, opacity: 0.9, fillColor: color, fillOpacity: 0.15 });
-  }
-  pendingDrawLayer.annotationId = id;
-  pendingDrawLayer.eachLayer && pendingDrawLayer.eachLayer(l => { l.annotationId = id; });
-  adminAnnotationLayer.addLayer(pendingDrawLayer);
-  const data = { id, geoJson, color, label, createdAt: new Date().toISOString() };
+  const data = { id, lat, lng, label, createdAt: new Date().toISOString() };
   annotationsData[id] = data;
   await saveAnnotationRemote(id, data);
   renderAnnotationLayer();
-  document.getElementById('admin-map-form').innerHTML = '';
-  pendingDrawLayer = null;
-}
-
-function cancelAnnotation() {
-  pendingDrawLayer = null;
+  renderAdminAnnotations();
   const formEl = document.getElementById('admin-map-form');
   if (formEl) formEl.innerHTML = '';
+  const addBtn = document.getElementById('admin-ann-add-btn');
+  const cancelBtn = document.getElementById('admin-ann-cancel-btn');
+  if (addBtn) addBtn.style.display = '';
+  if (cancelBtn) cancelBtn.style.display = 'none';
+}
+
+async function deleteAnnotation(id) {
+  if (adminRole !== 'master') return;
+  delete annotationsData[id];
+  await deleteAnnotationRemote(id);
+  renderAnnotationLayer();
+  renderAdminAnnotations();
 }
 
 async function loadAnnotations() {
