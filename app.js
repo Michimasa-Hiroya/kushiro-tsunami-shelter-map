@@ -2052,7 +2052,6 @@ function initAdminDrawTools() {
     try {
       const l = L.geoJSON(ann.geoJson, {
         style: { color: ann.color || '#f87171', weight: 4 },
-        pointToLayer: (_f, ll) => L.circleMarker(ll, { radius: 9, fillColor: ann.color || '#f87171', color: '#fff', weight: 2, fillOpacity: 1 }),
       });
       l.annotationId = ann.id;
       l.eachLayer && l.eachLayer(sub => { sub.annotationId = ann.id; });
