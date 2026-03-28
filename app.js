@@ -2063,8 +2063,8 @@ function initAdminDrawTools() {
     position: 'topright',
     edit: { featureGroup: adminAnnotationLayer },
     draw: {
-      polyline:      { shapeOptions: { color: '#f87171', weight: 4, opacity: 0.9 } },
-      marker:        true,
+      polyline:      false,
+      marker:        false,
       polygon:       { shapeOptions: { color: '#f87171', weight: 3, fillOpacity: 0.15 } },
       rectangle:     false,
       circle:        false,
