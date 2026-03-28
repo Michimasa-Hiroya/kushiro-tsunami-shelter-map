@@ -2130,8 +2130,7 @@ function selectAnnColor(btn) {
 
 async function saveAnnotation() {
   if (!pendingDrawLayer) return;
-  const activeBtn = document.querySelector('.ann-color-btn.active');
-  const color = activeBtn ? activeBtn.dataset.color : '#f87171';
+  const color = '#f87171';
   const label = (document.getElementById('ann-label-input')?.value || '').trim();
   let geoJson;
   try { geoJson = pendingDrawLayer.toGeoJSON(); } catch { return; }
