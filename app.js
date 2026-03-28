@@ -15,12 +15,11 @@ let adminSelectedTown = '釧路市';
 let customSheltersData = {}; // { [name]: shelterRecord | { deleted: true } }
 let adminMapAddMode   = false;
 let adminRole         = null; // null | 'standard' | 'master'
-// ===== アノテーション（地図注記） =====
-let annotationsData      = {}; // { [id]: { id, geoJson, color, label, createdAt } }
-let annotationLayer      = null; // 本地図上の注記レイヤー
-let adminAnnotationLayer = null; // 管理マップ 編集可能レイヤー
-let adminDrawControl     = null;
-let pendingDrawLayer     = null;
+// ===== アノテーション（通行止めマーカー） =====
+let annotationsData     = {}; // { [id]: { id, lat, lng, label, createdAt } }
+let annotationMarkers   = {}; // 本地図上のマーカー参照
+let adminAnnMarkers     = {}; // 管理マップのマーカー参照
+let adminAnnotationMode = false;
 // ===== 地図タップ位置指定 =====
 let mapTapMode = false;
 
