@@ -772,7 +772,11 @@
               <button class="admin-area-btn" onclick="setAdminMapArea('白糠町')">白糠町</button>
               <button class="admin-area-btn" onclick="setAdminMapArea('音別町')">音別町</button>
             </div>
-            <button id="admin-map-add-btn" class="admin-map-add-btn" onclick="enableAdminMapAddMode()">＋ 地図をクリックして追加</button>
+            <div class="admin-map-btn-row">
+              <button id="admin-map-add-btn" class="admin-map-add-btn" onclick="enableAdminMapAddMode()">＋ 避難所を追加</button>
+              <button id="admin-ann-add-btn" class="admin-ann-add-btn" onclick="enableAnnotationTapMode()" style="display:none">🔴 通行止めを追加</button>
+              <button id="admin-ann-cancel-btn" class="admin-ann-cancel-btn" onclick="cancelAnnotationTapMode()" style="display:none">✕ キャンセル</button>
+            </div>
             <div id="admin-map"></div>
             <div id="admin-map-form"></div>
           </div>
