@@ -72,6 +72,12 @@
       <!-- 地区別警告 -->
       <div id="zone-warning"></div>
 
+      <!-- 地図タップモードバナー（タップ中のみ表示） -->
+      <div id="map-tap-banner" style="display:none">
+        📍 地図をタップして現在地を指定してください
+        <button id="map-tap-cancel" onclick="cancelMapTapMode()">✕</button>
+      </div>
+
       <!-- 現在地入力 -->
       <section id="location-section">
         <div id="gps-row">
@@ -80,6 +86,7 @@
           </button>
           <button id="reset-btn" onclick="resetSearch()" style="display:none">🔄 やり直す</button>
         </div>
+        <button id="map-tap-btn" onclick="enableMapTapMode()">🗺 地図をタップして位置を指定</button>
         <div id="or-divider">または住所を入力</div>
         <div id="address-input-wrap">
           <select id="town-select">
