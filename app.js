@@ -1468,6 +1468,16 @@ function switchAdminView(view) {
           maxZoom: 18
         }).addTo(adminMap);
         adminMap.on('click', function(e) {
+          if (adminAnnotationMode) {
+            adminAnnotationMode = false;
+            adminMap.getContainer().style.cursor = '';
+            const addBtn = document.getElementById('admin-ann-add-btn');
+            const cancelBtn = document.getElementById('admin-ann-cancel-btn');
+            if (addBtn) addBtn.style.display = '';
+            if (cancelBtn) cancelBtn.style.display = 'none';
+            openAnnotationEditor(e.latlng.lat, e.latlng.lng);
+            return;
+          }
           if (!adminMapAddMode) return;
           adminMapAddMode = false;
           openAdminMapCreateForm(e.latlng.lat, e.latlng.lng);
