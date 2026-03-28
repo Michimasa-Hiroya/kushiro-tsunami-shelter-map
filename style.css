@@ -2418,6 +2418,40 @@ details[open] .howto-translate-title::after { content: '▼'; }
   border-color: #34d399;
   animation: gps-pulse 1.2s ease-out infinite;
 }
+.admin-map-btn-row {
+  display: flex;
+  gap: 6px;
+  margin: 8px 8px 0;
+}
+.admin-map-btn-row .admin-map-add-btn,
+.admin-map-btn-row .admin-ann-add-btn,
+.admin-map-btn-row .admin-ann-cancel-btn {
+  margin: 0;
+  flex: 1;
+  width: auto;
+}
+.admin-ann-add-btn {
+  padding: 8px 14px;
+  background: rgba(239,68,68,0.10);
+  color: #ef4444;
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.admin-ann-cancel-btn {
+  padding: 8px 14px;
+  background: rgba(100,116,139,0.15);
+  color: #94a3b8;
+  border: 1px solid rgba(100,116,139,0.2);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-sizing: border-box;
+}
 
 /* ── 製作者リンクボタン ── */
 .creator-links {
