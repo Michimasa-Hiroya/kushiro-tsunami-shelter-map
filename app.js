@@ -2100,16 +2100,8 @@ function openAnnotationEditor() {
   if (!formEl) return;
   formEl.innerHTML = `
     <div class="admin-map-form-header">
-      <span class="admin-item-name">📝 地図注記を追加</span>
+      <span class="admin-item-name">🔴 通行止めエリアを追加</span>
       <button class="admin-map-form-close" onclick="cancelAnnotation()">✕</button>
-    </div>
-    <div class="admin-form-field">
-      <label class="admin-label">色・種別</label>
-      <div class="ann-color-row">
-        <button class="ann-color-btn active" data-color="#f87171" onclick="selectAnnColor(this)">🔴 危険・通行止め</button>
-        <button class="ann-color-btn" data-color="#fbbf24" onclick="selectAnnColor(this)">🟡 注意・迂回路</button>
-        <button class="ann-color-btn" data-color="#34d399" onclick="selectAnnColor(this)">🟢 安全・集合場所</button>
-      </div>
     </div>
     <div class="admin-form-field">
       <label class="admin-label">説明（任意）</label>
