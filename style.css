@@ -1008,9 +1008,9 @@ body {
   background: rgba(56,189,248,0.12);
   border: 1px solid rgba(56,189,248,0.30);
   border-radius: 20px;
-  padding: 4px 10px;
+  padding: 3px 8px;
   white-space: nowrap;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
   cursor: pointer;
 }
 #scenario-chip:active { opacity: 0.7; }
