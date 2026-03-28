@@ -1120,29 +1120,19 @@ body {
 }
 
 .filter-btn {
-  padding: 4px 8px;
+  padding: 5px 10px;
   font-size: 10px;
   font-weight: 600;
   border-radius: 14px;
   border: 1px solid rgba(148,163,184,0.25);
   color: var(--muted);
-  background: rgba(8,13,26,0.80);
+  background: rgba(8,13,26,0.82);
   cursor: pointer;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   transition: background 0.15s, color 0.15s, border-color 0.15s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  min-width: 0;
-}
-.filter-sub {
-  font-size: 8px;
-  font-weight: 400;
-  opacity: 0.75;
-  line-height: 1;
   white-space: nowrap;
+  line-height: 1.2;
 }
 .filter-btn.active {
   color: #fff;
