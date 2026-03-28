@@ -1111,6 +1111,8 @@ function showAllSheltersOnMap() {
   // 現在のフィルターに応じてレイヤーを表示
   if (shelterFilter === 'kinkyuu' || shelterFilter === 'all') kinkyuuLayer.addTo(map);
   if (shelterFilter === 'hinanjo' || shelterFilter === 'all') hinanjoLayer.addTo(map);
+
+  renderAnnotationLayer();
 }
 
 // ===== 地図凡例 =====
