@@ -1441,6 +1441,8 @@ function updateAdminRoleUI() {
   if (createBar) createBar.style.display = isMaster ? '' : 'none';
   const mapAddBtn = document.getElementById('admin-map-add-btn');
   if (mapAddBtn) mapAddBtn.style.display = isMaster ? '' : 'none';
+  // マスターの場合：管理マップに描画ツールを追加
+  if (isMaster && adminMap && !adminDrawControl) initAdminDrawTools();
 }
 
 // ===== 管理者マップ =====
