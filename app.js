@@ -428,12 +428,21 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('address-input')
     .addEventListener('keydown', e => { if (e.key === 'Enter') searchAddress(); });
 
+  // 地図タップ：現在地指定モード
+  map.on('click', function(e) {
+    if (!mapTapMode) return;
+    cancelMapTapMode();
+    showLoading(true);
+    setUserLocation(e.latlng.lat, e.latlng.lng, null);
+  });
+
   showAllSheltersOnMap();
   addMapLegend();
   loadHospitals();
   initBottomSheet();
   loadShelterStatus();
   loadCustomShelters();
+  loadAnnotations();
 
   // 初回のみ：ハンドルバウンス + GPS パルスアニメーション
   if (!localStorage.getItem('firstVisitAnim')) {
