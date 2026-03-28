@@ -15,6 +15,14 @@ let adminSelectedTown = '釧路市';
 let customSheltersData = {}; // { [name]: shelterRecord | { deleted: true } }
 let adminMapAddMode   = false;
 let adminRole         = null; // null | 'standard' | 'master'
+// ===== アノテーション（地図注記） =====
+let annotationsData      = {}; // { [id]: { id, geoJson, color, label, createdAt } }
+let annotationLayer      = null; // 本地図上の注記レイヤー
+let adminAnnotationLayer = null; // 管理マップ 編集可能レイヤー
+let adminDrawControl     = null;
+let pendingDrawLayer     = null;
+// ===== 地図タップ位置指定 =====
+let mapTapMode = false;
 
 const STATUS_LABELS  = { open: '空き', half: '混雑（50%）', full: '満室' };
 const STATUS_COLORS  = { open: '#34d399', half: '#fbbf24', full: '#f87171' };
