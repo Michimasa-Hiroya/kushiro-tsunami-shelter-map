@@ -2004,6 +2004,208 @@ async function saveAdminMapNewShelter() {
   setTimeout(() => { document.getElementById('admin-map-form').innerHTML = ''; }, 1500);
 }
 
+// ===== 地図タップ：現在地指定 =====
+function enableMapTapMode() {
+  mapTapMode = true;
+  document.getElementById('map-tap-btn').style.display = 'none';
+  document.getElementById('map-tap-banner').style.display = 'flex';
+  map.getContainer().style.cursor = 'crosshair';
+  setBottomSheetHeight(180);
+}
+function cancelMapTapMode() {
+  mapTapMode = false;
+  const btn = document.getElementById('map-tap-btn');
+  if (btn) btn.style.display = '';
+  const banner = document.getElementById('map-tap-banner');
+  if (banner) banner.style.display = 'none';
+  map.getContainer().style.cursor = '';
+}
+
+// ===== アノテーション（地図注記） =====
+function renderAnnotationLayer() {
+  if (annotationLayer) annotationLayer.remove();
+  if (!map || !Object.keys(annotationsData).length) return;
+  annotationLayer = L.layerGroup().addTo(map);
+  for (const ann of Object.values(annotationsData)) {
+    if (!ann.geoJson) continue;
+    try {
+      const l = L.geoJSON(ann.geoJson, {
+        style: { color: ann.color || '#f87171', weight: 4, opacity: 0.9, fillColor: ann.color || '#f87171', fillOpacity: 0.15 },
+        pointToLayer: (_f, ll) => L.circleMarker(ll, {
+          radius: 9, fillColor: ann.color || '#f87171',
+          color: '#fff', weight: 2, opacity: 1, fillOpacity: 0.95,
+        }),
+      });
+      if (ann.label) l.bindPopup(`<span style="font-size:13px;font-weight:700">${ann.label}</span>`);
+      l.addTo(annotationLayer);
+    } catch {}
+  }
+}
+
+function initAdminDrawTools() {
+  if (!adminMap || adminDrawControl) return;
+  adminAnnotationLayer = L.featureGroup().addTo(adminMap);
+  // 既存の注記を管理マップに描画
+  for (const ann of Object.values(annotationsData)) {
+    if (!ann.geoJson) continue;
+    try {
+      const l = L.geoJSON(ann.geoJson, {
+        style: { color: ann.color || '#f87171', weight: 4 },
+        pointToLayer: (_f, ll) => L.circleMarker(ll, { radius: 9, fillColor: ann.color || '#f87171', color: '#fff', weight: 2, fillOpacity: 1 }),
+      });
+      l.annotationId = ann.id;
+      l.eachLayer && l.eachLayer(sub => { sub.annotationId = ann.id; });
+      adminAnnotationLayer.addLayer(l);
+    } catch {}
+  }
+  adminDrawControl = new L.Control.Draw({
+    position: 'topright',
+    edit: { featureGroup: adminAnnotationLayer },
+    draw: {
+      polyline:      { shapeOptions: { color: '#f87171', weight: 4, opacity: 0.9 } },
+      marker:        true,
+      polygon:       { shapeOptions: { color: '#f87171', weight: 3, fillOpacity: 0.15 } },
+      rectangle:     false,
+      circle:        false,
+      circlemarker:  false,
+    },
+  });
+  adminMap.addControl(adminDrawControl);
+  adminMap.on(L.Draw.Event.CREATED, e => {
+    pendingDrawLayer = e.layer;
+    openAnnotationEditor();
+  });
+  adminMap.on(L.Draw.Event.EDITED, e => {
+    e.layers.eachLayer(layer => {
+      const id = layer.annotationId;
+      if (id && annotationsData[id] && layer.toGeoJSON) {
+        annotationsData[id].geoJson = layer.toGeoJSON();
+        saveAnnotationRemote(id, annotationsData[id]);
+      }
+    });
+    renderAnnotationLayer();
+  });
+  adminMap.on(L.Draw.Event.DELETED, e => {
+    e.layers.eachLayer(layer => {
+      const id = layer.annotationId;
+      if (id) { delete annotationsData[id]; deleteAnnotationRemote(id); }
+    });
+    renderAnnotationLayer();
+  });
+}
+
+function openAnnotationEditor() {
+  const formEl = document.getElementById('admin-map-form');
+  if (!formEl) return;
+  formEl.innerHTML = `
+    <div class="admin-map-form-header">
+      <span class="admin-item-name">📝 地図注記を追加</span>
+      <button class="admin-map-form-close" onclick="cancelAnnotation()">✕</button>
+    </div>
+    <div class="admin-form-field">
+      <label class="admin-label">色・種別</label>
+      <div class="ann-color-row">
+        <button class="ann-color-btn active" data-color="#f87171" onclick="selectAnnColor(this)">🔴 危険・通行止め</button>
+        <button class="ann-color-btn" data-color="#fbbf24" onclick="selectAnnColor(this)">🟡 注意・迂回路</button>
+        <button class="ann-color-btn" data-color="#34d399" onclick="selectAnnColor(this)">🟢 安全・集合場所</button>
+      </div>
+    </div>
+    <div class="admin-form-field">
+      <label class="admin-label">説明（任意）</label>
+      <input class="admin-input" id="ann-label-input" type="text" placeholder="例: この道は通行止めです" />
+    </div>
+    <div class="admin-form-btns">
+      <button class="admin-save-btn admin-save-half" onclick="saveAnnotation()">💾 追加</button>
+      <button class="admin-cancel-btn" onclick="cancelAnnotation()">キャンセル</button>
+    </div>
+  `;
+}
+
+function selectAnnColor(btn) {
+  document.querySelectorAll('.ann-color-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const color = btn.dataset.color;
+  if (!pendingDrawLayer) return;
+  if (pendingDrawLayer.setStyle) pendingDrawLayer.setStyle({ color, fillColor: color });
+  if (pendingDrawLayer.setIcon) {
+    pendingDrawLayer.setIcon(L.divIcon({
+      html: `<div style="background:${color};width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 5px rgba(0,0,0,.4)"></div>`,
+      iconSize: [18, 18], className: '',
+    }));
+  }
+}
+
+async function saveAnnotation() {
+  if (!pendingDrawLayer) return;
+  const activeBtn = document.querySelector('.ann-color-btn.active');
+  const color = activeBtn ? activeBtn.dataset.color : '#f87171';
+  const label = (document.getElementById('ann-label-input')?.value || '').trim();
+  let geoJson;
+  try { geoJson = pendingDrawLayer.toGeoJSON(); } catch { return; }
+  const id = Date.now().toString();
+  geoJson.properties = { id, color, label };
+  if (pendingDrawLayer.setStyle) {
+    pendingDrawLayer.setStyle({ color, weight: 4, opacity: 0.9, fillColor: color, fillOpacity: 0.15 });
+  }
+  if (pendingDrawLayer.setIcon) {
+    pendingDrawLayer.setIcon(L.divIcon({
+      html: `<div style="background:${color};width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 5px rgba(0,0,0,.4)"></div>`,
+      iconSize: [18, 18], className: '',
+    }));
+  }
+  pendingDrawLayer.annotationId = id;
+  pendingDrawLayer.eachLayer && pendingDrawLayer.eachLayer(l => { l.annotationId = id; });
+  adminAnnotationLayer.addLayer(pendingDrawLayer);
+  const data = { id, geoJson, color, label, createdAt: new Date().toISOString() };
+  annotationsData[id] = data;
+  await saveAnnotationRemote(id, data);
+  renderAnnotationLayer();
+  document.getElementById('admin-map-form').innerHTML = '';
+  pendingDrawLayer = null;
+}
+
+function cancelAnnotation() {
+  pendingDrawLayer = null;
+  const formEl = document.getElementById('admin-map-form');
+  if (formEl) formEl.innerHTML = '';
+}
+
+async function loadAnnotations() {
+  try {
+    const local = localStorage.getItem('annotationsData');
+    if (local) annotationsData = JSON.parse(local);
+  } catch {}
+  const db = getFirestoreDB();
+  if (!db) { renderAnnotationLayer(); return; }
+  try {
+    const snap = await db.collection('annotations').get();
+    snap.forEach(doc => { annotationsData[doc.id] = doc.data(); });
+    renderAnnotationLayer();
+    db.collection('annotations').onSnapshot(snap => {
+      snap.docChanges().forEach(ch => {
+        if (ch.type === 'removed') delete annotationsData[ch.doc.id];
+        else annotationsData[ch.doc.id] = ch.doc.data();
+      });
+      renderAnnotationLayer();
+    });
+  } catch (e) {
+    console.warn('annotations load failed:', e);
+    renderAnnotationLayer();
+  }
+}
+
+async function saveAnnotationRemote(id, data) {
+  try { localStorage.setItem('annotationsData', JSON.stringify(annotationsData)); } catch {}
+  const db = getFirestoreDB();
+  if (db) { try { await db.collection('annotations').doc(id).set(data); } catch (e) { console.warn(e); } }
+}
+
+async function deleteAnnotationRemote(id) {
+  try { localStorage.setItem('annotationsData', JSON.stringify(annotationsData)); } catch {}
+  const db = getFirestoreDB();
+  if (db) { try { await db.collection('annotations').doc(id).delete(); } catch (e) { console.warn(e); } }
+}
+
 // ===== Firebase Firestore 連携 =====
 // （Firebase が未設定の場合は localStorage のみ動作）
 
