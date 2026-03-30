@@ -394,10 +394,17 @@ function setArrivalTime(t) {
 
 // ===== 初期化 =====
 document.addEventListener('DOMContentLoaded', () => {
-  map = L.map('map').setView([42.984, 144.382], 12);
+  // 対象エリア: 釧路市・釧路町・白糠町・音別町・厚岸町・浜中町・根室市
+  const AREA_BOUNDS = L.latLngBounds([42.2, 143.2], [43.6, 145.9]);
+  map = L.map('map', {
+    maxBounds: AREA_BOUNDS,
+    maxBoundsViscosity: 1.0,
+    minZoom: 9,
+  }).setView([42.984, 144.382], 12);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 18
+    maxZoom: 18,
+    bounds: AREA_BOUNDS,
   }).addTo(map);
 
   // 浸水レイヤー用ペイン（タイル z-200 の直上、他要素より下）
