@@ -1478,10 +1478,16 @@ function switchAdminView(view) {
   if (view === 'map') {
     setTimeout(() => {
       if (!adminMap) {
-        adminMap = L.map('admin-map').setView([42.984, 144.382], 13);
+        const ADMIN_AREA_BOUNDS = L.latLngBounds([42.2, 143.2], [43.6, 145.9]);
+        adminMap = L.map('admin-map', {
+          maxBounds: ADMIN_AREA_BOUNDS,
+          maxBoundsViscosity: 1.0,
+          minZoom: 9,
+        }).setView([42.984, 144.382], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          maxZoom: 18
+          maxZoom: 18,
+          bounds: ADMIN_AREA_BOUNDS,
         }).addTo(adminMap);
         adminMap.on('click', function(e) {
           if (adminAnnotationMode) {
