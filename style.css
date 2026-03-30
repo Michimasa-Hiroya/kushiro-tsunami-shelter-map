@@ -2707,26 +2707,4 @@ details[open] .howto-translate-title::after { content: '▼'; }
   flex-shrink: 0;
 }
 
-/* ===== 地図注記（アノテーション）エディタ ===== */
-.ann-color-row {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 2px;
-}
-.ann-color-btn {
-  padding: 7px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.05);
-  color: var(--text);
-  cursor: pointer;
-  font-size: 12px;
-  font-family: inherit;
-  text-align: left;
-  transition: border-color 0.15s, background 0.15s;
-}
-.ann-color-btn.active {
-  border-color: rgba(255,255,255,0.35);
-  background: rgba(255,255,255,0.12);
-}
+
