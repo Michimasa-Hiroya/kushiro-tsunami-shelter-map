@@ -922,6 +922,8 @@ function resetSearch() {
   document.getElementById('reset-btn').style.display = 'none';
   if (routeLayer) { routeLayer.remove(); routeLayer = null; }
   if (userMarker) { userMarker.remove(); userMarker = null; }
+  (window._shelterMarkers || []).forEach(m => m.remove());
+  window._shelterMarkers = [];
   radiusCircles.forEach(c => c.remove());
   radiusCircles = [];
   currentLat = null; currentLng = null;
