@@ -897,6 +897,14 @@ function renderResults(results, userLat, userLng) {
   document.getElementById('walking-list').innerHTML = cards + adviceHtml;
   document.getElementById('reset-btn').style.display = '';
   setBottomSheetHeight(Math.round(window.innerHeight * 0.5));
+  // シートが展開してから結果トップへスクロール
+  setTimeout(() => {
+    const bsContent = document.getElementById('bs-content');
+    const resultsEl = document.getElementById('results');
+    if (bsContent && resultsEl) {
+      bsContent.scrollTo({ top: resultsEl.offsetTop - 8, behavior: 'smooth' });
+    }
+  }, 320);
 }
 
 // ===== 検索リセット =====
