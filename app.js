@@ -1938,7 +1938,7 @@ function enableAdminMapAddMode() {
   if (adminRole !== 'master') return;
   adminMapAddMode = true;
   const btn = document.getElementById('admin-map-add-btn');
-  if (btn) { btn.textContent = '📍 地図をクリックして位置を指定中…'; btn.classList.add('active'); }
+  if (btn) { btn.textContent = '📍 クリックして位置を指定中…'; btn.classList.add('active'); }
   document.getElementById('admin-map-form').innerHTML = '';
 }
 
