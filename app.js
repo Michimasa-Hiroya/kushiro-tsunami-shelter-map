@@ -1944,7 +1944,7 @@ function enableAdminMapAddMode() {
 
 function openAdminMapCreateForm(lat, lng) {
   const btn = document.getElementById('admin-map-add-btn');
-  if (btn) { btn.textContent = '＋ 地図をクリックして追加'; btn.classList.remove('active'); }
+  if (btn) { btn.textContent = '＋ 避難所を追加'; btn.classList.remove('active'); }
   document.getElementById('admin-map-form').innerHTML = `
     <div class="admin-map-form-header">
       <div><span class="admin-item-name">新規避難所を追加</span></div>
