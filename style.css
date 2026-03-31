@@ -2285,6 +2285,25 @@ details[open] .howto-translate-title::after { content: '▼'; }
   appearance: none;
 }
 
+.admin-bulk-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 4px;
+}
+.admin-bulk-btn {
+  padding: 8px 10px;
+  background: rgba(239,68,68,0.12);
+  color: #f87171;
+  border: 1px solid rgba(239,68,68,0.30);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.admin-bulk-btn:hover { background: rgba(239,68,68,0.22); }
+
 /* 避難所リスト */
 .admin-item {
   border-bottom: 1px solid rgba(255,255,255,0.06);
