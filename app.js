@@ -2233,6 +2233,152 @@ async function deleteAnnotationRemote(id) {
   if (db) { try { await db.collection('annotations').doc(id).delete(); } catch (e) { console.warn(e); } }
 }
 
+// ===== 給水所 =====
+function renderWaterLayer() {
+  Object.values(waterPointMarkers).forEach(m => { try { m.remove(); } catch {} });
+  waterPointMarkers = {};
+  if (!map) return;
+  for (const wp of Object.values(waterPointsData)) {
+    if (wp.lat == null || wp.lng == null) continue;
+    const icon = L.divIcon({
+      html: '<div style="font-size:20px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.6))">🚰</div>',
+      className: '',
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+    });
+    const m = L.marker([wp.lat, wp.lng], { icon }).addTo(map);
+    const popupText = wp.label ? `🚰 ${wp.label}` : '🚰 給水所';
+    m.bindPopup(`<span style="font-size:13px;font-weight:700">${popupText}</span>`);
+    waterPointMarkers[wp.id] = m;
+  }
+}
+
+function renderAdminWaterPoints() {
+  Object.values(adminWaterMarkers).forEach(m => { try { m.remove(); } catch {} });
+  adminWaterMarkers = {};
+  if (!adminMap) return;
+  for (const wp of Object.values(waterPointsData)) {
+    if (wp.lat == null || wp.lng == null) continue;
+    const icon = L.divIcon({
+      html: '<div style="font-size:20px;line-height:1">🚰</div>',
+      className: '', iconSize: [24, 24], iconAnchor: [12, 12],
+    });
+    const m = L.marker([wp.lat, wp.lng], { icon }).addTo(adminMap);
+    const labelText = wp.label || '（説明なし）';
+    m.bindPopup(`
+      <div style="font-size:13px;min-width:140px">
+        <div style="font-weight:700;margin-bottom:8px">🚰 ${labelText}</div>
+        <button onclick="deleteWaterPoint('${wp.id}')" style="background:#ef4444;color:#fff;border:none;border-radius:6px;padding:5px 12px;cursor:pointer;font-size:12px;width:100%">🗑 削除</button>
+      </div>
+    `);
+    adminWaterMarkers[wp.id] = m;
+  }
+}
+
+function enableWaterTapMode() {
+  if (adminRole !== 'master') return;
+  if (adminMapAddMode) {
+    adminMapAddMode = false;
+    const addBtn = document.getElementById('admin-map-add-btn');
+    if (addBtn) { addBtn.textContent = '＋ 避難所を追加'; addBtn.classList.remove('active'); }
+  }
+  if (adminAnnotationMode) cancelAnnotationTapMode();
+  adminWaterMode = true;
+  document.getElementById('admin-water-add-btn').style.display = 'none';
+  document.getElementById('admin-water-cancel-btn').style.display = '';
+  adminMap.getContainer().style.cursor = 'crosshair';
+}
+
+function cancelWaterTapMode() {
+  adminWaterMode = false;
+  const addBtn = document.getElementById('admin-water-add-btn');
+  const cancelBtn = document.getElementById('admin-water-cancel-btn');
+  if (addBtn) addBtn.style.display = '';
+  if (cancelBtn) cancelBtn.style.display = 'none';
+  if (adminMap) adminMap.getContainer().style.cursor = '';
+  const formEl = document.getElementById('admin-map-form');
+  if (formEl) formEl.innerHTML = '';
+}
+
+function openWaterEditor(lat, lng) {
+  const formEl = document.getElementById('admin-map-form');
+  if (!formEl) return;
+  formEl.innerHTML = `
+    <div class="admin-map-form-header">
+      <span class="admin-item-name">🚰 給水所を追加</span>
+      <button class="admin-map-form-close" onclick="cancelWaterTapMode()">✕</button>
+    </div>
+    <div class="admin-form-field">
+      <label class="admin-label">説明（任意）</label>
+      <input class="admin-input" id="water-label-input" type="text" placeholder="例: ○○公園 給水所" />
+    </div>
+    <div class="admin-form-btns">
+      <button class="admin-save-btn admin-save-half" onclick="saveWaterPoint(${lat}, ${lng})">💾 追加</button>
+      <button class="admin-cancel-btn" onclick="cancelWaterTapMode()">キャンセル</button>
+    </div>
+  `;
+}
+
+async function saveWaterPoint(lat, lng) {
+  const label = (document.getElementById('water-label-input')?.value || '').trim();
+  const id = Date.now().toString();
+  const data = { id, lat, lng, label, createdAt: new Date().toISOString() };
+  waterPointsData[id] = data;
+  await saveWaterPointRemote(id, data);
+  renderWaterLayer();
+  renderAdminWaterPoints();
+  const formEl = document.getElementById('admin-map-form');
+  if (formEl) formEl.innerHTML = '';
+  const addBtn = document.getElementById('admin-water-add-btn');
+  const cancelBtn = document.getElementById('admin-water-cancel-btn');
+  if (addBtn) addBtn.style.display = '';
+  if (cancelBtn) cancelBtn.style.display = 'none';
+}
+
+async function deleteWaterPoint(id) {
+  if (adminRole !== 'master') return;
+  delete waterPointsData[id];
+  await deleteWaterPointRemote(id);
+  renderWaterLayer();
+  renderAdminWaterPoints();
+}
+
+async function loadWaterPoints() {
+  try {
+    const local = localStorage.getItem('waterPointsData');
+    if (local) waterPointsData = JSON.parse(local);
+  } catch {}
+  const db = getFirestoreDB();
+  if (!db) { renderWaterLayer(); return; }
+  try {
+    const snap = await db.collection('waterPoints').get();
+    snap.forEach(doc => { waterPointsData[doc.id] = doc.data(); });
+    renderWaterLayer();
+    db.collection('waterPoints').onSnapshot(snap => {
+      snap.docChanges().forEach(ch => {
+        if (ch.type === 'removed') delete waterPointsData[ch.doc.id];
+        else waterPointsData[ch.doc.id] = ch.doc.data();
+      });
+      renderWaterLayer();
+    });
+  } catch (e) {
+    console.warn('waterPoints load failed:', e);
+    renderWaterLayer();
+  }
+}
+
+async function saveWaterPointRemote(id, data) {
+  try { localStorage.setItem('waterPointsData', JSON.stringify(waterPointsData)); } catch {}
+  const db = getFirestoreDB();
+  if (db) { try { await db.collection('waterPoints').doc(id).set(data); } catch (e) { console.warn(e); } }
+}
+
+async function deleteWaterPointRemote(id) {
+  try { localStorage.setItem('waterPointsData', JSON.stringify(waterPointsData)); } catch {}
+  const db = getFirestoreDB();
+  if (db) { try { await db.collection('waterPoints').doc(id).delete(); } catch (e) { console.warn(e); } }
+}
+
 // ===== Firebase Firestore 連携 =====
 // （Firebase が未設定の場合は localStorage のみ動作）
 
