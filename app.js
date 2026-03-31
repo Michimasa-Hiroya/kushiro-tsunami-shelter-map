@@ -1524,6 +1524,16 @@ function switchAdminView(view) {
             openAnnotationEditor(e.latlng.lat, e.latlng.lng);
             return;
           }
+          if (adminWaterMode) {
+            adminWaterMode = false;
+            adminMap.getContainer().style.cursor = '';
+            const addBtn = document.getElementById('admin-water-add-btn');
+            const cancelBtn = document.getElementById('admin-water-cancel-btn');
+            if (addBtn) addBtn.style.display = '';
+            if (cancelBtn) cancelBtn.style.display = 'none';
+            openWaterEditor(e.latlng.lat, e.latlng.lng);
+            return;
+          }
           if (!adminMapAddMode) return;
           adminMapAddMode = false;
           openAdminMapCreateForm(e.latlng.lat, e.latlng.lng);
