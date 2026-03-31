@@ -1979,9 +1979,6 @@ body {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 340px;
-  object-fit: cover;
-  object-position: top;
 }
 .howto-img-caption {
   font-size: 11px;
