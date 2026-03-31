@@ -1853,6 +1853,33 @@ function selectAdminStatus(e, name) {
   clicked.classList.add('active');
 }
 
+async function bulkUpdateStatus() {
+  if (adminRole !== 'master') return;
+  const val = document.getElementById('admin-bulk-status')?.value;
+  if (!val) return;
+  const label = val === 'clear' ? '不明（リセット）' : { open: '空き', half: '混雑', full: '満室' }[val];
+  if (!confirm(`全避難所のステータスを「${label}」に一括変更しますか？`)) return;
+
+  const allShelters = getAllShelters();
+  const now = new Date().toISOString();
+  const promises = allShelters.map(async s => {
+    if (val === 'clear') {
+      delete shelterStatusData[s.name];
+      await deleteShelterStatusRemote(s.name);
+    } else {
+      const existing = shelterStatusData[s.name] || {};
+      const data = { status: val, supplies: existing.supplies || '', memo: existing.memo || '', updatedAt: now };
+      shelterStatusData[s.name] = data;
+      await saveShelterStatusRemote(s.name, data);
+    }
+  });
+  await Promise.all(promises);
+  document.getElementById('admin-bulk-status').value = '';
+  showAllSheltersOnMap();
+  renderAdminList();
+  if (adminMap) renderAdminMapMarkers(adminSelectedTown);
+}
+
 async function saveAdminItem(name, prefix = '') {
   const id        = prefix + simpleHash(name);
   const activeBtn = document.querySelector(`#admin-sbtn-${id} .admin-status-btn.active`);
