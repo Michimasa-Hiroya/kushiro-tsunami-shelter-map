@@ -1482,7 +1482,9 @@ function updateAdminRoleUI() {
   if (mapAddBtn) mapAddBtn.style.display = isMaster ? '' : 'none';
   const annAddBtn = document.getElementById('admin-ann-add-btn');
   if (annAddBtn) annAddBtn.style.display = isMaster ? '' : 'none';
-  if (isMaster && adminMap) renderAdminAnnotations();
+  const waterAddBtn = document.getElementById('admin-water-add-btn');
+  if (waterAddBtn) waterAddBtn.style.display = isMaster ? '' : 'none';
+  if (isMaster && adminMap) { renderAdminAnnotations(); renderAdminWaterPoints(); }
 }
 
 // ===== 管理者マップ =====
