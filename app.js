@@ -2396,7 +2396,8 @@ async function loadWaterPoints() {
         if (ch.type === 'removed') delete waterPointsData[ch.doc.id];
         else waterPointsData[ch.doc.id] = ch.doc.data();
       });
-      renderWaterLayer();
+      clearTimeout(window._waterDebounce);
+      window._waterDebounce = setTimeout(() => renderWaterLayer(), 350);
     });
   } catch (e) {
     console.warn('waterPoints load failed:', e);
