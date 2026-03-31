@@ -2249,7 +2249,8 @@ async function loadAnnotations() {
         if (ch.type === 'removed') delete annotationsData[ch.doc.id];
         else annotationsData[ch.doc.id] = ch.doc.data();
       });
-      renderAnnotationLayer();
+      clearTimeout(window._annDebounce);
+      window._annDebounce = setTimeout(() => renderAnnotationLayer(), 350);
     });
   } catch (e) {
     console.warn('annotations load failed:', e);
