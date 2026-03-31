@@ -1485,6 +1485,8 @@ function updateAdminRoleUI() {
   if (annAddBtn) annAddBtn.style.display = isMaster ? '' : 'none';
   const waterAddBtn = document.getElementById('admin-water-add-btn');
   if (waterAddBtn) waterAddBtn.style.display = isMaster ? '' : 'none';
+  const bulkWrap = document.getElementById('admin-bulk-wrap');
+  if (bulkWrap) bulkWrap.style.display = isMaster ? '' : 'none';
   if (isMaster && adminMap) { renderAdminAnnotations(); renderAdminWaterPoints(); }
 }
 
