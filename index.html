@@ -269,62 +269,98 @@
         </div>
 
         <div class="howto-steps">
+
+          <!-- STEP 1 -->
           <div class="howto-step">
             <div class="howto-step-num">1</div>
             <div class="howto-step-body">
-              <div class="howto-step-title">シナリオを設定する（任意）</div>
-              <p>ヘッダーの <strong>🌊 シナリオ表示（例：🌊0m ⏱設定なし）</strong> をタップして設定します。</p>
-              <ul>
-                <li>🌊 <strong>津波高さ</strong>：0m〜20m。設定すると標高の低い危険な避難所を自動除外し、浸水シミュレーションを地図に表示</li>
-                <li>⏱ <strong>到達時間</strong>：10〜20分。設定すると徒歩・ジョギング・車の到達圏を地図に表示</li>
-                <li>🌊 <strong>潮位</strong>：干潮（−1m）・平均潮位・満潮（+1m）で津波高さを補正</li>
-              </ul>
+              <div class="howto-step-title">まずこのボタンをタップ！</div>
+              <p>画面下の光るボタン <strong>「📍 現在地から最寄りの避難所を探す」</strong> をタップするだけで、GPS が自動で現在地を取得し、最寄りの避難所を3ヶ所案内します。</p>
+              <div class="howto-img-wrap">
+                <img src="./howto-imgs/step3-search.png" class="howto-img" alt="GPS検索ボタン" loading="lazy" />
+                <div class="howto-img-caption">↑ 光っているボタンをタップ（初回は位置情報の許可が必要）</div>
+              </div>
             </div>
           </div>
 
+          <!-- STEP 2 -->
           <div class="howto-step">
             <div class="howto-step-num">2</div>
             <div class="howto-step-body">
-              <div class="howto-step-title">地図の表示を切り替える</div>
-              <p>地図下部の3つのボタンで表示する避難所の種類を選べます。</p>
+              <div class="howto-step-title">地図上の避難所マーカーを確認する</div>
+              <p>地図上の青い丸マーカーが避難所です。マーカーをタップすると施設名・住所・標高を確認できます。</p>
               <ul>
-                <li>🔵 <strong>緊急避難場所</strong>（初期表示）：津波からすぐ逃げる高台・建物</li>
-                <li>🟢 <strong>避難所</strong>：しばらく生活できる施設（釧路町・白糠町を含む）</li>
-                <li>⚪ <strong>全避難所</strong>：両方を同時表示</li>
+                <li>🔵 <strong>緊急避難場所</strong>（水色）：津波からすぐ逃げる高台・建物</li>
+                <li>🟢 <strong>避難所</strong>（緑）：しばらく生活できる施設</li>
               </ul>
-              <p>マーカー内の文字は空き状況を表します：<strong>空</strong>=空き　<strong>混</strong>=混雑　<strong>満</strong>=満室（文字なし＝不明）</p>
+              <p>マーカー内の文字：<strong>空</strong>=空き　<strong>混</strong>=混雑　<strong>満</strong>=満室</p>
+              <div class="howto-img-wrap">
+                <img src="./howto-imgs/step1-home.png" class="howto-img" alt="地図と避難所マーカー" loading="lazy" />
+                <div class="howto-img-caption">↑ 青い丸が避難所。地図下のタブで種類を切り替えられます</div>
+              </div>
             </div>
           </div>
 
+          <!-- STEP 3 -->
           <div class="howto-step">
             <div class="howto-step-num">3</div>
             <div class="howto-step-body">
-              <div class="howto-step-title">現在地または住所で検索する</div>
-              <p>画面下のパネルから3つの方法で最寄りの避難所を検索できます。</p>
+              <div class="howto-step-title">住所・地図タップでも検索できる</div>
+              <p>GPS 以外にも2つの方法で検索できます。</p>
               <ul>
-                <li>📍 <strong>現在地から最寄りの避難所を探す</strong>：GPS で現在地を自動取得（初回は許可が必要）</li>
                 <li>🔍 <strong>住所入力</strong>：市町村を選んで番地まで入力し「検索」をタップ</li>
-                <li>🗺 <strong>地図をタップして位置を指定</strong>：「🗺 地図をタップして位置を指定」ボタンを押した後、地図上の任意の場所をタップすると、その地点から最寄りの避難所を検索できます</li>
+                <li>🗺 <strong>地図をタップして位置を指定</strong>：ボタンを押した後、地図の任意の場所をタップ</li>
               </ul>
-              <p>検索後は近い順に3箇所の候補と経路が表示されます。<strong>「ルートを地図に表示」</strong> で詳細ルートを確認できます。</p>
-              <p>検索をやり直すときは GPS ボタン右の <strong>✕</strong> をタップしてリセット。</p>
+              <p>検索後は近い順に3ヶ所の候補と徒歩ルートが表示されます。<strong>「ルートを地図に表示」</strong>で詳細ルートも確認できます。検索をやり直すには <strong>🔄 やり直す</strong> をタップ。</p>
             </div>
           </div>
 
+          <!-- STEP 4 -->
           <div class="howto-step">
             <div class="howto-step-num">4</div>
             <div class="howto-step-body">
-              <div class="howto-step-title">病院の情報を確認する</div>
-              <p>地図上の 🏥 マーカーをタップすると、近くの病院の<strong>地面標高・最上階標高</strong>を確認できます。津波到達時に安全な階数の目安として活用できます。</p>
+              <div class="howto-step-title">シナリオを設定する（任意）</div>
+              <p>ヘッダーの <strong>🌊 シナリオ表示</strong> をタップするとシナリオ設定画面が開きます。</p>
+              <ul>
+                <li>🌊 <strong>津波高さ</strong>：0m〜20m。危険な低標高避難所を自動除外＋浸水シミュレーション表示</li>
+                <li>⏱ <strong>到達時間</strong>：10〜20分。徒歩・ジョグ・車の到達圏を表示</li>
+                <li>🌊 <strong>潮位</strong>：干潮〜満潮で補正</li>
+              </ul>
+              <div class="howto-img-wrap">
+                <img src="./howto-imgs/step2-scenario.png" class="howto-img" alt="シナリオ設定画面" loading="lazy" />
+                <div class="howto-img-caption">↑ ヘッダーの「🌊0m ⏱0分」をタップして開く</div>
+              </div>
             </div>
           </div>
 
+          <!-- STEP 5 -->
           <div class="howto-step">
             <div class="howto-step-num">5</div>
             <div class="howto-step-body">
-              <div class="howto-step-title">地図上の通行止め情報を確認する</div>
-              <p>地図上に <span style="color:#ef4444;font-weight:bold">🔴 赤い丸マーカー</span> が表示されている場合は、管理者が登録した<strong>通行止め箇所</strong>を示しています。マーカーをタップすると詳細を確認できます。避難ルートの選択に役立ててください。</p>
-              <p>この情報は管理者（全権限）のみが追加・削除できます。</p>
+              <div class="howto-step-title">メニューからページを切り替える</div>
+              <p>左上の <strong>☰ ハンバーガーボタン</strong> をタップするとメニューが開きます。</p>
+              <ul>
+                <li>📖 <strong>使い方</strong>（このページ）</li>
+                <li>📂 <strong>避難所データ</strong>：出典・データライセンス</li>
+                <li>🔒 <strong>プライバシーポリシー</strong></li>
+                <li>👤 <strong>製作者情報</strong></li>
+              </ul>
+              <div class="howto-img-wrap">
+                <img src="./howto-imgs/step5-menu.png" class="howto-img" alt="メニュー画面" loading="lazy" />
+                <div class="howto-img-caption">↑ 左上のボタンでメニューを開く</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 6 -->
+          <div class="howto-step">
+            <div class="howto-step-num">6</div>
+            <div class="howto-step-body">
+              <div class="howto-step-title">病院・通行止め情報を確認する</div>
+              <ul>
+                <li>🏥 地図上の病院マーカーをタップ → 地面標高・最上階標高を確認（津波時の安全階数の目安）</li>
+                <li>🔴 赤い丸マーカー → 管理者が登録した<strong>通行止め箇所</strong>。タップすると詳細を表示。避難ルート選択に活用してください</li>
+              </ul>
             </div>
           </div>
 
