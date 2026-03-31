@@ -450,13 +450,20 @@ document.addEventListener('DOMContentLoaded', () => {
   loadCustomShelters();
   loadAnnotations();
 
-  // 初回のみ：ハンドルバウンス + GPS パルスアニメーション
+  // 初回のみ：ハンドルバウンス
   if (!localStorage.getItem('firstVisitAnim')) {
     const handle = document.getElementById('bs-handle');
-    const gpsbtn = document.getElementById('gps-btn');
     if (handle) handle.classList.add('bounce');
-    if (gpsbtn) gpsbtn.classList.add('pulse-ring');
     localStorage.setItem('firstVisitAnim', '1');
+  }
+  // GPS ボタン：未使用なら常時アトラクト表示
+  if (!localStorage.getItem('gpsUsed')) {
+    const gpsbtn = document.getElementById('gps-btn');
+    if (gpsbtn) gpsbtn.classList.add('gps-attract');
+  } else {
+    // 使用済みならヒントを非表示に
+    const hint = document.getElementById('gps-hint');
+    if (hint) hint.classList.add('hidden');
   }
 
   // 初回利用時は？ボタンをパルスアニメーション＋吹き出しでアピール
