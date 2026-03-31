@@ -1961,9 +1961,10 @@ body {
 .howto-step-body strong { color: var(--text); }
 
 /* 使い方スクリーンショット — 右サムネイル */
+/* モバイル: 右サムネイル (165px) */
 .howto-img-wrap {
   float: right;
-  width: 220px;
+  width: 165px;
   margin: 0 0 6px 10px;
   border-radius: 8px;
   overflow: hidden;
@@ -1975,6 +1976,14 @@ body {
   display: block;
   width: 100%;
   height: auto;
+}
+/* PC: float解除・中央寄せ */
+@media (min-width: 600px) {
+  .howto-img-wrap {
+    float: none;
+    width: 55%;
+    margin: 10px auto 0;
+  }
 }
 .howto-img-caption {
   font-size: 11px;
