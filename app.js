@@ -934,6 +934,11 @@ function resetSearch() {
   radiusCircles = [];
   currentLat = null; currentLng = null;
   cancelMapTapMode();
+  // GPSボタンのアトラクトを復活
+  const gpsbtn = document.getElementById('gps-btn');
+  if (gpsbtn) gpsbtn.classList.add('gps-attract');
+  const hint = document.getElementById('gps-hint');
+  if (hint) hint.classList.remove('hidden');
   setBottomSheetHeight(180);
 }
 
