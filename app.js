@@ -480,12 +480,18 @@ function getGPSLocation() {
   if (gpsbtn) gpsbtn.classList.remove('gps-attract');
   const hint = document.getElementById('gps-hint');
   if (hint) hint.classList.add('hidden');
+  // 2回目以降は同意済みとしてモーダルをスキップ
+  if (localStorage.getItem('gpsConsented')) {
+    consentGPS(true);
+    return;
+  }
   document.getElementById('consent-modal').style.display = 'flex';
 }
 
 function consentGPS(agreed) {
   document.getElementById('consent-modal').style.display = 'none';
   if (!agreed) return;
+  localStorage.setItem('gpsConsented', '1');
   if (!navigator.geolocation) {
     alert('このブラウザはGPSに対応していません。住所を入力してください。');
     return;
