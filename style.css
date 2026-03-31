@@ -1090,32 +1090,41 @@ body {
 
 /* 初回アピール用パルスアニメーション */
 @keyframes help-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(56,189,248,0.8); transform: scale(1); }
-  50% { box-shadow: 0 0 0 8px rgba(56,189,248,0); transform: scale(1.12); }
+  0%   { box-shadow: 0 0 0 0 rgba(56,189,248,0.9), 0 0 10px rgba(56,189,248,0.4); transform: scale(1); }
+  50%  { box-shadow: 0 0 0 12px rgba(56,189,248,0), 0 0 18px rgba(56,189,248,0.2); transform: scale(1.18); }
+  100% { box-shadow: 0 0 0 0 rgba(56,189,248,0), 0 0 10px rgba(56,189,248,0.4); transform: scale(1); }
+}
+@keyframes help-btn-shake {
+  0%,100% { transform: rotate(0deg) scale(1.18); }
+  25%      { transform: rotate(-8deg) scale(1.18); }
+  75%      { transform: rotate(8deg) scale(1.18); }
 }
 #help-btn.pulse {
   border-color: var(--accent);
   color: var(--accent);
-  background: rgba(56,189,248,0.12);
-  animation: help-pulse 1.6s ease-in-out infinite;
+  background: rgba(56,189,248,0.18);
+  animation: help-pulse 1.4s ease-in-out infinite;
 }
 
 /* 初回アピール吹き出し */
+@keyframes tooltip-bounce {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}
 #help-tooltip {
   position: fixed;
-  top: calc(var(--header-h) + 10px);
-  right: 10px;
+  top: calc(var(--header-h) + 12px);
+  right: 6px;
   background: var(--accent);
   color: #080d1a;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  padding: 9px 15px;
+  padding: 8px 13px;
   border-radius: 10px;
   white-space: nowrap;
   z-index: 1100;
   cursor: pointer;
   user-select: none;
-  /* 初期は非表示 */
   opacity: 0;
   visibility: hidden;
   transform: translateY(-6px);
@@ -1126,15 +1135,16 @@ body {
   visibility: visible;
   transform: translateY(0);
   transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0s;
+  animation: tooltip-bounce 1.6s ease-in-out infinite;
 }
 /* 上矢印（ ? ボタンを指す） */
 #help-tooltip-arrow {
   position: absolute;
   top: -8px;
-  right: 15px;
+  right: 12px;
   width: 0; height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
   border-bottom: 8px solid var(--accent);
 }
 
