@@ -1031,6 +1031,12 @@ function makeShelterIcon(bgColor, char) {
 }
 
 // ===== 全避難所マーカー表示 =====
+let _shelterMapDebounce = null;
+function showAllSheltersOnMapDebounced() {
+  clearTimeout(_shelterMapDebounce);
+  _shelterMapDebounce = setTimeout(() => showAllSheltersOnMap(), 350);
+}
+
 function showAllSheltersOnMap() {
   if (kinkyuuLayer) kinkyuuLayer.remove();
   if (hinanjoLayer) hinanjoLayer.remove();
