@@ -2131,12 +2131,12 @@ function renderAdminAnnotations() {
 
 function enableAnnotationTapMode() {
   if (adminRole !== 'master') return;
-  // 避難所追加モードが起動中なら先にキャンセル
   if (adminMapAddMode) {
     adminMapAddMode = false;
     const addBtn = document.getElementById('admin-map-add-btn');
     if (addBtn) { addBtn.textContent = '＋ 避難所を追加'; addBtn.classList.remove('active'); }
   }
+  if (adminWaterMode) cancelWaterTapMode();
   adminAnnotationMode = true;
   document.getElementById('admin-ann-add-btn').style.display = 'none';
   document.getElementById('admin-ann-cancel-btn').style.display = '';
