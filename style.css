@@ -250,9 +250,55 @@ body {
 }
 @keyframes gps-pulse {
   0%   { box-shadow: 0 4px 20px rgba(14,165,233,0.30), 0 0 0 0 rgba(14,165,233,0.55); }
-  60%  { box-shadow: 0 4px 20px rgba(14,165,233,0.30), 0 0 0 14px rgba(14,165,233,0); }
+  60%  { box-shadow: 0 4px 20px rgba(14,165,233,0.30), 0 0 0 18px rgba(14,165,233,0); }
   100% { box-shadow: 0 4px 20px rgba(14,165,233,0.30), 0 0 0 0 rgba(14,165,233,0); }
 }
+@keyframes gps-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes gps-bounce-hint {
+  0%, 100% { transform: translateY(0); opacity: 0.85; }
+  50%       { transform: translateY(-4px); opacity: 1; }
+}
+
+/* 常時アトラクト（未使用時） */
+#gps-btn.gps-attract {
+  animation: gps-pulse 1.8s ease-out infinite;
+  background: linear-gradient(
+    100deg,
+    #0284c7 0%,
+    #0ea5e9 35%,
+    #7dd3fc 50%,
+    #0ea5e9 65%,
+    #0284c7 100%
+  );
+  background-size: 250% auto;
+  animation: gps-pulse 1.8s ease-out infinite, gps-shimmer 2.8s linear infinite;
+  transform: scale(1.015);
+  box-shadow: 0 6px 28px rgba(14,165,233,0.50);
+}
+
+/* ヒントラベル */
+#gps-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #7dd3fc;
+  margin-top: -9px;
+  margin-bottom: 10px;
+  animation: gps-bounce-hint 1.4s ease-in-out infinite;
+  pointer-events: none;
+  letter-spacing: 0.5px;
+}
+
+/* 一度使ったら非表示 */
+#gps-hint.hidden { display: none; }
+
+/* 旧クラスも残す（後方互換） */
 #gps-btn.pulse-ring {
   animation: gps-pulse 1.4s ease-out 4;
 }
