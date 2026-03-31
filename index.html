@@ -177,14 +177,12 @@
   <div id="consent-modal" style="display:none" onclick="consentGPS(false)">
     <div id="consent-box" onclick="event.stopPropagation()">
       <div class="consent-icon">📍</div>
-      <h3 class="consent-title">現在地を取得します</h3>
+      <h3 class="consent-title">位置情報を使用します</h3>
       <div class="consent-body">
-        <p>GPS を使って現在地を取得し、最寄りの避難所を案内します。</p>
+        <p>現在地を取得して、最寄りの避難所を案内します。</p>
         <ul>
-          <li>📵 取得した座標は<strong>端末内のみ</strong>で処理します。外部サーバーへの保存・送信は行いません</li>
-          <li>🗾 現在地の表示と避難所の距離計算にのみ使用します</li>
-          <li>🔒 アプリを閉じると位置情報は破棄されます</li>
-          <li>⚠️ ルート表示時のみ、出発地・目的地の座標を経路探索サービス（OSRM）へ送信します</li>
+          <li>🔒 位置情報は<strong>端末内のみ</strong>で処理。外部送信しません</li>
+          <li>⚠️ ルート表示時のみ、座標を経路探索サービスへ送信します</li>
         </ul>
       </div>
       <div class="consent-btns">
