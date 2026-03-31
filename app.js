@@ -1972,8 +1972,8 @@ async function confirmDeleteShelter(name) {
 
 function enableAdminMapAddMode() {
   if (adminRole !== 'master') return;
-  // 通行止めモードが起動中なら先にキャンセル
   if (adminAnnotationMode) cancelAnnotationTapMode();
+  if (adminWaterMode) cancelWaterTapMode();
   adminMapAddMode = true;
   const btn = document.getElementById('admin-map-add-btn');
   if (btn) { btn.textContent = '📍 クリックして位置を指定中…'; btn.classList.add('active'); }
