@@ -456,15 +456,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (handle) handle.classList.add('bounce');
     localStorage.setItem('firstVisitAnim', '1');
   }
-  // GPS ボタン：未使用なら常時アトラクト表示
-  if (!localStorage.getItem('gpsUsed')) {
-    const gpsbtn = document.getElementById('gps-btn');
-    if (gpsbtn) gpsbtn.classList.add('gps-attract');
-  } else {
-    // 使用済みならヒントを非表示に
-    const hint = document.getElementById('gps-hint');
-    if (hint) hint.classList.add('hidden');
-  }
+  // GPS ボタン：常時アトラクト表示（検索実行後のセッション内のみ停止）
+  const gpsbtn = document.getElementById('gps-btn');
+  if (gpsbtn) gpsbtn.classList.add('gps-attract');
 
   // 初回利用時は？ボタンをパルスアニメーション＋吹き出しでアピール
   if (!localStorage.getItem('helpSeen_v3')) {
