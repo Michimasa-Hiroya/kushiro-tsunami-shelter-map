@@ -1860,7 +1860,7 @@ async function bulkUpdateStatus() {
   const label = val === 'clear' ? '不明（リセット）' : { open: '空き', half: '混雑', full: '満室' }[val];
   if (!confirm(`全避難所のステータスを「${label}」に一括変更しますか？`)) return;
 
-  const allShelters = getAllShelters();
+  const allShelters = getAllSheltersForAdmin();
   const now = new Date().toISOString();
   const promises = allShelters.map(async s => {
     if (val === 'clear') {
