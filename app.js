@@ -454,6 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadShelterStatus();
   loadCustomShelters();
   loadAnnotations();
+  loadWaterPoints();
 
   // 初回のみ：ハンドルバウンス
   if (!localStorage.getItem('firstVisitAnim')) {
