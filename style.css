@@ -1963,7 +1963,7 @@ body {
 /* 使い方スクリーンショット — 右サムネイル */
 .howto-img-wrap {
   float: right;
-  width: 110px;
+  width: 220px;
   margin: 0 0 6px 10px;
   border-radius: 8px;
   overflow: hidden;
