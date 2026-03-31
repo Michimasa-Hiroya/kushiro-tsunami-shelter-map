@@ -20,6 +20,11 @@ let annotationsData     = {}; // { [id]: { id, lat, lng, label, createdAt } }
 let annotationMarkers   = {}; // 本地図上のマーカー参照
 let adminAnnMarkers     = {}; // 管理マップのマーカー参照
 let adminAnnotationMode = false;
+// ===== 給水所マーカー =====
+let waterPointsData     = {}; // { [id]: { id, lat, lng, label, createdAt } }
+let waterPointMarkers   = {}; // 本地図上のマーカー参照
+let adminWaterMarkers   = {}; // 管理マップのマーカー参照
+let adminWaterMode      = false;
 // ===== 地図タップ位置指定 =====
 let mapTapMode = false;
 
