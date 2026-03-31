@@ -733,6 +733,16 @@
                   <option value="full">🔴 満室</option>
                   <option value="none">未設定</option>
                 </select>
+                <div id="admin-bulk-wrap" style="display:none" class="admin-bulk-wrap">
+                  <select id="admin-bulk-status" class="admin-filter-select">
+                    <option value="">一括変更…</option>
+                    <option value="clear">⬜ 不明（リセット）</option>
+                    <option value="open">⬜ 空き</option>
+                    <option value="half">🟡 混雑</option>
+                    <option value="full">🔴 満室</option>
+                  </select>
+                  <button class="admin-bulk-btn" onclick="bulkUpdateStatus()">全適用</button>
+                </div>
               </div>
             </div>
             <div class="admin-create-bar">
