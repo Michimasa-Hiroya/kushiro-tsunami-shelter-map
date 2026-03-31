@@ -2440,7 +2440,7 @@ async function loadShelterStatus() {
         if (ch.type === 'removed') delete shelterStatusData[ch.doc.id];
         else shelterStatusData[ch.doc.id] = ch.doc.data();
       });
-      showAllSheltersOnMap();
+      showAllSheltersOnMapDebounced();
     });
   } catch (e) {
     console.warn('Firestore load failed:', e);
