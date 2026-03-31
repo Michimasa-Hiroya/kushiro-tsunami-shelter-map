@@ -481,6 +481,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ===== GPS 取得 =====
 function getGPSLocation() {
+  // アトラクトアニメーションを停止
+  const gpsbtn = document.getElementById('gps-btn');
+  if (gpsbtn) gpsbtn.classList.remove('gps-attract');
+  const hint = document.getElementById('gps-hint');
+  if (hint) hint.classList.add('hidden');
+  localStorage.setItem('gpsUsed', '1');
   document.getElementById('consent-modal').style.display = 'flex';
 }
 
