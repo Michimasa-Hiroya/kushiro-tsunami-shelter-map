@@ -1159,6 +1159,7 @@ function showAllSheltersOnMap() {
   if (shelterFilter === 'hinanjo' || shelterFilter === 'all') hinanjoLayer.addTo(map);
 
   renderAnnotationLayer();
+  renderWaterLayer();
 }
 
 // ===== 地図凡例 =====
