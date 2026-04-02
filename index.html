@@ -82,14 +82,14 @@
       <!-- 現在地入力 -->
       <section id="location-section">
         <div id="gps-row">
-          <button id="gps-btn" onclick="getGPSLocation()">
+          <button id="gps-btn" onclick="getGPSLocation()" data-i18n="gps-btn">
             📍 現在地から最寄りの避難所を探す
           </button>
-          <button id="reset-btn" onclick="resetSearch()" style="display:none">🔄 やり直す</button>
+          <button id="reset-btn" onclick="resetSearch()" style="display:none" data-i18n="reset-btn">🔄 やり直す</button>
         </div>
-        <div id="gps-hint">👆 ここをタップ</div>
-        <button id="map-tap-btn" onclick="enableMapTapMode()">🗺 地図をタップして位置を指定</button>
-        <div id="or-divider">または住所を入力</div>
+        <div id="gps-hint" data-i18n="gps-hint">👆 ここをタップ</div>
+        <button id="map-tap-btn" onclick="enableMapTapMode()" data-i18n="map-tap-btn">🗺 地図をタップして位置を指定</button>
+        <div id="or-divider" data-i18n="or-divider">または住所を入力</div>
         <div id="address-input-wrap">
           <select id="town-select">
             <option value="釧路市">釧路市</option>
@@ -99,10 +99,11 @@
           </select>
           <input type="text" id="address-input"
                  placeholder="町名・番地またはキーワード"
+                 data-i18n-placeholder="addr-placeholder"
                  inputmode="text" autocomplete="off" />
-          <button id="search-btn" onclick="searchAddress()">検索</button>
+          <button id="search-btn" onclick="searchAddress()" data-i18n="search-btn">検索</button>
         </div>
-        <div id="addr-hint">例: 大楽毛〇丁目〇番 / 大楽毛〇-〇　※住所入力は番地までのデータです</div>
+        <div id="addr-hint" data-i18n="addr-hint">例: 大楽毛〇丁目〇番 / 大楽毛〇-〇　※住所入力は番地までのデータです</div>
       </section>
 
       <!-- 検索結果 -->
