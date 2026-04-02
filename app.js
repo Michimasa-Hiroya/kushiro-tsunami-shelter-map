@@ -805,20 +805,25 @@ function updateMapMarkers(results) {
 
 // ===== バッジ生成 =====
 function elevBadge(elev) {
-  if (elev === null) return `<span class="badge">標高 不明</span>`;
+  const en = window.lang === 'en';
+  if (elev === null) return `<span class="badge">${en ? 'Elev. N/A' : '標高 不明'}</span>`;
   const effH = effectiveTsunamiH();
-  if (effH === 0) return `<span class="badge elev-safe">標高 ${elev}m</span>`;
-  if (elev >= effH + 5) return `<span class="badge elev-safe">標高 ${elev}m ✓ 安全</span>`;
-  if (elev >= effH)               return `<span class="badge elev-caution">標高 ${elev}m △ 要確認</span>`;
-  return `<span class="badge elev-danger">標高 ${elev}m ⚠ 低い</span>`;
+  if (effH === 0) return `<span class="badge elev-safe">${en ? `Elev. ${elev}m` : `標高 ${elev}m`}</span>`;
+  if (elev >= effH + 5) return `<span class="badge elev-safe">${en ? `Elev. ${elev}m ✓ Safe` : `標高 ${elev}m ✓ 安全`}</span>`;
+  if (elev >= effH)     return `<span class="badge elev-caution">${en ? `Elev. ${elev}m △ Check` : `標高 ${elev}m △ 要確認`}</span>`;
+  return `<span class="badge elev-danger">${en ? `Elev. ${elev}m ⚠ Low` : `標高 ${elev}m ⚠ 低い`}</span>`;
 }
 
 function timeBadge(min, profile) {
-  const label = profile === 'foot' ? '🏃 ジョギング' : '🚗 車';
-  const over  = tsunamiArrivalMin > 0 && min > tsunamiArrivalMin;
-  const warn  = over ? ' ⚠ 津波到達前に間に合わない可能性' : '';
-  const cls   = over ? 'badge time-danger' : 'badge time-ok';
-  return `<span class="${cls}">${label} 約${min}分${warn}</span>`;
+  const en = window.lang === 'en';
+  const label = profile === 'foot'
+    ? (en ? '🏃 Jogging' : '🏃 ジョギング')
+    : (en ? '🚗 Car' : '🚗 車');
+  const over = tsunamiArrivalMin > 0 && min > tsunamiArrivalMin;
+  const warn = over ? tStr('time-danger-warn') : '';
+  const cls  = over ? 'badge time-danger' : 'badge time-ok';
+  const minLabel = en ? `~${min}min` : `約${min}分`;
+  return `<span class="${cls}">${label} ${minLabel}${warn}</span>`;
 }
 
 function walkBadge(distM) {
