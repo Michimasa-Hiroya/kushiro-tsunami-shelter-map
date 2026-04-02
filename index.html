@@ -180,17 +180,17 @@
   <div id="consent-modal" style="display:none" onclick="consentGPS(false)">
     <div id="consent-box" onclick="event.stopPropagation()">
       <div class="consent-icon">📍</div>
-      <h3 class="consent-title">位置情報を使用します</h3>
+      <h3 class="consent-title" data-i18n="consent-title">位置情報を使用します</h3>
       <div class="consent-body">
-        <p>現在地を取得して、最寄りの避難所を案内します。</p>
+        <p data-i18n="consent-body">現在地を取得して、最寄りの避難所を案内します。</p>
         <ul>
-          <li>🔒 位置情報は<strong>端末内のみ</strong>で処理。外部送信しません</li>
-          <li>⚠️ ルート表示時のみ、座標を経路探索サービスへ送信します</li>
+          <li data-i18n-html="consent-li1">🔒 位置情報は<strong>端末内のみ</strong>で処理。外部送信しません</li>
+          <li data-i18n-html="consent-li2">⚠️ ルート表示時のみ、座標を経路探索サービスへ送信します</li>
         </ul>
       </div>
       <div class="consent-btns">
-        <button class="consent-btn-agree" onclick="consentGPS(true)">同意して現在地を取得</button>
-        <button class="consent-btn-cancel" onclick="consentGPS(false)">キャンセル</button>
+        <button class="consent-btn-agree" onclick="consentGPS(true)" data-i18n="consent-agree">同意して現在地を取得</button>
+        <button class="consent-btn-cancel" onclick="consentGPS(false)" data-i18n="consent-cancel">キャンセル</button>
       </div>
     </div>
   </div>
