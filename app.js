@@ -877,11 +877,14 @@ function shelterOfficialLink(s) {
 
 // ===== 結果レンダリング =====
 function renderResults(results, userLat, userLng) {
+  const ranks = [tStr('rank-1'), tStr('rank-2'), tStr('rank-3')];
   const cards = results.map((s, i) => {
-    const rank = i === 0 ? '🥇 第1候補' : i === 1 ? '🥈 第2候補' : '🥉 第3候補';
+    const fromSea = s.distance_from_sea_m !== null
+      ? `<span class="badge">${tStr('from-sea', (s.distance_from_sea_m / 1000).toFixed(1))}</span>` : '';
+    const estBadge = s.route.is_estimated ? `<span class="badge est-badge">${tStr('estimated')}</span>` : '';
     return `
     <div class="shelter-card ${cardClass(s.elevation_m)}">
-      <div class="shelter-rank">${rank}</div>
+      <div class="shelter-rank">${ranks[i] || ranks[2]}</div>
       <div class="shelter-name" data-name="${s.name}">${s.name}</div>
       <div class="time-row">
         ${walkBadge(s.route.distance_m)}
@@ -889,16 +892,16 @@ function renderResults(results, userLat, userLng) {
         <span class="badge dist-badge">📏 ${s.route.distance_m}m</span>
       </div>
       <button class="route-btn" onclick="showRoute('foot',${userLat},${userLng},${s.lat},${s.lng})">
-        ルートを地図に表示
+        ${tStr('route-btn')}
       </button>
       <details class="shelter-details">
-        <summary>詳細を見る</summary>
+        <summary>${tStr('details-btn')}</summary>
         <div class="time-row" style="margin-top:8px">
           ${timeBadge(s.route.duration_min, 'foot')}
-          ${s.route.is_estimated ? '<span class="badge est-badge">概算</span>' : ''}
+          ${estBadge}
         </div>
         <div class="info-row">
-          ${s.distance_from_sea_m !== null ? `<span class="badge">🌊 海岸から ${(s.distance_from_sea_m / 1000).toFixed(1)}km</span>` : ''}
+          ${fromSea}
           ${capacityBadge(s.capacity)}
         </div>
         <div class="shelter-addr">${s.address}</div>
@@ -911,12 +914,12 @@ function renderResults(results, userLat, userLng) {
 
   const adviceHtml = `
     <div class="search-ai-box">
-      <div class="search-ai-title">⚠️ 避難の際のご注意</div>
-      <div class="search-ai-line">🏃 最寄りの避難所を3箇所出しています。どこに逃げれば良いか、自宅に留まるかはご自身で判断してください。</div>
-      <div class="search-ai-line">📻 実際の避難行動は、行政・防災無線の指示に必ず従ってください。</div>
-      <div class="search-ai-line">🏠 指定避難所は参考程度に出しています。緊急の場合は、指定緊急避難場所に逃げてください。</div>
-      <div class="search-ai-line">🚗 車での避難は渋滞が発生しやすく、到達時間に大きなばらつきが生じる可能性があります。高台・内陸方向を目指してください。</div>
-      <div class="search-ai-line">🌉 大津波警報発令時は橋が封鎖される場合があります。橋を渡る経路を避難ルートとしている場合は、別ルートも事前に確認しておいてください。</div>
+      <div class="search-ai-title">${tStr('advice-title')}</div>
+      <div class="search-ai-line">${tStr('advice-1')}</div>
+      <div class="search-ai-line">${tStr('advice-2')}</div>
+      <div class="search-ai-line">${tStr('advice-3')}</div>
+      <div class="search-ai-line">${tStr('advice-4')}</div>
+      <div class="search-ai-line">${tStr('advice-5')}</div>
     </div>`;
 
   document.getElementById('results').style.display = 'block';
