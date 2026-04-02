@@ -1409,11 +1409,13 @@ function updateScenarioChip() {
   const chip = document.getElementById('scenario-chip');
   if (!chip) return;
   if (tsunamiHeightM === 0 && tsunamiArrivalMin === 0) {
-    chip.textContent = '🌊 シナリオ未設定';
+    chip.textContent = tStr('scenario-unset');
   } else {
     const effH = effectiveTsunamiH();
     const hLabel = tsunamiHeightM === 0 ? '0m' : `${effH}m`;
-    const tLabel = tsunamiArrivalMin === 0 ? '0分' : `${tsunamiArrivalMin}分`;
+    const tLabel = tsunamiArrivalMin === 0
+      ? (window.lang === 'en' ? '0min' : '0分')
+      : (window.lang === 'en' ? `${tsunamiArrivalMin}min` : `${tsunamiArrivalMin}分`);
     chip.textContent = `🌊${hLabel} ⏱${tLabel}`;
   }
 }
